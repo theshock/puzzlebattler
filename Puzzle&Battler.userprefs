@@ -1,0 +1,15 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Classes/CMatchIcon.cs">
+    <Files>
+      <File FileName="Assets/Classes/CMatchController.cs" Line="10" Column="2" />
+      <File FileName="Assets/Classes/actions/CMatchActionDestroy.cs" Line="6" Column="39" />
+      <File FileName="Assets/Classes/CMatchIcon.cs" Line="16" Column="2" />
+      <File FileName="Assets/Classes/CMatchField.cs" Line="15" Column="29" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
