@@ -3,7 +3,6 @@ using System.Collections;
 
 public class CGameUI : MonoBehaviour
 {
-	public CProgressBar mProgressBar;
 	public CGameController mGameController;
 	public Sprite[] iconSprites;
 	public SpriteRenderer mIconLastMatch;
@@ -22,10 +21,7 @@ public class CGameUI : MonoBehaviour
 		
 	}
 
-	public void updateIconLastMatch()
-	{
-		mIconLastMatch.sprite = iconSprites[(int)mGameController.mGameData.mLastIconMatch];
-	}
+
 
 	// Use this for initialization
 	void Start ()
@@ -36,7 +32,7 @@ public class CGameUI : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		mProgressBar.barDisplay = mGameController.mGameData.mPrExp;
+
 	}
 }
 

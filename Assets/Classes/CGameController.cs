@@ -8,7 +8,6 @@ public class CGameController : MonoBehaviour,  INotificationObserver
 	public CGameData mGameData;
 	public CGameUI mGameUI;
 	public CMatchController mMatchController;
-	public CRunnerController mRunnerController;
 
 	public void handleNotification(int aEvent, Object aParam, CNotificationManager aManager)
 	{
