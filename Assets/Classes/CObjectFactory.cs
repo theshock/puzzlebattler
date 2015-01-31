@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-public delegate IMatchAction ObjectFactoryDelegate();
+public delegate Match.Actions.IAction ObjectFactoryDelegate();
 
 public class CObjectFactory
 {

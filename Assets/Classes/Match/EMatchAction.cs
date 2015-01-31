@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public enum EMatchAction
-{
-	eDestroyAction,
-	eSwipeAction,
-	eMatchAction,
-	eAutoMatchAction,
-	eRefreshPositionAction,
+namespace Match {
+	public enum EMatchAction {
+		eDestroyAction,
+		eSwipeAction,
+		eMatchAction,
+		eAutoMatchAction,
+		eRefreshPositionAction,
 
-	eMatchActionCount
+		eMatchActionCount
+	}
 }
-

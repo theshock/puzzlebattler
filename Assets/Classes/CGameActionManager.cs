@@ -2,7 +2,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-
+using Match;
+using Match.Actions;
 
 public class CGameActionManager
 {
@@ -12,14 +13,14 @@ public class CGameActionManager
 
 	public CGameActionManager()
 	{
-		CObjectFactory.registerCreator("match_action_" + (int)EMatchAction.eDestroyAction, CMatchActionDestroy.create);
-		CObjectFactory.registerCreator("match_action_" + (int)EMatchAction.eSwipeAction, CMatchActionSwipe.create);
-		CObjectFactory.registerCreator("match_action_" + (int)EMatchAction.eMatchAction, CMatchActionMatch.create);
-		CObjectFactory.registerCreator("match_action_" + (int)EMatchAction.eAutoMatchAction, CMatchAutoMatchAction.create);
-		CObjectFactory.registerCreator("match_action_" + (int)EMatchAction.eRefreshPositionAction, CMatchRefreshPositionAction.create);
+		CObjectFactory.registerCreator("match_action_" + (int)EMatchAction.eDestroyAction, CDestroy.create);
+		CObjectFactory.registerCreator("match_action_" + (int)EMatchAction.eSwipeAction, CSwipe.create);
+		CObjectFactory.registerCreator("match_action_" + (int)EMatchAction.eMatchAction, CMatch.create);
+		CObjectFactory.registerCreator("match_action_" + (int)EMatchAction.eAutoMatchAction, CAutoMatch.create);
+		CObjectFactory.registerCreator("match_action_" + (int)EMatchAction.eRefreshPositionAction, CRefreshPosition.create);
 	}
 
-	public IMatchAction createAction(EMatchAction aAction)
+	public IAction createAction(EMatchAction aAction)
 	{
 //		UnityEngine.Debug.Log("createAction");
 
@@ -27,14 +28,14 @@ public class CGameActionManager
 
 //		UnityEngine.Debug.Log(name_action);
 
-		IMatchAction action = CObjectFactory.createObjectByKey(name_action) as IMatchAction;
+		IAction action = CObjectFactory.createObjectByKey(name_action) as IAction;
 
 		action.initWithActionManager(this, mMatchController.mMatchView.mMatchField);
 
 		return action;
 	}
 
-	public int addAction(IMatchAction aAction)
+	public int addAction(IAction aAction)
 	{
 		if(!aAction.validation())
 			return 0;
@@ -50,7 +51,7 @@ public class CGameActionManager
 
 	}
 
-	public void removeAction(IMatchAction aAction)
+	public void removeAction(IAction aAction)
 	{
 		try
 		{
@@ -63,7 +64,7 @@ public class CGameActionManager
 
 	}
 
-	public void onEndAction(IMatchAction aAction)
+	public void onEndAction(IAction aAction)
 	{
 //		UnityEngine.Debug.Log("aAction.getActionEventCount = " + aAction.getActionEvent());
 		removeAction(aAction);

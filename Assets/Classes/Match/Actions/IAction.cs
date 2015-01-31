@@ -10,23 +10,20 @@
 using UnityEngine;
 using System.Collections;
 
-public delegate void MatchActionDelegate(IMatchAction aAction);
+namespace Match.Actions {
+	public interface IAction {
+		void initWithActionManager(CGameActionManager aManager, CField aIconField);
 
-public interface IMatchAction
-{
-	void initWithActionManager(CGameActionManager aManager, CField aIconField);
+		void doUpdateActionParam(Hashtable aData);
 
-	void doUpdateActionParam(Hashtable aData);
+		bool validation();
 
-	bool validation();
+		void startAction();
 
-	void startAction();
+		void updateting();
 
-	void updateting();
+		void setDelegate(Match.Actions.Delegate aDelegate);
 
-	void setDelegate(MatchActionDelegate aDelegate);
-
-	GameNotificationEvents getActionEvent();
+		GameNotificationEvents getActionEvent();
+	}
 }
-
-

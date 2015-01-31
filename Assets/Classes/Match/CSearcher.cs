@@ -2,112 +2,99 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class CSearcher : INotificationObserver
-{
-	public CController mMatchController { get; set; }
+namespace Match {
 
-	public void handleNotification(int aEvent, Object aParam, CNotificationManager aManager)
-	{
-		return;
-	}
+	public class CSearcher : INotificationObserver {
+		public CController mMatchController {
+			get;
+			set;
+		}
 
-	public void subscribeNotification(CNotificationManager aCenter)
-	{
+		public void handleNotification(int aEvent, Object aParam, CNotificationManager aManager) {
+			return;
+		}
 
-	}
+		public void subscribeNotification(CNotificationManager aCenter) {
 
-	public bool isHaveMatches()
-	{
-		return false;
-	}
+		}
 
-	public ArrayList findMatches(bool aOnlyOpenedCells = false)
-	{
-		ArrayList matches = new ArrayList();
-		CWeightedUnion weightedUnionInstance = new CWeightedUnion();
-		CField field = mMatchController.mMatchView.mMatchField;
+		public bool isHaveMatches() {
+			return false;
+		}
 
-		int col_field = field.mColumns;
-		int row_field = field.mRows;
+		public ArrayList findMatches(bool aOnlyOpenedCells = false) {
+			ArrayList matches = new ArrayList();
+			CWeightedUnion weightedUnionInstance = new CWeightedUnion();
+			CField field = mMatchController.mMatchView.mMatchField;
 
-		weightedUnionInstance.initWithElements(col_field * row_field);
+			int col_field = field.mColumns;
+			int row_field = field.mRows;
 
-		for (int i = 0; i < col_field * row_field/2; i += col_field)
-		{
-			for (int j = i; j < i + (col_field - 2); j++)
-			{
-				ArrayList icons = new ArrayList();
+			weightedUnionInstance.initWithElements(col_field * row_field);
 
-				icons.Add(field.getIconByIndex(j));
-				icons.Add(field.getIconByIndex(j + 1));
-				icons.Add(field.getIconByIndex(j + 2));
+			for (int i = 0; i < col_field * row_field / 2; i += col_field) {
+				for (int j = i; j < i + (col_field - 2); j++) {
+					ArrayList icons = new ArrayList();
 
-				if(aOnlyOpenedCells)
-				{
-					for(int index = 0; index < icons.Count; index++)
-					{
-						CIcon icon = icons[index] as CIcon;
-						if(icon && !icon.getIsReadyAction())
-						{
-							continue;
+					icons.Add(field.getIconByIndex(j));
+					icons.Add(field.getIconByIndex(j + 1));
+					icons.Add(field.getIconByIndex(j + 2));
+
+					if (aOnlyOpenedCells) {
+						for (int index = 0; index < icons.Count; index++) {
+							CIcon icon = icons[index] as CIcon;
+							if (icon && !icon.getIsReadyAction()) {
+								continue;
+							}
 						}
 					}
-				}
 
-				if (field.isTheSameIconOne(icons))
-				{
-					weightedUnionInstance.unionInt(j,(j + 1));
-					weightedUnionInstance.unionInt(j,(j + 2));
-				}
-			}
-		}
-//
-		for (int i = 0; i < row_field/2; i++)
-		{
-			for (int j = i; j < i + (col_field * (row_field/2 - 2)); j += col_field)
-			{
-				ArrayList icons = new ArrayList();
-
-				icons.Add(field.getIconByIndex(j));
-				icons.Add(field.getIconByIndex(j + (col_field)));
-				icons.Add(field.getIconByIndex(j + (col_field * 2)));
-
-				if(aOnlyOpenedCells)
-				{
-					for(int index = 0; index < icons.Count; index++)
-					{
-						CIcon icon = icons[index] as CIcon;
-						if(icon && !icon.getIsReadyAction())
-						{
-							continue;
-						}
+					if (field.isTheSameIconOne(icons)) {
+						weightedUnionInstance.unionInt(j, (j + 1));
+						weightedUnionInstance.unionInt(j, (j + 2));
 					}
 				}
+			}
+			//
+			for (int i = 0; i < row_field / 2; i++) {
+				for (int j = i; j < i + (col_field * (row_field / 2 - 2)); j += col_field) {
+					ArrayList icons = new ArrayList();
 
-				if (field.isTheSameIconOne(icons))
-				{
-					weightedUnionInstance.unionInt(j,(j + col_field));
-					weightedUnionInstance.unionInt(j,(j + col_field * 2));
+					icons.Add(field.getIconByIndex(j));
+					icons.Add(field.getIconByIndex(j + (col_field)));
+					icons.Add(field.getIconByIndex(j + (col_field * 2)));
+
+					if (aOnlyOpenedCells) {
+						for (int index = 0; index < icons.Count; index++) {
+							CIcon icon = icons[index] as CIcon;
+							if (icon && !icon.getIsReadyAction()) {
+								continue;
+							}
+						}
+					}
+
+					if (field.isTheSameIconOne(icons)) {
+						weightedUnionInstance.unionInt(j, (j + col_field));
+						weightedUnionInstance.unionInt(j, (j + col_field * 2));
+					}
 				}
 			}
-		}
 
 
-		if (weightedUnionInstance.getHasUnions())
-		{
-			Dictionary<int, ArrayList> foundMatches = weightedUnionInstance.getTrees();
+			if (weightedUnionInstance.getHasUnions()) {
+				Dictionary<int, ArrayList> foundMatches = weightedUnionInstance.getTrees();
 
-//			Debug.Log(foundMatches);
+				//			Debug.Log(foundMatches);
 
-			foreach (var pair in foundMatches)
-			{
-//				Debug.Log(pair.Key);
+				foreach (var pair in foundMatches) {
+					//				Debug.Log(pair.Key);
 
-				matches.Add(pair.Value);
+					matches.Add(pair.Value);
+				}
+
 			}
 
+			return matches;
 		}
-
-		return matches;
 	}
 }

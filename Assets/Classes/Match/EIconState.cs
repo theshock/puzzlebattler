@@ -1,8 +1,9 @@
-public enum EIconState
-{
-	eLock,
-	eClear,
-	eOpen,
-	eInvisible,
-	eCount
-};
+namespace Match {
+	public enum EIconState {
+		eLock,
+		eClear,
+		eOpen,
+		eInvisible,
+		eCount
+	};
+}

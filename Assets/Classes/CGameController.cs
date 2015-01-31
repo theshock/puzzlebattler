@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Match;
 
 
 public class CGameController : MonoBehaviour,  INotificationObserver
