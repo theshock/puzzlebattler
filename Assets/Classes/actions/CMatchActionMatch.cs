@@ -9,16 +9,16 @@ public class CMatchActionMatch : CMatchBaseAction
 
 	private int mStartDestroyIcon;
 
-	private EMatchIconType mCreateIconType;
+	private EIconType mCreateIconType;
 
 	public static IMatchAction create()
 	{
 		return new CMatchActionMatch();
 	}
 
-	public EMatchIconType getMatchIconType()
+	public EIconType getMatchIconType()
 	{
-		CMatchIcon icon = mIconField.getIconByIndex((int)mMatchIcons[0]);
+		CIcon icon = mIconField.getIconByIndex((int)mMatchIcons[0]);
 		return icon.IconType;
 	}
 
@@ -44,7 +44,7 @@ public class CMatchActionMatch : CMatchBaseAction
 		{
 			foreach(int index_icon in mMatchIcons)
 			{
-				CMatchIcon icon = mIconField.getIconByIndex(index_icon);
+				CIcon icon = mIconField.getIconByIndex(index_icon);
 				
 				if(!icon || (icon && !icon.getIsReadyAction()))
 				{
@@ -75,7 +75,7 @@ public class CMatchActionMatch : CMatchBaseAction
 
 		foreach(int index_icon in mMatchIcons)
 		{
-			CMatchIcon icon = mIconField.getIconByIndex(index_icon);
+			CIcon icon = mIconField.getIconByIndex(index_icon);
 			
 			IMatchAction destroy_action = mActionManager.createAction(EMatchAction.eDestroyAction);
 			Hashtable hash = new Hashtable();

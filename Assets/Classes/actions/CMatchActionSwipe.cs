@@ -5,9 +5,9 @@ public class CMatchActionSwipe : CMatchBaseAction
 {
 	private bool mIsCurrentSwipe = true;
 	
-	private CMatchIcon mSelectedIcon = null;
+	private CIcon mSelectedIcon = null;
 
-	private CMatchIcon mTargetedIcon = null;
+	private CIcon mTargetedIcon = null;
 
 	private bool mIsCurrenSwipe = false;
 
@@ -48,8 +48,8 @@ public class CMatchActionSwipe : CMatchBaseAction
 		mIconField.swipeCellInMatrix(mSelectedIcon, mTargetedIcon);
 		
 		// Открываем ячейки
-		mSelectedIcon.IconState = EMatchIconState.eOpenIcon;
-		mTargetedIcon.IconState = EMatchIconState.eOpenIcon;
+		mSelectedIcon.IconState = EIconState.eOpen;
+		mTargetedIcon.IconState = EIconState.eOpen;
 	
 		if (mIsCurrenSwipe == false)
 		{
@@ -90,8 +90,8 @@ public class CMatchActionSwipe : CMatchBaseAction
 				{
 //					Debug.Log("onEndSwipeAnimation did not find match");
 
-					mSelectedIcon.IconState = EMatchIconState.eLockIcon;
-					mTargetedIcon.IconState = EMatchIconState.eLockIcon;
+					mSelectedIcon.IconState = EIconState.eLock;
+					mTargetedIcon.IconState = EIconState.eLock;
 					
 					mIsCurrenSwipe = true;
 					
@@ -102,8 +102,8 @@ public class CMatchActionSwipe : CMatchBaseAction
 			else
 			{
 				// Открываем ячейки
-				mSelectedIcon.IconState = EMatchIconState.eOpenIcon;
-				mTargetedIcon.IconState = EMatchIconState.eOpenIcon;
+				mSelectedIcon.IconState = EIconState.eOpen;
+				mTargetedIcon.IconState = EIconState.eOpen;
 				
 				if(swipeCreateMatch)
 				{
@@ -111,8 +111,8 @@ public class CMatchActionSwipe : CMatchBaseAction
 				}
 				else
 				{
-					mSelectedIcon.IconState = EMatchIconState.eLockIcon;
-					mTargetedIcon.IconState = EMatchIconState.eLockIcon;
+					mSelectedIcon.IconState = EIconState.eLock;
+					mTargetedIcon.IconState = EIconState.eLock;
 					
 					mIsCurrenSwipe = true;
 					
@@ -132,8 +132,8 @@ public class CMatchActionSwipe : CMatchBaseAction
 	{
 		Vector3 objSFPoint = mSelectedIcon.transform.position;
 		Vector3 objSWPoint = mTargetedIcon.transform.position;
-		mSelectedIcon.IconState = EMatchIconState.eLockIcon;
-		mTargetedIcon.IconState = EMatchIconState.eLockIcon;
+		mSelectedIcon.IconState = EIconState.eLock;
+		mTargetedIcon.IconState = EIconState.eLock;
 		
 		mTargetedIcon.mDelegate = onEndSwipeAnimation;
 		mSelectedIcon.mDelegate = onEndSwipeAnimation;
@@ -174,8 +174,8 @@ public class CMatchActionSwipe : CMatchBaseAction
 	
 	public override void doUpdateActionParam(Hashtable aData)
 	{
-		mSelectedIcon = aData["selectedIcon"] as CMatchIcon;
-		mTargetedIcon = aData["targetedIcon"] as CMatchIcon;
+		mSelectedIcon = aData["selectedIcon"] as CIcon;
+		mTargetedIcon = aData["targetedIcon"] as CIcon;
 
 		return;
 	}

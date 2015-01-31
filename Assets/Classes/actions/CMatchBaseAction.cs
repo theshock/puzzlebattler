@@ -8,14 +8,14 @@ public class CMatchBaseAction : UnityEngine.Object, IMatchAction
 {
 	protected CGameActionManager mActionManager;
 	protected MatchActionDelegate mDelegate;
-	protected CMatchField mIconField;
+	protected CField mIconField;
 
 	public CMatchBaseAction()
 	{
 //		UnityEngine.Debug.Log("create Action " + getActionEvent());
 	}
 
-	public void initWithActionManager(CGameActionManager aManager, CMatchField aIconField)
+	public void initWithActionManager(CGameActionManager aManager, CField aIconField)
 	{
 		mActionManager = aManager;
 		mIconField = aIconField;

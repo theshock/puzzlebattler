@@ -4,7 +4,7 @@ using System.Collections;
 public class CMatchActionDestroy : CMatchBaseAction
 {
 	private float mTimeDelayEmpty = 0.1f;
-	private CMatchIcon mIconTarget = null;
+	private CIcon mIconTarget = null;
 
 	public static IMatchAction create()
 	{
@@ -39,7 +39,7 @@ public class CMatchActionDestroy : CMatchBaseAction
 	{
 //		Debug.Log("CMatchActionDestroy startAction"); 
 
-		mIconTarget.IconState = EMatchIconState.eLockIcon;
+		mIconTarget.IconState = EIconState.eLock;
 		mIconTarget.onDestroyIcon();
 
 //		Debug.Log("CMatchActionDestroy startAction 1"); 
@@ -51,7 +51,7 @@ public class CMatchActionDestroy : CMatchBaseAction
 	{
 //		Debug.Log("CMatchActionDestroy emptyCell"); 
 
-		mIconTarget.IconState = EMatchIconState.eClearIcon;
+		mIconTarget.IconState = EIconState.eClear;
 		complateAction();
 	}
 
@@ -75,7 +75,7 @@ public class CMatchActionDestroy : CMatchBaseAction
 
 	public override void doUpdateActionParam(Hashtable aData)
 	{
-		mIconTarget = aData["target"] as CMatchIcon;
+		mIconTarget = aData["target"] as CIcon;
 
 		return;
 	}
