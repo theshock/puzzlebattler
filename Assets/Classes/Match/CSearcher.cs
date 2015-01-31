@@ -8,7 +8,7 @@ namespace Match {
 	public class CSearcher {
 		public CMatch mController;
 
-		public List<List<int>> findMatches () {
+		public List<List<int>> FindMatches() {
 			var union = new CWeightedUnion(GetSquare());
 
 			for (int i = 0; i < GetSquare(); i++) {
@@ -24,6 +24,10 @@ namespace Match {
 			}
 
 			return union.GetTrees();
+		}
+
+		public bool MatchesExists () {
+			return FindMatches().Count > 0;
 		}
 
 		private int GetWidth () {

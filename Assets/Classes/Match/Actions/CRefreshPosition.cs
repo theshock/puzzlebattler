@@ -15,21 +15,21 @@ namespace Match.Actions {
 		}
 
 		public override void startAction() {
-			mCountStartUpdateIcon = mIconField.updatePositionIcons(onEndMove);
-
-			if (mCountStartUpdateIcon == 0) {
-				IAction action = mActionManager.createAction(EAction.eAutoMatch);
-				mActionManager.addAction(action);
-
-				complateAction();
+			if (mIconField.updatePositionIcons(onEndMove) == 0) {
+				LaunchAutoMatch();
 			}
 		}
 
 		public void doUpdate() {}
 
 		public void onEndMove() {
-			IAction action = mActionManager.createAction(EAction.eAutoMatch);
-			int res = mActionManager.addAction(action);
+			LaunchAutoMatch();
+		}
+
+		private void LaunchAutoMatch () {
+			var action = mActionManager.createAction(EAction.eAutoMatch) as Actions.CAutoMatch;
+			action.autoConfigure();
+			mActionManager.addAction(action);
 
 			complateAction();
 		}
@@ -37,8 +37,6 @@ namespace Match.Actions {
 		public override EEvents getActionEvent() {
 			return EEvents.eRefreshPosition;
 		}
-
-		public override void doUpdateActionParam(Hashtable aData) {}
 	}
 
 }

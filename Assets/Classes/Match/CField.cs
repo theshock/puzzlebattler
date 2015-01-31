@@ -41,9 +41,9 @@ namespace Match {
 
 		public void swipeCellInMatrix(CIcon aFirstIcon, CIcon aSecondIcon) {
 
-			int t_r = aFirstIcon.mRow;
-			int t_c = aFirstIcon.mColumn;
-			int t_i = aFirstIcon.mIndex;
+			int row    = aFirstIcon.mRow;
+			int column = aFirstIcon.mColumn;
+			int index  = aFirstIcon.mIndex;
 
 			mIconMatrix[aFirstIcon.mRow, aFirstIcon.mColumn] = aSecondIcon;
 			mIconMatrix[aSecondIcon.mRow, aSecondIcon.mColumn] = aFirstIcon;
@@ -52,9 +52,9 @@ namespace Match {
 			aFirstIcon.mColumn = aSecondIcon.mColumn;
 			aFirstIcon.mIndex = aSecondIcon.mIndex;
 
-			aSecondIcon.mRow = t_r;
-			aSecondIcon.mColumn = t_c;
-			aSecondIcon.mIndex = t_i;
+			aSecondIcon.mRow = row;
+			aSecondIcon.mColumn = column;
+			aSecondIcon.mIndex = index;
 
 		}
 

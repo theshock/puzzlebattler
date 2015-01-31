@@ -12,27 +12,18 @@ namespace Match.Actions {
 			return new CAutoMatch();
 		}
 
-		public void onEndAction(IAction aAction) {	}
+		public void onEndAction(IAction aAction) {}
 
 		public override bool validation() {
-			mAutoMatches = mActionManager.mMatchController.mSearcher.findMatches();
-
-			return mAutoMatches.Count > 0;
+			return mAutoMatches != null && mAutoMatches.Count > 0;
 		}
 
 		public override void startAction() {
 			mCountStartMatch = 0;
 
 			foreach (List<int> match in mAutoMatches) {
-				bool is_hor = true;
-
 				CMatch action = mActionManager.createAction(EAction.eMatch) as CMatch;
-
-				Hashtable hash = new Hashtable();
-				hash["matchIcons"] = match;
-				hash["directionSwap"] = is_hor;
-
-				action.doUpdateActionParam(hash);
+				action.configure(match);
 				action.setDelegate(onEndAction);
 
 				mCountStartMatch += mActionManager.addAction(action);
@@ -49,10 +40,13 @@ namespace Match.Actions {
 			return EEvents.eAutoMatch;
 		}
 
-		public override void doUpdateActionParam(Hashtable aData) {
-			mAutoMatches = aData["matches"] as List<List<int>>;
+		public void autoConfigure () {
+			configure(mActionManager.mMatchController.mSearcher.FindMatches());
 		}
 
+		public void configure (List<List<int>> aMatches) {
+			mAutoMatches = aMatches;
+		}
 	}
 
 }

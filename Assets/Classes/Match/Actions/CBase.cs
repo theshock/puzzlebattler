@@ -18,10 +18,6 @@ namespace Match.Actions {
 			mDelegate = aDelegate;
 		}
 
-		public virtual void doUpdateActionParam(Hashtable aData) {
-			return;
-		}
-
 		public virtual bool validation() {
 			return false;
 		}

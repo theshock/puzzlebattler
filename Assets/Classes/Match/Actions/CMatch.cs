@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace Match.Actions {
 	public class CMatch : CBase {
-		private bool mIsHorizontalSwipe = true;
-
 		private List<int> mMatchIcons;
 
 		private int mStartDestroyIcon;
@@ -65,9 +63,8 @@ namespace Match.Actions {
 			return EEvents.eMatch;
 		}
 
-		public override void doUpdateActionParam(Hashtable aData) {
-			mIsHorizontalSwipe = (bool) aData["directionSwap"];
-			mMatchIcons = aData["matchIcons"] as List<int>;
+		public void configure (List<int> aMatchIcons) {
+			mMatchIcons = aMatchIcons;
 		}
 	}
 }

@@ -23,11 +23,11 @@ namespace Match {
 			mInput.Check();
 		}
 
-		public void destroyRow(int aRow) {
+		public void DestroyRow(int aRow) {
 			DestroyList(mField.getIconsByRow(aRow));
 		}
 
-		public void destroyColumn(int aCol) {
+		public void DestroyColumn(int aCol) {
 			DestroyList(mField.getIconsByColumn(aCol));
 		}
 
@@ -47,7 +47,6 @@ namespace Match {
 
 				mSelectedIcon = null;
 			}
-
 		}
 
 		public void OnInputEnd () {

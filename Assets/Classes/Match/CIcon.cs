@@ -78,9 +78,7 @@ namespace Match {
 		}
 
 		public bool hitTest(Vector2 aPos) {
-			Vector2 convert_pos = Camera.main.ScreenToWorldPoint(aPos);
-
-			return collider2D.OverlapPoint(convert_pos);
+			return collider2D.OverlapPoint(Camera.main.ScreenToWorldPoint(aPos));
 		}
 
 		public void initWithParams(CField aMatchField, Vector2 aIconPos, EIconType aIconType, int aIndex) {

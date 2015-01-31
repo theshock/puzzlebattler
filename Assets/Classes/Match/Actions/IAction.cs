@@ -9,7 +9,7 @@ namespace Match.Actions {
 
 		void startAction();
 
-		void setDelegate(Match.Actions.Delegate aDelegate);
+		void setDelegate(Delegate aDelegate);
 
 		EEvents getActionEvent();
 	}

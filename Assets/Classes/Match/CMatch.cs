@@ -27,7 +27,8 @@ namespace Match {
 
 			mView.init();
 
-			Actions.IAction action = mActionManager.createAction(EAction.eAutoMatch);
+			var action = mActionManager.createAction(EAction.eAutoMatch) as Actions.CAutoMatch;
+			action.autoConfigure();
 			mActionManager.addAction(action);
 		}
 
