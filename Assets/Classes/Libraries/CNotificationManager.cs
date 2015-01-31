@@ -5,43 +5,28 @@ using System.Diagnostics;
 
 namespace Libraries {
 	public class CNotificationManager {
-		private Dictionary<int, ArrayList> mDictionary = new Dictionary<int, ArrayList>();
+		private new Dictionary<int, List<INotificationObserver>> mDictionary = new Dictionary<int, List<INotificationObserver>>();
 
 		public void addObserver(int aEvent, INotificationObserver aObserver) {
-			if (mDictionary.ContainsKey(aEvent)) {
-				mDictionary[aEvent].Add(aObserver);
-			} else {
-				ArrayList arr = new ArrayList();
-				arr.Add(aObserver);
 
-				mDictionary.Add(aEvent, arr);
+			if (!mDictionary.ContainsKey(aEvent)) {
+				mDictionary.Add(aEvent, new List<INotificationObserver>());
 			}
+			mDictionary[aEvent].Add(aObserver);
 
-			return;
 		}
 
 		public void removeObserver(int aEvent, INotificationObserver aObserver) {
 			try {
 				mDictionary[aEvent].Remove(aObserver);
-			}
-			catch (System.Exception e) {
+			} catch (System.Exception e) {
 				Trace.TraceError(e.ToString());
 			}
-
-
-			return;
 		}
 
 		public void removeObserver(INotificationObserver aObserver) {
-			foreach (KeyValuePair<int, ArrayList> pair in mDictionary) {
-				foreach (ArrayList arr in mDictionary[pair.Key]) {
-					try {
-						arr.Remove(aObserver);
-					}
-					catch (System.Exception e) {
-						Trace.TraceError(e.ToString());
-					}
-				}
+			foreach (KeyValuePair<int, List<INotificationObserver>> pair in mDictionary) {
+				removeObserver(pair.Key, aObserver);
 			}
 		}
 
@@ -55,7 +40,7 @@ namespace Libraries {
 
 		public void notify(int aEvent, Object aParam) {
 			if (mDictionary.ContainsKey(aEvent)) {
-				ArrayList observers = mDictionary[aEvent];
+				List<INotificationObserver> observers = mDictionary[aEvent];
 
 				foreach (INotificationObserver ob in observers) {
 					ob.handleNotification(aEvent, aParam, this);

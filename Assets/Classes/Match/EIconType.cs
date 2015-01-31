@@ -1,4 +1,5 @@
 namespace Match {
+
 	public enum EIconType {
 		eRed,
 		eGreen,
@@ -7,4 +8,5 @@ namespace Match {
 		eYellow,
 		eCount
 	};
+
 }
