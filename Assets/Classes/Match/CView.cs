@@ -1,11 +1,12 @@
 using UnityEngine;
 using System.Collections;
 
-public class CMatchView : MonoBehaviour
+public class CView : MonoBehaviour
 {
-	public CMatchField mMatchField = null;
-	private CMatchIcon mSelectedIcon = null;
-	public CMatchController mMatchController = null;
+	public CField mMatchField = null;
+	public CController mMatchController = null;
+
+	private CIcon mSelectedIcon = null;
 	private bool mIsIgnoreTouch = false;
 	private bool mIsStartClick = false;
 
@@ -76,7 +77,7 @@ public class CMatchView : MonoBehaviour
 	{
 		ArrayList row = mMatchField.getIconsByRow(aRow);
 
-		foreach(CMatchIcon icon in row)
+		foreach(CIcon icon in row)
 		{
 			IMatchAction destroy_action = mMatchController.mActionManager.createAction(EMatchAction.eDestroyAction);
 			Hashtable hash = new Hashtable();
@@ -91,7 +92,7 @@ public class CMatchView : MonoBehaviour
 	{
 		ArrayList column = mMatchField.getIconsByColumn(aCol);
 		
-		foreach(CMatchIcon icon in column)
+		foreach(CIcon icon in column)
 		{
 			IMatchAction destroy_action = mMatchController.mActionManager.createAction(EMatchAction.eDestroyAction);
 			Hashtable hash = new Hashtable();
@@ -107,7 +108,7 @@ public class CMatchView : MonoBehaviour
 
 	}
 	
-	public void destroyIconsByType(EMatchIconType aType)
+	public void destroyIconsByType(EIconType aType)
 	{
 
 	}
@@ -129,7 +130,7 @@ public class CMatchView : MonoBehaviour
 		
 		if(mSelectedIcon && mSelectedIcon.getIsReadyMove() && !mIsIgnoreTouch)
 		{
-			CMatchIcon target_icon = mMatchField.getIconByPos(point);
+			CIcon target_icon = mMatchField.getIconByPos(point);
 
 			if(target_icon && target_icon.getIsReadyMove() && mSelectedIcon != target_icon)
 			{
@@ -177,7 +178,7 @@ public class CMatchView : MonoBehaviour
 		
 		if(mSelectedIcon && mSelectedIcon.getIsReadyMove() && !mIsIgnoreTouch)
 		{
-			CMatchIcon target_icon = mMatchField.getIconByPos(point);
+			CIcon target_icon = mMatchField.getIconByPos(point);
 
 			if(target_icon && target_icon.getIsReadyMove() && mSelectedIcon != target_icon)
 			{

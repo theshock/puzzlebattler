@@ -7,7 +7,7 @@ public class CGameController : MonoBehaviour,  INotificationObserver
 	public CNotificationManager mNotificationManager = new CNotificationManager();
 	public CGameData mGameData;
 	public CGameUI mGameUI;
-	public CMatchController mMatchController;
+	public CController mMatchController;
 
 	public void handleNotification(int aEvent, Object aParam, CNotificationManager aManager)
 	{

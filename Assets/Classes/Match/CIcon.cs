@@ -2,34 +2,15 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public enum EMatchIconType
-{
-	eMatchIconRed,
-	eMatchIconGreen,
-	eMatchIconBlue,
-	eMatchIconPurple,
-	eMatchIconYellow,
-	eMatchIconTypeCount
-};
-
-public enum EMatchIconState
-{
-	eLockIcon,
-	eClearIcon,
-	eOpenIcon,
-	eInvisibleIcon,
-	eMatchIconStateCount
-};
-
-public class CMatchIcon : MonoBehaviour 
+public class CIcon : MonoBehaviour
 {
 	float mTimeDelay = 0.1f;
 
 	public delegate void SwipeDelegate();
 	public SwipeDelegate mDelegate = null;
 
-	private EMatchIconType mIconType;
-	public EMatchIconType IconType
+	private EIconType mIconType;
+	public EIconType IconType
 	{ 
 		get
 		{
@@ -51,8 +32,8 @@ public class CMatchIcon : MonoBehaviour
 	}
 
 
-	private EMatchIconState mIconState;
-	public EMatchIconState IconState { 
+	private EIconState mIconState;
+	public EIconState IconState {
 		get
 		{
 			return mIconState;
@@ -63,26 +44,7 @@ public class CMatchIcon : MonoBehaviour
 
 			if(mIconSpriteRenderer)
 			{
-				switch(mIconState)
-				{
-					case EMatchIconState.eClearIcon:
-					{
-						mIconSpriteRenderer.enabled = false;
-					}
-						break;
-						
-//					case EMatchIconState.eInvisibleIcon:
-//					{
-//						mIconSpriteRenderer.enabled = false;
-//					}
-//						break;
-						
-					default:
-					{
-						mIconSpriteRenderer.enabled = true;
-					}
-						break;
-				}
+				mIconSpriteRenderer.enabled = (mIconState != EIconState.eClear);
 			}
 			else
 			{
@@ -96,14 +58,14 @@ public class CMatchIcon : MonoBehaviour
 	public int mColumn;
 	public int mIndex { get; set; }
 	public Image mIconSpriteRenderer = null;
-	public CMatchField mMatchField { get; set; }
+	public CField mMatchField { get; set; }
 
 	public string getLogInfo()
 	{
 		return "Icon Info [Row : " + mRow + "] [mCol : " + mColumn + "] [State : " + mIconState + "]";
 	}
 
-	CMatchIcon()
+	CIcon()
 	{
 
 	}
@@ -140,12 +102,12 @@ public class CMatchIcon : MonoBehaviour
 
 	public bool getIsReadyAction()
 	{
-		return (mIconState == EMatchIconState.eOpenIcon);
+		return (mIconState == EIconState.eOpen);
 	}
 
 	public bool getIsReadyMove()
 	{
-		return (mIconState == EMatchIconState.eOpenIcon);
+		return (mIconState == EIconState.eOpen);
 	}
 
 	public bool hitTest(Vector2 aPos)
@@ -162,7 +124,7 @@ public class CMatchIcon : MonoBehaviour
 		return res;
 	}
 
-	public void initWithParams(CMatchField aMatchField, Vector2 aIconPos, EMatchIconType aIconType, int aIndex)
+	public void initWithParams(CField aMatchField, Vector2 aIconPos, EIconType aIconType, int aIndex)
 	{
 		mMatchField = aMatchField;
 		mRow = (int)aIconPos.x;
@@ -197,7 +159,7 @@ public class CMatchIcon : MonoBehaviour
 //			return false;
 //		}
 
-		mIconState = EMatchIconState.eLockIcon;
+		mIconState = EIconState.eLock;
 		iTween.MoveTo(this.gameObject, iTween.Hash("position",pos3d,"time",mTimeDelay,"onComplete", "onEndMoveComplete"));
 
 		return true;
@@ -205,7 +167,7 @@ public class CMatchIcon : MonoBehaviour
 
 	public void onEndMoveComplete()
 	{
-		mIconState = EMatchIconState.eOpenIcon;
+		mIconState = EIconState.eOpen;
 		mMatchField.onEndMoveComplete(this);
 	}
 }

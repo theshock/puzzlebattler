@@ -8,7 +8,7 @@ public class CGameActionManager
 {
 	private ArrayList mActiveActions = new ArrayList();
 
-	public CMatchController mMatchController { get; set; }
+	public CController mMatchController { get; set; }
 
 	public CGameActionManager()
 	{

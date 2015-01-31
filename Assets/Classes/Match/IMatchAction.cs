@@ -14,7 +14,7 @@ public delegate void MatchActionDelegate(IMatchAction aAction);
 
 public interface IMatchAction
 {
-	void initWithActionManager(CGameActionManager aManager, CMatchField aIconField);
+	void initWithActionManager(CGameActionManager aManager, CField aIconField);
 
 	void doUpdateActionParam(Hashtable aData);
 

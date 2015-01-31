@@ -9,9 +9,9 @@ public class CGameUI : MonoBehaviour
 
 	void Awake()
 	{
-		iconSprites = new Sprite[(int)EMatchIconType.eMatchIconTypeCount];
+		iconSprites = new Sprite[(int)EIconType.eCount];
 		// load all frames in fruitsSprites array
-		for(int i = 0; i < (int)EMatchIconType.eMatchIconTypeCount; i++)
+		for(int i = 0; i < (int)EIconType.eCount; i++)
 		{
 			string name = "ui_match_icon/ui_match_icon_" + i;
 			Debug.Log(name);

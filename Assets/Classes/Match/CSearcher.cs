@@ -2,9 +2,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class CMatchSearcher : INotificationObserver
+public class CSearcher : INotificationObserver
 {
-	public CMatchController mMatchController { get; set; }
+	public CController mMatchController { get; set; }
 
 	public void handleNotification(int aEvent, Object aParam, CNotificationManager aManager)
 	{
@@ -25,7 +25,7 @@ public class CMatchSearcher : INotificationObserver
 	{
 		ArrayList matches = new ArrayList();
 		CWeightedUnion weightedUnionInstance = new CWeightedUnion();
-		CMatchField field = mMatchController.mMatchView.mMatchField;
+		CField field = mMatchController.mMatchView.mMatchField;
 
 		int col_field = field.mColumns;
 		int row_field = field.mRows;
@@ -37,23 +37,23 @@ public class CMatchSearcher : INotificationObserver
 			for (int j = i; j < i + (col_field - 2); j++)
 			{
 				ArrayList icons = new ArrayList();
-				
+
 				icons.Add(field.getIconByIndex(j));
 				icons.Add(field.getIconByIndex(j + 1));
 				icons.Add(field.getIconByIndex(j + 2));
-				
+
 				if(aOnlyOpenedCells)
 				{
 					for(int index = 0; index < icons.Count; index++)
 					{
-						CMatchIcon icon = icons[index] as CMatchIcon;
+						CIcon icon = icons[index] as CIcon;
 						if(icon && !icon.getIsReadyAction())
 						{
 							continue;
 						}
 					}
 				}
-				
+
 				if (field.isTheSameIconOne(icons))
 				{
 					weightedUnionInstance.unionInt(j,(j + 1));
@@ -61,13 +61,13 @@ public class CMatchSearcher : INotificationObserver
 				}
 			}
 		}
-//		
+//
 		for (int i = 0; i < row_field/2; i++)
 		{
 			for (int j = i; j < i + (col_field * (row_field/2 - 2)); j += col_field)
 			{
 				ArrayList icons = new ArrayList();
-				
+
 				icons.Add(field.getIconByIndex(j));
 				icons.Add(field.getIconByIndex(j + (col_field)));
 				icons.Add(field.getIconByIndex(j + (col_field * 2)));
@@ -76,14 +76,14 @@ public class CMatchSearcher : INotificationObserver
 				{
 					for(int index = 0; index < icons.Count; index++)
 					{
-						CMatchIcon icon = icons[index] as CMatchIcon;
+						CIcon icon = icons[index] as CIcon;
 						if(icon && !icon.getIsReadyAction())
 						{
 							continue;
 						}
 					}
 				}
-				
+
 				if (field.isTheSameIconOne(icons))
 				{
 					weightedUnionInstance.unionInt(j,(j + col_field));
@@ -103,11 +103,11 @@ public class CMatchSearcher : INotificationObserver
 			{
 //				Debug.Log(pair.Key);
 
-				matches.Add(pair.Value);				
+				matches.Add(pair.Value);
 			}
-			
+
 		}
-	
+
 		return matches;
 	}
 }

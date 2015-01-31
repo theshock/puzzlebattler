@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CMatchController : MonoBehaviour , INotificationObserver
+public class CController : MonoBehaviour , INotificationObserver
 {
 	public CNotificationManager mNotificationManager = new CNotificationManager();
-	public CMatchSearcher mMatchSearcher { get; set; }
-	public CMatchView mMatchView;
+	public CSearcher mMatchSearcher { get; set; }
+	public CView mMatchView;
 	public CGameActionManager mActionManager { get; set; }
 
 	public void handleNotification(int aEvent, Object aParam, CNotificationManager aManager)
@@ -32,7 +32,7 @@ public class CMatchController : MonoBehaviour , INotificationObserver
 
 		mNotificationManager.addObserver((int)GameNotificationEvents.eMatchEventEndAllAction,this);
 
-		mMatchSearcher = new CMatchSearcher();
+		mMatchSearcher = new CSearcher();
 		mMatchSearcher.mMatchController = this;
 		mMatchSearcher.subscribeNotification(mNotificationManager);
 

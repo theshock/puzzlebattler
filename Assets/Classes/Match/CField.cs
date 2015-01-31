@@ -2,8 +2,8 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class CMatchField : MonoBehaviour {
-	private CMatchIcon [,] mIconMatrix;
+public class CField : MonoBehaviour {
+	private CIcon [,] mIconMatrix;
 	public int mRows;
 	public int mColumns;
 	public Vector2 mStartPoint;
@@ -16,9 +16,9 @@ public class CMatchField : MonoBehaviour {
 
 	void Awake()
 	{
-		iconSprites = new Sprite[(int)EMatchIconType.eMatchIconTypeCount];
+		iconSprites = new Sprite[(int)EIconType.eCount];
 		// load all frames in fruitsSprites array
-		for(int i = 0; i < (int)EMatchIconType.eMatchIconTypeCount; i++)
+		for(int i = 0; i < (int)EIconType.eCount; i++)
 		{
 			string name = "match_icon/match_icon_" + i;
 			var spr = Resources.Load<Sprite>(name);
@@ -35,14 +35,14 @@ public class CMatchField : MonoBehaviour {
 
 	public void initMatchField()
 	{
-		mIconMatrix = new CMatchIcon[mRows, mColumns];
+		mIconMatrix = new CIcon[mRows, mColumns];
 		
 		for(int r = 0; r < mRows; r++)
 		{
 			for(int c = 0; c < mColumns; c++)
 			{
 				mIconMatrix[r,c] = null;
-				createIconByPos(new Vector2(r,c), EMatchIconType.eMatchIconTypeCount, true);
+				createIconByPos(new Vector2(r,c), EIconType.eCount, true);
 			}
 		}
 
@@ -65,7 +65,7 @@ public class CMatchField : MonoBehaviour {
 //		}
 	}
 
-	public void swipeCellInMatrix(CMatchIcon aFirstIcon, CMatchIcon aSecondIcon)
+	public void swipeCellInMatrix(CIcon aFirstIcon, CIcon aSecondIcon)
 	{
 
 		int t_r = aFirstIcon.mRow;
@@ -85,17 +85,17 @@ public class CMatchField : MonoBehaviour {
 
 	}
 
-	EMatchIconType genIconType()
+	EIconType genIconType()
 	{
-		int count = EMatchIconType.eMatchIconTypeCount.GetHashCode();
+		int count = EIconType.eCount.GetHashCode();
 		int type = Random.Range(0, count);
 
-		EMatchIconType res = (EMatchIconType) type;
+		EIconType res = (EIconType) type;
 
 		return res;
 	}
 
-	public void onEndMoveComplete(CMatchIcon aIcon)
+	public void onEndMoveComplete(CIcon aIcon)
 	{
 		mCountStartMoveCells--;
 
@@ -121,7 +121,7 @@ public class CMatchField : MonoBehaviour {
 				moved = false;
 				for( int r = 0; r < mRows; r++ )
 				{
-					if ( mIconMatrix[ r , c ].IconState == EMatchIconState.eClearIcon && (r + 1) < mRows && mIconMatrix[ r + 1 , c ].IconState != EMatchIconState.eClearIcon )
+					if ( mIconMatrix[ r , c ].IconState == EIconState.eClear && (r + 1) < mRows && mIconMatrix[ r + 1 , c ].IconState != EIconState.eClear )
 					{
 						swipeCellInMatrix(mIconMatrix[r,c], mIconMatrix[r + 1,c]);
 						
@@ -152,9 +152,9 @@ public class CMatchField : MonoBehaviour {
 		return mCountStartMoveCells;
 	}
 
-	void createIconByPos(Vector2 aIconPos, EMatchIconType aIconType, bool aIsSetStartPosition)
+	void createIconByPos(Vector2 aIconPos, EIconType aIconType, bool aIsSetStartPosition)
 	{
-		if(aIconType == EMatchIconType.eMatchIconTypeCount)
+		if(aIconType == EIconType.eCount)
 		{
 			aIconType = genIconType();
 		}
@@ -167,7 +167,7 @@ public class CMatchField : MonoBehaviour {
 //			Debug.Log("createIconByPos new Object");
 
  			GameObject icon = createIcon();
-			CMatchIcon component = icon.GetComponent<CMatchIcon>();
+			CIcon component = icon.GetComponent<CIcon>();
 			Image render = icon.GetComponent<Image>();
 			BoxCollider2D collider = icon.GetComponent<BoxCollider2D>();
 
@@ -180,11 +180,11 @@ public class CMatchField : MonoBehaviour {
 			
 			if(r < mRows / 2)
 			{
-				component.IconState = EMatchIconState.eOpenIcon;
+				component.IconState = EIconState.eOpen;
 			}
 			else
 			{
-				component.IconState = EMatchIconState.eInvisibleIcon;
+				component.IconState = EIconState.eInvisible;
 			}
 			
 			
@@ -205,18 +205,18 @@ public class CMatchField : MonoBehaviour {
 		{
 //			Debug.Log("createIconByPos reinit Object");
 
-			CMatchIcon component = mIconMatrix[r,c];
+			CIcon component = mIconMatrix[r,c];
 			GameObject icon = component.gameObject;
 
 			component.initWithParams(this, new Vector2(r,c), aIconType, r * mColumns + c);
 			
 			if(r < mRows / 2)
 			{
-				component.IconState = EMatchIconState.eOpenIcon;
+				component.IconState = EIconState.eOpen;
 			}
 			else
 			{
-				component.IconState = EMatchIconState.eInvisibleIcon;
+				component.IconState = EIconState.eInvisible;
 			}
 			
 
@@ -242,7 +242,7 @@ public class CMatchField : MonoBehaviour {
 		icon.AddComponent<CanvasRenderer>();
 		icon.AddComponent<BoxCollider2D>();
 		icon.AddComponent<Image>();
-		icon.AddComponent("CMatchIcon");
+		icon.AddComponent("CIcon");
 		icon.transform.SetParent(this.transform);
 
 		return icon;
@@ -254,9 +254,9 @@ public class CMatchField : MonoBehaviour {
 		{
 			for( int r = 0; r < mRows; r++ )
 			{
-				if ( mIconMatrix[ r , c ].IconState ==  EMatchIconState.eClearIcon)
+				if ( mIconMatrix[ r , c ].IconState ==  EIconState.eClear)
 				{
-					createIconByPos(new Vector2(r,c), EMatchIconType.eMatchIconTypeCount, false);
+					createIconByPos(new Vector2(r,c), EIconType.eCount, false);
 				}
 				
 			}
@@ -294,12 +294,12 @@ public class CMatchField : MonoBehaviour {
 		if(aSlice.Count < 1)
 			return false;
 
-		CMatchIcon first_icon = aSlice[0] as CMatchIcon;
+		CIcon first_icon = aSlice[0] as CIcon;
 
 		int standart = first_icon.mRow;
 		int count = 0;
 
-		foreach(CMatchIcon icon in aSlice)
+		foreach(CIcon icon in aSlice)
 		{
 			if(icon.mRow == standart)
 			{
@@ -317,12 +317,12 @@ public class CMatchField : MonoBehaviour {
 		if(aSlice.Count < 1)
 			return false;
 		
-		CMatchIcon first_icon = aSlice[0] as CMatchIcon;
+		CIcon first_icon = aSlice[0] as CIcon;
 		
 		int standart = first_icon.mColumn;
 		int count = 0;
 		
-		foreach(CMatchIcon icon in aSlice)
+		foreach(CIcon icon in aSlice)
 		{
 			if(icon.mColumn == standart)
 			{
@@ -340,14 +340,14 @@ public class CMatchField : MonoBehaviour {
 		if(aSlice.Count < 1)
 			return false;
 		
-		CMatchIcon first_icon = aSlice[0] as CMatchIcon;
+		CIcon first_icon = aSlice[0] as CIcon;
 		
-		EMatchIconType standart = first_icon.IconType;
+		EIconType standart = first_icon.IconType;
 		int count = 0;
 
 //		Debug.Log("aSlice.Count = " + aSlice.Count);
 
-		foreach(CMatchIcon icon in aSlice)
+		foreach(CIcon icon in aSlice)
 		{
 			if(!icon)
 			{
@@ -374,7 +374,7 @@ public class CMatchField : MonoBehaviour {
 			{
 //				Debug.Log("isHaveEmptyIcon Icon State [r =" +r + "], [c = " +c + "], [State = " + mIconMatrix[r,c].IconState + "]");
 
-				if(mIconMatrix[r,c].IconState == EMatchIconState.eClearIcon)
+				if(mIconMatrix[r,c].IconState == EIconState.eClear)
 				{
 					return true;
 				}
@@ -405,12 +405,12 @@ public class CMatchField : MonoBehaviour {
 		return new Vector3(mStartPoint.x + column * mOffset.x,mStartPoint.y + row * mOffset.y, 0);
 	}
 
-	public CMatchIcon getIconByPos(int aRow, int aColumn)
+	public CIcon getIconByPos(int aRow, int aColumn)
 	{
 		return mIconMatrix[aRow, aColumn];
 	}
 
-	public CMatchIcon getIconByPos(Vector2 aPos)
+	public CIcon getIconByPos(Vector2 aPos)
 	{
 //		Debug.Log(aPos);
 
@@ -418,7 +418,7 @@ public class CMatchField : MonoBehaviour {
 		{
 			for(int c = 0; c < mColumns; c++)
 			{
-				CMatchIcon icon = mIconMatrix[r,c];
+				CIcon icon = mIconMatrix[r,c];
 
 //				if(!icon)
 //				{
@@ -437,7 +437,7 @@ public class CMatchField : MonoBehaviour {
 		return null;
 	}
 
-	public CMatchIcon getIconByIndex(int aIndex)
+	public CIcon getIconByIndex(int aIndex)
 	{
 		if(aIndex >= mRows * mColumns)
 			return null;
