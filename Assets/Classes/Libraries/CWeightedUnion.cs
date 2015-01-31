@@ -58,6 +58,10 @@ namespace Libraries {
 		}
 
 		public List<List<int>> GetTrees() {
+			if (!HasUnions()) {
+				return new List<List<int>>();
+			}
+
 			var mTrees = new Dictionary<int, List<int>>();
 
 			foreach (CBranch branch in mBranches) {

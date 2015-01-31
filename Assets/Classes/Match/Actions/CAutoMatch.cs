@@ -1,10 +1,11 @@
-using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Match.Actions {
 
 	public class CAutoMatch : CBase {
-		private ArrayList mAutoMatches = null;
+		private List<List<int>> mAutoMatches;
 		public int mCountStartMatch = 0;
 
 		public static IAction create() {
@@ -14,7 +15,7 @@ namespace Match.Actions {
 		public void onEndAction(IAction aAction) {	}
 
 		public override bool validation() {
-			mAutoMatches = mActionManager.mMatchController.mSearcher.findMatches(true);
+			mAutoMatches = mActionManager.mMatchController.mSearcher.findMatches();
 
 			return mAutoMatches.Count > 0;
 		}
@@ -22,7 +23,7 @@ namespace Match.Actions {
 		public override void startAction() {
 			mCountStartMatch = 0;
 
-			foreach (ArrayList match in mAutoMatches) {
+			foreach (List<int> match in mAutoMatches) {
 				bool is_hor = true;
 
 				CMatch action = mActionManager.createAction(EAction.eMatch) as CMatch;
@@ -49,7 +50,7 @@ namespace Match.Actions {
 		}
 
 		public override void doUpdateActionParam(Hashtable aData) {
-			mAutoMatches = aData["matches"] as ArrayList;
+			mAutoMatches = aData["matches"] as List<List<int>>;
 		}
 
 	}

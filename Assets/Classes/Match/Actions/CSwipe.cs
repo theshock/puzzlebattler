@@ -1,5 +1,6 @@
-using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Match.Actions {
 	public class CSwipe : CBase {
@@ -37,13 +38,13 @@ namespace Match.Actions {
 			if (mIsCurrenSwipe == false) {
 				bool swipeCreateMatch = false;
 
-				ArrayList matches = mActionManager.mMatchController.mSearcher.findMatches(true);
+				List<List<int>> matches = mActionManager.mMatchController.mSearcher.findMatches();
 
 				if (matches.Count > 0) {
-					foreach (ArrayList match in matches) {
+					foreach (List<int> match in matches) {
 						for (int j = 0; j < match.Count; j++) {
 
-							if (((int)match[j] == mSelectedIcon.mIndex) || ((int)match[j] == mTargetedIcon.mIndex)) {
+							if (match[j] == mSelectedIcon.mIndex || match[j] == mTargetedIcon.mIndex) {
 								IAction matchAction = mActionManager.createAction(EAction.eMatch);
 								bool is_hor = (mSelectedIcon.mRow == mTargetedIcon.mRow);
 

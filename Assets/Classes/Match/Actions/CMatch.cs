@@ -1,11 +1,12 @@
-using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Match.Actions {
 	public class CMatch : CBase {
 		private bool mIsHorizontalSwipe = true;
 
-		private ArrayList mMatchIcons = null;
+		private List<int> mMatchIcons;
 
 		private int mStartDestroyIcon;
 
@@ -16,7 +17,7 @@ namespace Match.Actions {
 		}
 
 		public EIconType getMatchIconType() {
-			CIcon icon = mIconField.getIconByIndex((int)mMatchIcons[0]);
+			CIcon icon = mIconField.getIconByIndex(mMatchIcons[0]);
 			return icon.IconType;
 		}
 
@@ -68,7 +69,7 @@ namespace Match.Actions {
 
 		public override void doUpdateActionParam(Hashtable aData) {
 			mIsHorizontalSwipe = (bool) aData["directionSwap"];
-			mMatchIcons = aData["matchIcons"] as ArrayList;
+			mMatchIcons = aData["matchIcons"] as List<int>;
 		}
 	}
 }
