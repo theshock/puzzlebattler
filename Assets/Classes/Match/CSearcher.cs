@@ -1,4 +1,4 @@
-using Library;
+using Libraries;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,13 +18,12 @@ namespace Match {
 
 		public ArrayList findMatches(bool aOnlyOpenedCells = false) {
 			ArrayList matches = new ArrayList();
-			CWeightedUnion weightedUnionInstance = new CWeightedUnion();
 			CField field = mController.mView.mField;
 
 			int col_field = field.mColumns;
 			int row_field = field.mRows;
 
-			weightedUnionInstance.initWithElements(col_field * row_field);
+			CWeightedUnion weightedUnionInstance = new CWeightedUnion(col_field * row_field);
 
 			for (int i = 0; i < col_field * row_field / 2; i += col_field) {
 				for (int j = i; j < i + (col_field - 2); j++) {
@@ -44,8 +43,8 @@ namespace Match {
 					}
 
 					if (field.isTheSameIconOne(icons)) {
-						weightedUnionInstance.unionInt(j, (j + 1));
-						weightedUnionInstance.unionInt(j, (j + 2));
+						weightedUnionInstance.unite(j, (j + 1));
+						weightedUnionInstance.unite(j, (j + 2));
 					}
 				}
 			}
@@ -68,18 +67,18 @@ namespace Match {
 					}
 
 					if (field.isTheSameIconOne(icons)) {
-						weightedUnionInstance.unionInt(j, (j + col_field));
-						weightedUnionInstance.unionInt(j, (j + col_field * 2));
+						weightedUnionInstance.unite(j, (j + col_field));
+						weightedUnionInstance.unite(j, (j + col_field * 2));
 					}
 				}
 			}
 
 
-			if (weightedUnionInstance.getHasUnions()) {
-				Dictionary<int, ArrayList> foundMatches = weightedUnionInstance.getTrees();
+			if (weightedUnionInstance.HasUnions()) {
+				List<List<int>> foundMatches = weightedUnionInstance.GetTrees();
 
-				foreach (KeyValuePair<int, ArrayList> pair in foundMatches) {
-					matches.Add(pair.Value);
+				foreach (List<int> branch in foundMatches) {
+					matches.Add(new ArrayList(branch));
 				}
 
 			}

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Library;
+using Libraries;
 
 namespace Game {
 	public class CGame : MonoBehaviour, INotificationObserver {
@@ -17,7 +17,6 @@ namespace Game {
 			} else {
 				return ((aCountMatch - 1) * aCountMatch) / 2 - aCountMatch - 3;
 			}
-
 		}
 
 		void Start() {
