@@ -5,85 +5,83 @@ using UnityEngine;
 
 namespace Match {
 
-	public class CSearcher : INotificationObserver {
-		public CMatch mController { get; set; }
+	public class CSearcher {
+		public CMatch mController;
 
-		public void handleNotification(int aEvent, Object aParam, CNotificationManager aManager) { }
+		public List<List<int>> findMatches () {
+			var union = new CWeightedUnion(GetSquare());
 
-		public void subscribeNotification(CNotificationManager aCenter) { }
+			for (int i = 0; i < GetSquare(); i++) {
+				if (IsHorizontalMatch(i)) {
+					union.unite(i, i + 1);
+					union.unite(i, i + 2);
+				}
 
-		public bool isHaveMatches() {
-			return false;
+				if (IsVerticalMatch(i)) {
+					union.unite(i, i + GetWidth());
+					union.unite(i, i + GetWidth()*2);
+				}
+			}
+
+			return union.GetTrees();
 		}
 
-		public ArrayList findMatches(bool aOnlyOpenedCells = false) {
-			ArrayList matches = new ArrayList();
-			CField field = mController.mView.mField;
-
-			int col_field = field.mColumns;
-			int row_field = field.mRows;
-
-			CWeightedUnion weightedUnionInstance = new CWeightedUnion(col_field * row_field);
-
-			for (int i = 0; i < col_field * row_field / 2; i += col_field) {
-				for (int j = i; j < i + (col_field - 2); j++) {
-					ArrayList icons = new ArrayList();
-
-					icons.Add(field.getIconByIndex(j));
-					icons.Add(field.getIconByIndex(j + 1));
-					icons.Add(field.getIconByIndex(j + 2));
-
-					if (aOnlyOpenedCells) {
-						for (int index = 0; index < icons.Count; index++) {
-							CIcon icon = icons[index] as CIcon;
-							if (icon && !icon.getIsReadyAction()) {
-								continue;
-							}
-						}
-					}
-
-					if (field.isTheSameIconOne(icons)) {
-						weightedUnionInstance.unite(j, (j + 1));
-						weightedUnionInstance.unite(j, (j + 2));
-					}
-				}
-			}
-			//
-			for (int i = 0; i < row_field / 2; i++) {
-				for (int j = i; j < i + (col_field * (row_field / 2 - 2)); j += col_field) {
-					ArrayList icons = new ArrayList();
-
-					icons.Add(field.getIconByIndex(j));
-					icons.Add(field.getIconByIndex(j + (col_field)));
-					icons.Add(field.getIconByIndex(j + (col_field * 2)));
-
-					if (aOnlyOpenedCells) {
-						for (int index = 0; index < icons.Count; index++) {
-							CIcon icon = icons[index] as CIcon;
-							if (icon && !icon.getIsReadyAction()) {
-								continue;
-							}
-						}
-					}
-
-					if (field.isTheSameIconOne(icons)) {
-						weightedUnionInstance.unite(j, (j + col_field));
-						weightedUnionInstance.unite(j, (j + col_field * 2));
-					}
-				}
-			}
-
-
-			if (weightedUnionInstance.HasUnions()) {
-				List<List<int>> foundMatches = weightedUnionInstance.GetTrees();
-
-				foreach (List<int> branch in foundMatches) {
-					matches.Add(new ArrayList(branch));
-				}
-
-			}
-
-			return matches;
+		private int GetWidth () {
+			return mController.mView.mField.mColumns;
 		}
+
+		private int GetHeight () {
+			return mController.mView.mField.mRows;
+		}
+
+		private int GetSquare () {
+			return GetWidth() * GetHeight() / 2;
+		}
+
+		private bool IsOutOfHorisontalRange (int index) {
+			return index % GetWidth() >= GetWidth() - 2;
+		}
+
+		private bool IsOutOfVeticalRange (int index) {
+			return index >= (GetSquare() - GetWidth() * 2);
+		}
+
+		private bool IsHorizontalMatch (int index) {
+			if (IsOutOfHorisontalRange(index)) {
+				return false;
+			} else {
+				return IsMatch(index, index + 1, index + 2);
+			}
+		}
+
+		private bool IsVerticalMatch (int index) {
+			if (IsOutOfVeticalRange(index)) {
+				return false;
+			} else {
+				return IsMatch(index, index + GetWidth()*1, index + GetWidth()*2);
+			}
+		}
+
+		private bool IsMatch(int first, int second, int third) {
+			var icons = new List<CIcon>();
+			var field = mController.mView.mField;
+
+			icons.Add( field.getIconByIndex(first) );
+			icons.Add( field.getIconByIndex(second) );
+			icons.Add( field.getIconByIndex(third) );
+
+			return IsAllIconsActive(icons) && field.IsIconsTheSame(icons);
+		}
+
+		private bool IsAllIconsActive (List<CIcon> icons) {
+			foreach (CIcon icon in icons) {
+				if(icon && !icon.getIsReadyAction()) {
+					return false;
+				}
+			}
+
+			return true;
+		}
+
 	}
 }

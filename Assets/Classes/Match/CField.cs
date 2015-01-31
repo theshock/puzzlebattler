@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Match {
@@ -252,6 +253,22 @@ namespace Match {
 			}
 
 			return (count == aSlice.Count);
+		}
+
+		public bool IsIconsTheSame (List<CIcon> icons) {
+			if (icons.Count < 1) {
+				return false;
+			}
+
+			int count = 0;
+
+			foreach (CIcon icon in icons) {
+				if (icon.IconType == icons[0].IconType) {
+					count++;
+				}
+			}
+
+			return (count == icons.Count);
 		}
 
 		public bool isTheSameIconOne(ArrayList aSlice) {

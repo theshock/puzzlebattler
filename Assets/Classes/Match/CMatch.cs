@@ -24,7 +24,6 @@ namespace Match {
 
 			mSearcher = new CSearcher();
 			mSearcher.mController = this;
-			mSearcher.subscribeNotification(mNotificationManager);
 
 			mView.init();
 
