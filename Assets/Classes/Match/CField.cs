@@ -24,12 +24,6 @@ namespace Match {
 				var spr = Resources.Load<Sprite>(name);
 				iconSprites[i] = spr;
 			}
-
-		}
-
-		// Use this for initialization
-		void Start() {
-
 		}
 
 		public void initMatchField() {
@@ -42,21 +36,6 @@ namespace Match {
 				}
 			}
 
-		}
-
-		// Update is called once per frame
-		void Update() {
-
-		}
-
-		void printfField() {
-			//		for(int r = 0; r < mRows; r++)
-			//		{
-			//			for(int c = 0; c < mColumns; c++)
-			//			{
-			//
-			//			}
-			//		}
 		}
 
 		public void swipeCellInMatrix(CIcon aFirstIcon, CIcon aSecondIcon) {
@@ -98,10 +77,7 @@ namespace Match {
 		public int updatePositionIcons(UpdatePositionDelegate aDelegate) {
 			mCountStartMoveCells = 0;
 			mDelegate = aDelegate;
-			//
-			//		// TRACE("START MOVE CELLS DOWN")
-			//
-			//
+
 			for ( int c = 0; c < mColumns; c++ ) {
 				bool moved = true;
 				while (moved) {
@@ -110,7 +86,6 @@ namespace Match {
 						if ( mIconMatrix[r, c].IconState == EIconState.eClear && (r + 1) < mRows && mIconMatrix[r + 1, c].IconState != EIconState.eClear ) {
 							swipeCellInMatrix(mIconMatrix[r, c], mIconMatrix[r + 1, c]);
 
-							printfField();
 							moved = true;
 						}
 					}
@@ -118,8 +93,7 @@ namespace Match {
 			}
 
 			fillFreeIcons();
-			//		//  TRACE("END MOVE CELLS DOWN")
-			//
+
 			for ( int c = 0; c < mColumns; c++ ) {
 				float delay = 0;
 				for ( int r = 0; r < mRows; r++ ) {
@@ -127,7 +101,6 @@ namespace Match {
 						mCountStartMoveCells++;
 						delay += 0.01f;
 					}
-
 				}
 			}
 
@@ -187,8 +160,6 @@ namespace Match {
 					component.IconState = EIconState.eInvisible;
 				}
 
-
-
 				if (aIsSetStartPosition) {
 					icon.transform.position = getIconCenterByIndex(r, c);
 				} else {
@@ -203,6 +174,7 @@ namespace Match {
 
 		GameObject createIcon() {
 			GameObject icon = new GameObject();
+
 			icon.AddComponent<CanvasRenderer>();
 			icon.AddComponent<BoxCollider2D>();
 			icon.AddComponent<Image>();
@@ -218,7 +190,6 @@ namespace Match {
 					if ( mIconMatrix[r, c].IconState == EIconState.eClear) {
 						createIconByPos(new Vector2(r, c), EIconType.eCount, false);
 					}
-
 				}
 			}
 		}
@@ -241,10 +212,10 @@ namespace Match {
 				res.Add(mIconMatrix[r, aColumn]);
 			}
 
-
 			return res;
 		}
 
+		// todo: merge with isTheSameIconOne, iconsInTheSameCol, isTheSameIconOne
 		public bool iconsInTheSameRow(ArrayList aSlice) {
 			if (aSlice.Count < 1)
 				return false;
@@ -280,9 +251,7 @@ namespace Match {
 				}
 			}
 
-			bool res = (count == aSlice.Count);
-
-			return res;
+			return (count == aSlice.Count);
 		}
 
 		public bool isTheSameIconOne(ArrayList aSlice) {
@@ -294,29 +263,18 @@ namespace Match {
 			EIconType standart = first_icon.IconType;
 			int count = 0;
 
-			//		Debug.Log("aSlice.Count = " + aSlice.Count);
-
 			foreach (CIcon icon in aSlice) {
-				if (!icon) {
-					//				Debug.Log("isTheSameIconOne fail");
-				}
-
 				if (icon.IconType == standart) {
 					count++;
 				}
 			}
 
-			bool res = (count == aSlice.Count);
-
-			return res;
+			return (count == aSlice.Count);
 		}
 
 		public bool isHaveEmptyIcon() {
-			//		Debug.Log("isHaveEmptyIcon");
 			for (int r = 0; r < mRows; r++) {
 				for (int c = 0; c < mColumns; c++) {
-					//				Debug.Log("isHaveEmptyIcon Icon State [r =" +r + "], [c = " +c + "], [State = " + mIconMatrix[r,c].IconState + "]");
-
 					if (mIconMatrix[r, c].IconState == EIconState.eClear) {
 						return true;
 					}
@@ -326,14 +284,6 @@ namespace Match {
 			return false;
 		}
 
-		//	IMatchIcon* CDefaultMatchCellField::getCentralIcon(std::vector<IMatchIcon*> aSlice)
-		//	{
-		//		std::sort(aSlice.begin(), aSlice.end(), IMatchIcon::predicateColumn);
-		//		IMatchIcon* centr_cell = aSlice[(aSlice.size() - 1)/2];
-		//
-		//		return centr_cell;
-		//	}
-		//
 		public Vector3 getIconCenterByIndex(int aRow, int aColumn) {
 			return new Vector3(mStartPoint.x + aColumn * mOffset.x, mStartPoint.y + aRow * mOffset.y, 0);
 		}
@@ -350,18 +300,9 @@ namespace Match {
 		}
 
 		public CIcon getIconByPos(Vector2 aPos) {
-			//		Debug.Log(aPos);
-
 			for (int r = 0; r < mRows; r++) {
 				for (int c = 0; c < mColumns; c++) {
 					CIcon icon = mIconMatrix[r, c];
-
-					//				if(!icon)
-					//				{
-					//					Debug.Log("fail icon");
-					//					Debug.Log(r);
-					//					Debug.Log(c);
-					//				}
 
 					if (icon && icon.hitTest(aPos) && icon.getIsReadyMove()) {
 						return icon;
@@ -376,13 +317,8 @@ namespace Match {
 			if (aIndex >= mRows * mColumns)
 				return null;
 
-			//		Debug.Log("[mRows " + mRows + "] [mColumns " + mColumns + "]");
-			//		Debug.Log("[aIndex " + aIndex + "]");
 			int row = aIndex / mColumns;
 			int column = aIndex - row * mColumns;
-
-			//		Debug.Log("getIconByIndex [row " + row + "] [column " + column + "]");
-
 			return mIconMatrix[row, column];
 		}
 	}

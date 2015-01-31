@@ -8,34 +8,15 @@ namespace Match.Actions {
 		public int mCountStartMatch = 0;
 
 		public static IAction create() {
-			//		Debug.Log("CMatchAutoMatchAction create");
-
 			return new CAutoMatch();
 		}
 
-		public void onEndAction(IAction aAction) {
-			//		Debug.Log("CMatchAutoMatchAction onEndAction");
-			//
-			//		mCountStartMatch--;
-			//
-			//		if(mCountStartMatch == 0)
-			//		{
-			//			Debug.Log("CMatchAutoMatchAction onEndAction last");
-			//
-			//			complateAction();
-			//		}
-		}
+		public void onEndAction(IAction aAction) {	}
 
 		public override bool validation() {
-			//		Debug.Log("CMatchAutoMatchAction validation");
-
 			mAutoMatches = mActionManager.mMatchController.mMatchSearcher.findMatches(true);
 
-			if (mAutoMatches.Count > 0) {
-				return true;
-			}
-
-			return false;
+			return mAutoMatches.Count > 0;
 		}
 
 		public override void startAction() {
@@ -60,19 +41,15 @@ namespace Match.Actions {
 		}
 
 
-		public void doUpdate() {
-
-		}
+		public void doUpdate() {}
 
 
 		public override GameNotificationEvents getActionEvent() {
-			return  GameNotificationEvents.eMatchActionAutoMatchEvent;
+			return GameNotificationEvents.eMatchActionAutoMatchEvent;
 		}
 
 		public override void doUpdateActionParam(Hashtable aData) {
 			mAutoMatches = aData["matches"] as ArrayList;
-
-			return;
 		}
 
 	}

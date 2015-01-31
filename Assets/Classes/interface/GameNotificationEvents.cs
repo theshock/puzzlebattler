@@ -1,8 +1,7 @@
 using UnityEngine;
 using System;
 
-public enum GameNotificationEvents
-{
+public enum GameNotificationEvents {
 	eMatchEventEndAllAction,
 	eMatchEventEndInitAction,
 	eMatchChangeInTheFieldAction,

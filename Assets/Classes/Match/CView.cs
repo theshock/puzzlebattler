@@ -1,4 +1,3 @@
-
 using System.Collections;
 using UnityEngine;
 
@@ -12,12 +11,9 @@ namespace Match {
 		private bool mIsIgnoreTouch = false;
 		private bool mIsStartClick = false;
 
-		// Use this for initialization
 		void Start() {
 			Input.simulateMouseWithTouches = true;
 		}
-
-		// Update is called once per frame
 
 		public void init() {
 			mMatchField.initMatchField();
@@ -29,25 +25,18 @@ namespace Match {
 
 				switch (touch.phase) {
 					case TouchPhase.Began:
-				{
-					onTouchBegan(touch);
-				}
-					break;
+						onTouchBegan(touch);
+						break;
 
 					case TouchPhase.Moved:
-				{
-					onTouchMoved(touch);
-				}
-					break;
+						onTouchMoved(touch);
+						break;
 
 					case TouchPhase.Ended:
-				{
-					onTouchEnded(touch);
-				}
-					break;
+						onTouchEnded(touch);
+						break;
 				}
 			} else if ( Input.GetMouseButton(0) ) {
-
 				if (!mIsStartClick) {
 					mIsStartClick = true;
 					onTouchBegan(Input.mousePosition);
@@ -55,8 +44,6 @@ namespace Match {
 					onTouchMoved(Input.mousePosition);
 				}
 			} else if (mIsStartClick) {
-				//			Debug.Log( "Click End" );
-
 				mIsStartClick = false;
 				mSelectedIcon = null;
 				mIsIgnoreTouch = false;
@@ -101,13 +88,11 @@ namespace Match {
 			if (mIsIgnoreTouch)
 				return;
 
-			//		Debug.Log("onTouchBegan");
 			Vector2 toush_pos = aPos;
 			mSelectedIcon = mMatchField.getIconByPos(toush_pos);
 		}
 
 		void onTouchMoved(Vector2 aPos) {
-			//		Debug.Log("onTouchMoved");
 			Vector2 point = aPos;
 
 			if (mSelectedIcon && mSelectedIcon.getIsReadyMove() && !mIsIgnoreTouch) {
@@ -116,9 +101,6 @@ namespace Match {
 				if (target_icon && target_icon.getIsReadyMove() && mSelectedIcon != target_icon) {
 					int rowDistance = Mathf.Abs(mSelectedIcon.mRow - target_icon.mRow);
 					int colDistance = Mathf.Abs(mSelectedIcon.mColumn - target_icon.mColumn);
-
-					//				Debug.Log("[rowDistance : " + rowDistance + "]");
-					//				Debug.Log("[colDistance : " + colDistance + "]");
 
 					if ((rowDistance == 1 && colDistance == 0) || (rowDistance == 0 && colDistance == 1)) {
 						Actions.IAction swipe_action = mMatchController.mActionManager.createAction(EMatchAction.eSwipeAction);

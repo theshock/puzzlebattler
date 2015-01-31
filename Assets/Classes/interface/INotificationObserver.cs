@@ -10,8 +10,7 @@
 using UnityEngine;
 using System.Collections;
 
-public interface INotificationObserver
-{
+public interface INotificationObserver {
 	void handleNotification(int aEvent, Object aParam, CNotificationManager aManager);
 }
 

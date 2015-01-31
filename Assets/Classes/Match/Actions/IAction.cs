@@ -20,8 +20,6 @@ namespace Match.Actions {
 
 		void startAction();
 
-		void updateting();
-
 		void setDelegate(Match.Actions.Delegate aDelegate);
 
 		GameNotificationEvents getActionEvent();

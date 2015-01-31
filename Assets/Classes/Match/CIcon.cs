@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
+using System.Collections;
 
 namespace Match {
 
@@ -48,39 +48,18 @@ namespace Match {
 
 		public int mRow;
 		public int mColumn;
-		public int mIndex {
-			get;
-			set;
-		}
+		public int mIndex { get; set; }
 		public Image mIconSpriteRenderer = null;
-		public CField mMatchField {
-			get;
-			set;
-		}
+		public CField mMatchField { get; set; }
 
 		public string getLogInfo() {
 			return "Icon Info [Row : " + mRow + "] [mCol : " + mColumn + "] [State : " + mIconState + "]";
 		}
 
-		CIcon() {
-
-		}
-		// Use this for initialization
 		void Start() {
-			if (mIconSpriteRenderer != null) {
-				//			mIconSpriteRenderer.sortingLayerID = 1;
-				//			mIconSpriteRenderer.sortingLayerName = "match_view";
-			} else {
+			if (mIconSpriteRenderer == null) {
 				mIconSpriteRenderer = GetComponent<Image>();
-				//			mIconSpriteRenderer.sortingLayerID = 1;
 			}
-
-			//		gameObject.layer = 8;
-		}
-
-		// Update is called once per frame
-		void Update() {
-
 		}
 
 		public void onDestroyIcon() {
@@ -99,15 +78,9 @@ namespace Match {
 		}
 
 		public bool hitTest(Vector2 aPos) {
-			bool res = false;
 			Vector2 convert_pos = Camera.main.ScreenToWorldPoint(aPos);
 
-
-			if (collider2D.OverlapPoint(convert_pos)) {
-				res = true;
-			}
-
-			return res;
+			return collider2D.OverlapPoint(convert_pos);
 		}
 
 		public void initWithParams(CField aMatchField, Vector2 aIconPos, EIconType aIconType, int aIndex) {
@@ -118,14 +91,9 @@ namespace Match {
 		}
 
 		public void onEndSwipeAnimation() {
-			//		Debug.Log("CMatchIcon onEndSwipeAnimation");
-
 			if (mDelegate != null) {
-				//			Debug.Log("CMatchIcon onEndSwipeAnimation call delegate");
-
 				mDelegate.Invoke();
 			}
-			//		Debug.Log("CMatchIcon onEndSwipeAnimation end");
 		}
 
 		public bool moveTo(int aRow, int aCol, float aDelay) {
@@ -134,12 +102,6 @@ namespace Match {
 
 			if (this.transform.position == pos3d)
 				return false;
-
-			//		if(mIconState == EMatchIconState.eInvisibleIcon || mIconState == EMatchIconState.eClearIcon)
-			//		{
-			//			this.transform.position = pos3d;
-			//			return false;
-			//		}
 
 			mIconState = EIconState.eLock;
 			iTween.MoveTo(this.gameObject, iTween.Hash("position", pos3d, "time", mTimeDelay, "onComplete", "onEndMoveComplete"));

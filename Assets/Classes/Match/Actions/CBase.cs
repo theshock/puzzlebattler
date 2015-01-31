@@ -1,18 +1,13 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 
 namespace Match.Actions {
-	public class CBase : UnityEngine.Object, IAction {
+	public class CBase : Object, IAction {
 		protected CGameActionManager mActionManager;
 		protected Match.Actions.Delegate mDelegate;
 		protected CField mIconField;
-
-		public CBase() {
-			//		UnityEngine.Debug.Log("create Action " + getActionEvent());
-		}
 
 		public void initWithActionManager(CGameActionManager aManager, CField aIconField) {
 			mActionManager = aManager;
@@ -21,10 +16,6 @@ namespace Match.Actions {
 
 		public void setDelegate(Match.Actions.Delegate aDelegate) {
 			mDelegate = aDelegate;
-		}
-
-		public void updateting() {
-
 		}
 
 		public virtual void doUpdateActionParam(Hashtable aData) {
@@ -40,28 +31,19 @@ namespace Match.Actions {
 		}
 
 		public virtual void complateAction() {
-			//		UnityEngine.Debug.Log("end Action " + getActionEvent());
-			//		UnityEngine.Debug.Log("complateAction");
 			try {
-				//			UnityEngine.Debug.Log("complateAction 1");
 				mActionManager.mMatchController.mNotificationManager.notify((int)getActionEvent(), this);
-				//			UnityEngine.Debug.Log("complateAction 1_1");
 
 				if (mDelegate != null) {
 					mDelegate.Invoke(this);
 				}
 
-
-				//			UnityEngine.Debug.Log("complateAction 2");
 				mActionManager.onEndAction(this);
-
-				//			UnityEngine.Debug.Log("complateAction 3");
 
 			}
 			catch (System.Exception e) {
-				UnityEngine.Debug.LogError(e.ToString());
+				Debug.LogError(e.ToString());
 			}
-
 		}
 
 		public virtual GameNotificationEvents getActionEvent() {

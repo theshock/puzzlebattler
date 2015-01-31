@@ -5,18 +5,11 @@ using System.Collections.Generic;
 namespace Match {
 
 	public class CSearcher : INotificationObserver {
-		public CController mMatchController {
-			get;
-			set;
-		}
+		public CController mMatchController { get; set; }
 
-		public void handleNotification(int aEvent, Object aParam, CNotificationManager aManager) {
-			return;
-		}
+		public void handleNotification(int aEvent, Object aParam, CNotificationManager aManager) { }
 
-		public void subscribeNotification(CNotificationManager aCenter) {
-
-		}
+		public void subscribeNotification(CNotificationManager aCenter) { }
 
 		public bool isHaveMatches() {
 			return false;
@@ -84,11 +77,7 @@ namespace Match {
 			if (weightedUnionInstance.getHasUnions()) {
 				Dictionary<int, ArrayList> foundMatches = weightedUnionInstance.getTrees();
 
-				//			Debug.Log(foundMatches);
-
 				foreach (var pair in foundMatches) {
-					//				Debug.Log(pair.Key);
-
 					matches.Add(pair.Value);
 				}
 

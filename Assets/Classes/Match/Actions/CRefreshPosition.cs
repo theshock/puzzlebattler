@@ -11,17 +11,7 @@ namespace Match.Actions {
 
 
 		public override bool validation() {
-			//		Debug.Log("CMatchRefreshPositionAction validation");
-
-			if (mIconField.isHaveEmptyIcon()) {
-				//			Debug.Log("CMatchRefreshPositionAction validation ok");
-
-				return true;
-			}
-
-			//		Debug.Log("CMatchRefreshPositionAction validation fail");
-
-			return false;
+			return mIconField.isHaveEmptyIcon();
 		}
 
 		public override void startAction() {
@@ -33,12 +23,9 @@ namespace Match.Actions {
 
 				complateAction();
 			}
-
 		}
 
-		public void doUpdate() {
-
-		}
+		public void doUpdate() {}
 
 		public void onEndMove() {
 			IAction action = mActionManager.createAction(EMatchAction.eAutoMatchAction);
@@ -51,10 +38,7 @@ namespace Match.Actions {
 			return GameNotificationEvents.eMatchRefreshPositionEvent;
 		}
 
-		public override void doUpdateActionParam(Hashtable aData) {
-
-			return;
-		}
+		public override void doUpdateActionParam(Hashtable aData) {}
 	}
 
 }

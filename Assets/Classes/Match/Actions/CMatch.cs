@@ -21,21 +21,9 @@ namespace Match.Actions {
 		}
 
 		public void onEndAction(IAction aAction) {
-			//		Debug.Log("CMatchActionMatch onEndAction");
-			//
-			//		mStartDestroyIcon--;
-			//
-			//		if(mStartDestroyIcon == 0)
-			//		{
-			//			Debug.Log("CMatchActionMatch onEndAction last");
-			//
-			//			complateAction();
-			//		}
 		}
 
 		public override bool validation() {
-			//		Debug.Log("CMatchActionMatch validation");
-
 			if (mMatchIcons != null) {
 				foreach (int index_icon in mMatchIcons) {
 					CIcon icon = mIconField.getIconByIndex(index_icon);
@@ -48,8 +36,6 @@ namespace Match.Actions {
 				return false;
 			}
 
-			//		Debug.Log("CMatchActionMatch validation ok");
-
 			return true;
 		}
 
@@ -58,8 +44,6 @@ namespace Match.Actions {
 		}
 
 		public override void startAction() {
-			//		Debug.Log("CMatchActionMatch startAction");
-
 			mStartDestroyIcon = 0;
 
 			foreach (int index_icon in mMatchIcons) {
@@ -75,7 +59,6 @@ namespace Match.Actions {
 			}
 
 			complateAction();
-			//		Debug.Log("CMatchActionMatch startAction end " + mStartDestroyIcon);
 		}
 
 
@@ -86,8 +69,6 @@ namespace Match.Actions {
 		public override void doUpdateActionParam(Hashtable aData) {
 			mIsHorizontalSwipe = (bool) aData["directionSwap"];
 			mMatchIcons = aData["matchIcons"] as ArrayList;
-
-			return;
 		}
 	}
 }
