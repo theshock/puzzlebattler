@@ -20,7 +20,7 @@ namespace Game {
 		}
 
 		void Start() {
-			mMatch.mNotificationManager.addObserver((int)Match.EEvents.eActionMatch, this);
+			mMatch.mNotificationManager.addObserver((int)Match.EEvents.eMatch, this);
 		}
 	}
 }

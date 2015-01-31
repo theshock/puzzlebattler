@@ -5,8 +5,6 @@ namespace Match.Actions {
 	public interface IAction {
 		void initWithActionManager(Game.CActionManager aManager, CField aIconField);
 
-		void doUpdateActionParam(Hashtable aData);
-
 		bool validation();
 
 		void startAction();

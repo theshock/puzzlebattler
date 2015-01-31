@@ -10,7 +10,7 @@ namespace Match {
 		public Game.CActionManager mActionManager { get; set; }
 
 		public void handleNotification(int aEvent, Object aParam, CNotificationManager aManager) {
-			if ((EEvents) aEvent == EEvents.eEndAllAction) {
+			if ((EEvents) aEvent == EEvents.eEndAll) {
 				Actions.IAction action = mActionManager.createAction(EAction.eRefreshPosition);
 				mActionManager.addAction(action);
 			}
@@ -20,7 +20,7 @@ namespace Match {
 			mActionManager = new Game.CActionManager();
 			mActionManager.mMatchController = this;
 
-			mNotificationManager.addObserver((int)EEvents.eEndAllAction, this);
+			mNotificationManager.addObserver((int)EEvents.eEndAll, this);
 
 			mSearcher = new CSearcher();
 			mSearcher.mController = this;

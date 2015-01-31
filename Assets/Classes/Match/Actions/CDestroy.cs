@@ -38,11 +38,11 @@ namespace Match.Actions {
 
 
 		public override EEvents getActionEvent() {
-			return  EEvents.eActionDestroy;
+			return EEvents.eDestroy;
 		}
 
-		public override void doUpdateActionParam(Hashtable aData) {
-			mIconTarget = aData["target"] as CIcon;
+		public void configure(CIcon target) {
+			mIconTarget = target;
 		}
 
 		public void destroyArray(ArrayList aCells) {}

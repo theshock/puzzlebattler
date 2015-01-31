@@ -157,7 +157,7 @@ GameObject:
   - 4: {fileID: 235478208}
   - 114: {fileID: 235478207}
   m_Layer: 8
-  m_Name: GameObject
+  m_Name: View
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -174,8 +174,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 512b6e7377f16394c8ab2446d3af9100, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMatchField: {fileID: 875817892}
-  mMatchController: {fileID: 1728815467}
+  mField: {fileID: 875817892}
+  mController: {fileID: 1728815467}
 --- !u!4 &235478208
 Transform:
   m_ObjectHideFlags: 0
@@ -379,7 +379,7 @@ GameObject:
   - 222: {fileID: 875817895}
   - 114: {fileID: 875817894}
   m_Layer: 8
-  m_Name: GameObject
+  m_Name: Field
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -624,7 +624,7 @@ GameObject:
   - 4: {fileID: 1417612942}
   - 114: {fileID: 1417612943}
   m_Layer: 8
-  m_Name: GameObject
+  m_Name: Game
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -651,12 +651,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1417612941}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06283d10a0fe242249c393a684089589, type: 3}
+  m_Script: {fileID: 11500000, guid: 4bf045164716ee947b6ee52c05114283, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mGameData: {fileID: 0}
   mGameUI: {fileID: 0}
-  mMatchController: {fileID: 1728815467}
+  mMatch: {fileID: 1728815467}
 --- !u!1 &1609723986
 GameObject:
   m_ObjectHideFlags: 0
@@ -873,7 +872,7 @@ GameObject:
   - 4: {fileID: 1728815468}
   - 114: {fileID: 1728815467}
   m_Layer: 8
-  m_Name: GameObject
+  m_Name: Match
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -887,10 +886,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1728815466}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9121d4a327b7c943a6c06cf969907ca, type: 3}
+  m_Script: {fileID: 11500000, guid: 250868035083ab14d91ddb628f7f9b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMatchView: {fileID: 235478207}
+  mView: {fileID: 235478207}
 --- !u!4 &1728815468
 Transform:
   m_ObjectHideFlags: 0

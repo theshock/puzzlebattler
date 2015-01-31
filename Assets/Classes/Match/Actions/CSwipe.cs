@@ -45,7 +45,7 @@ namespace Match.Actions {
 						for (int j = 0; j < match.Count; j++) {
 
 							if (match[j] == mSelectedIcon.mIndex || match[j] == mTargetedIcon.mIndex) {
-								IAction matchAction = mActionManager.createAction(EAction.eMatch);
+								var matchAction = mActionManager.createAction(EAction.eMatch) as Actions.CMatch;
 								bool is_hor = (mSelectedIcon.mRow == mTargetedIcon.mRow);
 
 								Hashtable hash = new Hashtable();
@@ -102,18 +102,10 @@ namespace Match.Actions {
 			mTargetedIcon.mDelegate = onEndSwipeAnimation;
 			mSelectedIcon.mDelegate = onEndSwipeAnimation;
 
-			if (!aIsWrongSwipe) {
-				float duration = 0.2f;
+			float duration = 0.2f;
 
-				iTween.MoveTo(mTargetedIcon.gameObject, iTween.Hash("transition", "easeInOut", "position", objSFPoint, "time", duration));
-				iTween.MoveTo(mSelectedIcon.gameObject, iTween.Hash("transition", "easeInOut", "position", objSWPoint, "time", duration, "onComplete", "onEndSwipeAnimation"));
-
-			} else {
-				float duration = 0.2f;
-
-				iTween.MoveTo(mTargetedIcon.gameObject, iTween.Hash("transition", "easeInOut", "position", objSFPoint, "time", duration));
-				iTween.MoveTo(mSelectedIcon.gameObject, iTween.Hash("transition", "easeInOut", "position", objSWPoint, "time", duration, "onComplete", "onEndSwipeAnimation"));
-			}
+			iTween.MoveTo(mTargetedIcon.gameObject, iTween.Hash("transition", "easeInOut", "position", objSFPoint, "time", duration));
+			iTween.MoveTo(mSelectedIcon.gameObject, iTween.Hash("transition", "easeInOut", "position", objSWPoint, "time", duration, "onComplete", "onEndSwipeAnimation"));
 		}
 
 		public override void startAction() {
@@ -124,14 +116,17 @@ namespace Match.Actions {
 
 
 		public override EEvents getActionEvent() {
-			return  EEvents.eActionSwipe;
+			return  EEvents.eSwipe;
 		}
 
-		public override void doUpdateActionParam(Hashtable aData) {
-			mSelectedIcon = aData["selectedIcon"] as CIcon;
-			mTargetedIcon = aData["targetedIcon"] as CIcon;
+		public struct Config {
+			public CIcon selected;
+			public CIcon targeted;
+		}
 
-			return;
+		public void configure (CIcon selected, CIcon targeted) {
+			mSelectedIcon = selected;
+			mTargetedIcon = targeted;
 		}
 	}
 }

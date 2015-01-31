@@ -35,7 +35,7 @@ namespace Match.Actions {
 		}
 
 		public override EEvents getActionEvent() {
-			return EEvents.eActionRefreshPosition;
+			return EEvents.eRefreshPosition;
 		}
 
 		public override void doUpdateActionParam(Hashtable aData) {}

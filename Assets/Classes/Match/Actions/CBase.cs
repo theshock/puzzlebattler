@@ -47,7 +47,7 @@ namespace Match.Actions {
 		}
 
 		public virtual EEvents getActionEvent() {
-			return EEvents.eCount;
+			return EEvents.Count;
 		}
 	}
 

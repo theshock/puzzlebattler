@@ -46,7 +46,7 @@ namespace Match.Actions {
 
 
 		public override EEvents getActionEvent() {
-			return EEvents.eActionAutoMatch;
+			return EEvents.eAutoMatch;
 		}
 
 		public override void doUpdateActionParam(Hashtable aData) {

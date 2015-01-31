@@ -50,10 +50,8 @@ namespace Match.Actions {
 			foreach (int index_icon in mMatchIcons) {
 				CIcon icon = mIconField.getIconByIndex(index_icon);
 
-				IAction destroy_action = mActionManager.createAction(EAction.eDestroy);
-				Hashtable hash = new Hashtable();
-				hash.Add("target", icon);
-				destroy_action.doUpdateActionParam(hash);
+				var destroy_action = mActionManager.createAction(EAction.eDestroy) as Actions.CDestroy;
+				destroy_action.configure(icon);
 				destroy_action.setDelegate(onEndAction);
 
 				mStartDestroyIcon += mActionManager.addAction(destroy_action);
@@ -64,7 +62,7 @@ namespace Match.Actions {
 
 
 		public override EEvents getActionEvent() {
-			return EEvents.eActionMatch;
+			return EEvents.eMatch;
 		}
 
 		public override void doUpdateActionParam(Hashtable aData) {

@@ -96,6 +96,13 @@ namespace Match {
 			}
 		}
 
+		public bool IsNeighbour (CIcon target) {
+			int rowDistance = Mathf.Abs(mRow - target.mRow);
+			int colDistance = Mathf.Abs(mColumn - target.mColumn);
+
+			return (rowDistance == 1 && colDistance == 0) || (rowDistance == 0 && colDistance == 1);
+		}
+
 		public bool moveTo(int aRow, int aCol, float aDelay) {
 			Vector2 pos = mMatchField.getIconCenterByIndex(aRow, aCol);
 			Vector3 pos3d = new Vector3(pos.x, pos.y, this.transform.position.z);

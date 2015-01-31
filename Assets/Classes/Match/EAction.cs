@@ -8,6 +8,6 @@ namespace Match {
 		eAutoMatch,
 		eRefreshPosition,
 
-		eCount
+		Count
 	}
 }

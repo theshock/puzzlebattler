@@ -2,17 +2,13 @@ using Libraries;
 using Match.Actions;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 
 namespace Game {
 	public class CActionManager {
 		private ArrayList mActiveActions = new ArrayList();
 
-		public Match.CMatch mMatchController {
-			get;
-			set;
-		}
+		public Match.CMatch mMatchController { get; set; }
 
 		public CActionManager() {
 			CObjectFactory.registerCreator("match_action_" + (int)Match.EAction.eDestroy, CDestroy.create);
@@ -32,22 +28,22 @@ namespace Game {
 			return action;
 		}
 
+		// todo: change to bool
 		public int addAction(IAction aAction) {
-			if (!aAction.validation())
-				return 0;
+			if (aAction.validation()) {
+				aAction.startAction();
+				mActiveActions.Add(aAction);
+				return 1;
+			}
 
-			aAction.startAction();
-			mActiveActions.Add(aAction);
-
-			return 1;
+			return 0;
 		}
 
 		public void removeAction(IAction aAction) {
 			try {
 				mActiveActions.Remove(aAction);
-			}
-			catch (System.Exception e) {
-				UnityEngine.Debug.LogError(e.ToString());
+			} catch (System.Exception e) {
+				Debug.LogError(e.ToString());
 			}
 		}
 
@@ -55,7 +51,7 @@ namespace Game {
 			removeAction(aAction);
 
 			if (!isHaveAction()) {
-				mMatchController.mNotificationManager.notify((int)Match.EEvents.eEndAllAction, null);
+				mMatchController.mNotificationManager.notify((int)Match.EEvents.eEndAll, null);
 			}
 		}
 

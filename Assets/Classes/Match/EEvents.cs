@@ -1,17 +1,15 @@
-using UnityEngine;
-using System;
-
 namespace Match {
 	public enum EEvents {
-		eEndAllAction,
-		eEndInitAction,
-		eChangeInTheFieldAction,
-		eActionRefreshPosition,
-		eActionDestroy,
-		eActionAutoMatch,
-		eActionMatch,
-		eActionSwipe,
+		eDestroy,
+		eSwipe,
+		eMatch,
+		eAutoMatch,
+		eRefreshPosition,
 
-		eCount
+		eEndAll,
+		eEndInit,
+		eChangeInTheField,
+
+		Count
 	}
 }

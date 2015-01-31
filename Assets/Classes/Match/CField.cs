@@ -18,9 +18,9 @@ namespace Match {
 		public GameObject[] mPrefab = null;
 
 		void Awake() {
-			iconSprites = new Sprite[(int)EIconType.eCount];
+			iconSprites = new Sprite[(int)EIconType.Count];
 			// load all frames in fruitsSprites array
-			for (int i = 0; i < (int)EIconType.eCount; i++) {
+			for (int i = 0; i < (int)EIconType.Count; i++) {
 				string name = "match_icon/match_icon_" + i;
 				var spr = Resources.Load<Sprite>(name);
 				iconSprites[i] = spr;
@@ -33,7 +33,7 @@ namespace Match {
 			for (int r = 0; r < mRows; r++) {
 				for (int c = 0; c < mColumns; c++) {
 					mIconMatrix[r, c] = null;
-					createIconByPos(new Vector2(r, c), EIconType.eCount, true);
+					createIconByPos(new Vector2(r, c), EIconType.Count, true);
 				}
 			}
 
@@ -59,7 +59,7 @@ namespace Match {
 		}
 
 		EIconType genIconType() {
-			int count = EIconType.eCount.GetHashCode();
+			int count = EIconType.Count.GetHashCode();
 			int type = Random.Range(0, count);
 
 			EIconType res = (EIconType) type;
@@ -109,7 +109,7 @@ namespace Match {
 		}
 
 		void createIconByPos(Vector2 aIconPos, EIconType aIconType, bool aIsSetStartPosition) {
-			if (aIconType == EIconType.eCount) {
+			if (aIconType == EIconType.Count) {
 				aIconType = genIconType();
 			}
 
@@ -189,7 +189,7 @@ namespace Match {
 			for ( int c = 0; c < mColumns; c++ ) {
 				for ( int r = 0; r < mRows; r++ ) {
 					if ( mIconMatrix[r, c].IconState == EIconState.eClear) {
-						createIconByPos(new Vector2(r, c), EIconType.eCount, false);
+						createIconByPos(new Vector2(r, c), EIconType.Count, false);
 					}
 				}
 			}
@@ -316,7 +316,7 @@ namespace Match {
 			return mIconMatrix[aRow, aColumn];
 		}
 
-		public CIcon getIconByPos(Vector2 aPos) {
+		public CIcon GetIconByPosition(Vector2 aPos) {
 			for (int r = 0; r < mRows; r++) {
 				for (int c = 0; c < mColumns; c++) {
 					CIcon icon = mIconMatrix[r, c];

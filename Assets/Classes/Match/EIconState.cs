@@ -4,6 +4,7 @@ namespace Match {
 		eClear,
 		eOpen,
 		eInvisible,
-		eCount
+
+		Count
 	};
 }

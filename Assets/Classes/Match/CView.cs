@@ -3,15 +3,15 @@ using UnityEngine;
 
 namespace Match {
 
-	public class CView : MonoBehaviour {
+	public class CView : MonoBehaviour, IInputObserver {
 		public CField mField = null;
 		public CMatch mController = null;
 
+		private CInput mInput;
 		private CIcon mSelectedIcon = null;
-		private bool mIsIgnoreTouch = false;
-		private bool mIsStartClick = false;
 
 		void Start() {
+			mInput = new CInput(this);
 			Input.simulateMouseWithTouches = true;
 		}
 
@@ -19,149 +19,61 @@ namespace Match {
 			mField.initMatchField();
 		}
 
-		void Update() {
-			if (Input.touchCount == 1) {
-				Touch touch = Input.GetTouch(0);
-
-				switch (touch.phase) {
-					case TouchPhase.Began:
-						onTouchBegan(touch);
-						break;
-
-					case TouchPhase.Moved:
-						onTouchMoved(touch);
-						break;
-
-					case TouchPhase.Ended:
-						onTouchEnded(touch);
-						break;
-				}
-			} else if ( Input.GetMouseButton(0) ) {
-				if (!mIsStartClick) {
-					mIsStartClick = true;
-					onTouchBegan(Input.mousePosition);
-				} else {
-					onTouchMoved(Input.mousePosition);
-				}
-			} else if (mIsStartClick) {
-				mIsStartClick = false;
-				mSelectedIcon = null;
-				mIsIgnoreTouch = false;
-			}
+		public void Update() {
+			mInput.Check();
 		}
 
 		public void destroyRow(int aRow) {
-			ArrayList row = mField.getIconsByRow(aRow);
-
-			foreach (CIcon icon in row) {
-				Actions.IAction destroy_action = mController.mActionManager.createAction(EAction.eDestroy);
-				Hashtable hash = new Hashtable();
-				hash.Add("target", icon);
-				destroy_action.doUpdateActionParam(hash);
-
-				mController.mActionManager.addAction(destroy_action);
-			}
+			DestroyList(mField.getIconsByRow(aRow));
 		}
 
 		public void destroyColumn(int aCol) {
-			ArrayList column = mField.getIconsByColumn(aCol);
-
-			foreach (CIcon icon in column) {
-				Actions.IAction destroy_action = mController.mActionManager.createAction(EAction.eDestroy);
-				Hashtable hash = new Hashtable();
-				hash.Add("target", icon);
-				destroy_action.doUpdateActionParam(hash);
-
-				mController.mActionManager.addAction(destroy_action);
-			}
+			DestroyList(mField.getIconsByColumn(aCol));
 		}
 
-		public void destroySector(Rect aSize) {
-
+		public void OnInputBegin (Vector2 aPosition) {
+			mSelectedIcon = mField.GetIconByPosition(aPosition);
 		}
 
-		public void destroyIconsByType(EIconType aType) {
+		public void OnInputMove (Vector2 aPosition) {
+			if (!IsActiveIcon(mSelectedIcon)) return;
 
-		}
+			CIcon targetIcon = mField.GetIconByPosition(aPosition);
 
-		void onTouchBegan(Vector2 aPos) {
-			if (mIsIgnoreTouch)
-				return;
-
-			Vector2 toush_pos = aPos;
-			mSelectedIcon = mField.getIconByPos(toush_pos);
-		}
-
-		void onTouchMoved(Vector2 aPos) {
-			Vector2 point = aPos;
-
-			if (mSelectedIcon && mSelectedIcon.getIsReadyMove() && !mIsIgnoreTouch) {
-				CIcon target_icon = mField.getIconByPos(point);
-
-				if (target_icon && target_icon.getIsReadyMove() && mSelectedIcon != target_icon) {
-					int rowDistance = Mathf.Abs(mSelectedIcon.mRow - target_icon.mRow);
-					int colDistance = Mathf.Abs(mSelectedIcon.mColumn - target_icon.mColumn);
-
-					if ((rowDistance == 1 && colDistance == 0) || (rowDistance == 0 && colDistance == 1)) {
-						Actions.IAction swipe_action = mController.mActionManager.createAction(EAction.eSwipe);
-
-						Hashtable hash = new Hashtable();
-						hash.Add("selectedIcon", mSelectedIcon);
-						hash.Add("targetedIcon", target_icon);
-						swipe_action.doUpdateActionParam(hash);
-
-						int res = mController.mActionManager.addAction(swipe_action);
-
-						if (res == 1) {
-							mIsIgnoreTouch = true;
-						}
-					}
-
-					mSelectedIcon = null;
+			if (IsActiveIcon(targetIcon) && mSelectedIcon != targetIcon) {
+				if (mSelectedIcon.IsNeighbour(targetIcon)) {
+					startSwipe(mSelectedIcon, targetIcon);
 				}
+
+				mSelectedIcon = null;
 			}
 
 		}
 
-		void onTouchBegan(Touch aTouch) {
-			if (mIsIgnoreTouch)
-				return;
-
-			Vector2 toush_pos = aTouch.position;
-			mSelectedIcon = mField.getIconByPos(toush_pos);
-		}
-
-		void onTouchMoved(Touch aTouch) {
-			Vector2 point = aTouch.position;
-
-			if (mSelectedIcon && mSelectedIcon.getIsReadyMove() && !mIsIgnoreTouch) {
-				CIcon target_icon = mField.getIconByPos(point);
-
-				if (target_icon && target_icon.getIsReadyMove() && mSelectedIcon != target_icon) {
-					int rowDistance = Mathf.Abs(mSelectedIcon.mRow - target_icon.mRow);
-					int colDistance = Mathf.Abs(mSelectedIcon.mColumn - target_icon.mColumn);
-
-					if ((rowDistance == 1 && colDistance == 0) || (rowDistance == 0 && colDistance == 1)) {
-						Actions.IAction swipe_action = mController.mActionManager.createAction(EAction.eSwipe);
-						Hashtable hash = new Hashtable();
-						hash.Add("selectedIcon", mSelectedIcon);
-						hash.Add("targetedIcon", target_icon);
-						swipe_action.doUpdateActionParam(hash);
-
-						mController.mActionManager.addAction(swipe_action);
-
-						mIsIgnoreTouch = true;
-					}
-
-					mSelectedIcon = null;
-				}
-			}
-
-		}
-
-		void onTouchEnded(Touch aTouch) {
+		public void OnInputEnd () {
 			mSelectedIcon = null;
-			mIsIgnoreTouch = false;
+		}
+
+		private void DestroyList (ArrayList aIcons) {
+			foreach (CIcon icon in aIcons) {
+				var destroyAction = mController.mActionManager.createAction(EAction.eDestroy) as Actions.CDestroy;
+				destroyAction.configure(icon);
+				mController.mActionManager.addAction(destroyAction);
+			}
+		}
+
+		private void startSwipe (CIcon aSelected, CIcon aTargeted) {
+			var swipeAction = mController.mActionManager.createAction(EAction.eSwipe) as Actions.CSwipe;
+
+			swipeAction.configure(aSelected, aTargeted);
+
+			if (mController.mActionManager.addAction(swipeAction) == 1) {
+				mInput.Block();
+			}
+		}
+
+		private bool IsActiveIcon (CIcon aIcon) {
+			return aIcon != null && aIcon.getIsReadyMove();
 		}
 	}
 
