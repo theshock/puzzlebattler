@@ -1,11 +1,12 @@
-using UnityEngine;
+using Library;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Match {
 
 	public class CSearcher : INotificationObserver {
-		public CController mMatchController { get; set; }
+		public CMatch mController { get; set; }
 
 		public void handleNotification(int aEvent, Object aParam, CNotificationManager aManager) { }
 
@@ -18,7 +19,7 @@ namespace Match {
 		public ArrayList findMatches(bool aOnlyOpenedCells = false) {
 			ArrayList matches = new ArrayList();
 			CWeightedUnion weightedUnionInstance = new CWeightedUnion();
-			CField field = mMatchController.mMatchView.mMatchField;
+			CField field = mController.mView.mField;
 
 			int col_field = field.mColumns;
 			int row_field = field.mRows;
@@ -77,7 +78,7 @@ namespace Match {
 			if (weightedUnionInstance.getHasUnions()) {
 				Dictionary<int, ArrayList> foundMatches = weightedUnionInstance.getTrees();
 
-				foreach (var pair in foundMatches) {
+				foreach (KeyValuePair<int, ArrayList> pair in foundMatches) {
 					matches.Add(pair.Value);
 				}
 

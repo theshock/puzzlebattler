@@ -18,7 +18,7 @@ namespace Match.Actions {
 			mCountStartUpdateIcon = mIconField.updatePositionIcons(onEndMove);
 
 			if (mCountStartUpdateIcon == 0) {
-				IAction action = mActionManager.createAction(EMatchAction.eAutoMatchAction);
+				IAction action = mActionManager.createAction(EAction.eAutoMatch);
 				mActionManager.addAction(action);
 
 				complateAction();
@@ -28,14 +28,14 @@ namespace Match.Actions {
 		public void doUpdate() {}
 
 		public void onEndMove() {
-			IAction action = mActionManager.createAction(EMatchAction.eAutoMatchAction);
+			IAction action = mActionManager.createAction(EAction.eAutoMatch);
 			int res = mActionManager.addAction(action);
 
 			complateAction();
 		}
 
-		public override GameNotificationEvents getActionEvent() {
-			return GameNotificationEvents.eMatchRefreshPositionEvent;
+		public override EEvents getActionEvent() {
+			return EEvents.eActionRefreshPosition;
 		}
 
 		public override void doUpdateActionParam(Hashtable aData) {}

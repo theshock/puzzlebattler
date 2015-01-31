@@ -4,12 +4,10 @@ using System.Collections;
 namespace Match.Actions {
 	public class CSwipe : CBase {
 		private bool mIsCurrentSwipe = true;
+		private bool mIsCurrenSwipe = false;
 
 		private CIcon mSelectedIcon = null;
-
 		private CIcon mTargetedIcon = null;
-
-		private bool mIsCurrenSwipe = false;
 
 		public static IAction create() {
 			return new CSwipe();
@@ -23,22 +21,13 @@ namespace Match.Actions {
 		}
 
 		public override bool validation() {
-			if (mSelectedIcon == null || mTargetedIcon == null) {
-				return false;
-			}
-
-
-			if (!mSelectedIcon.getIsReadyAction() || !mTargetedIcon.getIsReadyAction()) {
-				return false;
-			}
-
-			return true;
+			return mSelectedIcon != null
+				&& mTargetedIcon != null
+				&& mSelectedIcon.getIsReadyAction()
+				&& mTargetedIcon.getIsReadyAction();
 		}
 
 		public void onEndSwipeAnimation() {
-			//		Debug.Log("onEndSwipeAnimation");
-			//		Debug.Log("mIsCurrenSwipe = " + mIsCurrenSwipe);
-			//
 			mIconField.swipeCellInMatrix(mSelectedIcon, mTargetedIcon);
 
 			// Открываем ячейки
@@ -48,14 +37,14 @@ namespace Match.Actions {
 			if (mIsCurrenSwipe == false) {
 				bool swipeCreateMatch = false;
 
-				ArrayList matches = mActionManager.mMatchController.mMatchSearcher.findMatches(true);
+				ArrayList matches = mActionManager.mMatchController.mSearcher.findMatches(true);
 
 				if (matches.Count > 0) {
 					foreach (ArrayList match in matches) {
 						for (int j = 0; j < match.Count; j++) {
 
 							if (((int)match[j] == mSelectedIcon.mIndex) || ((int)match[j] == mTargetedIcon.mIndex)) {
-								IAction matchAction = mActionManager.createAction(EMatchAction.eMatchAction);
+								IAction matchAction = mActionManager.createAction(EAction.eMatch);
 								bool is_hor = (mSelectedIcon.mRow == mTargetedIcon.mRow);
 
 								Hashtable hash = new Hashtable();
@@ -74,8 +63,6 @@ namespace Match.Actions {
 					if (swipeCreateMatch) {
 						complateAction();
 					} else {
-						//					Debug.Log("onEndSwipeAnimation did not find match");
-
 						mSelectedIcon.IconState = EIconState.eLock;
 						mTargetedIcon.IconState = EIconState.eLock;
 
@@ -101,8 +88,6 @@ namespace Match.Actions {
 					}
 				}
 			} else {
-				//			Debug.Log("onEndSwipeAnimation mIsCurrenSwipe true");
-
 				complateAction();
 			}
 		}
@@ -123,14 +108,10 @@ namespace Match.Actions {
 				iTween.MoveTo(mSelectedIcon.gameObject, iTween.Hash("transition", "easeInOut", "position", objSWPoint, "time", duration, "onComplete", "onEndSwipeAnimation"));
 
 			} else {
-				//			Debug.Log("swipeAnimation true");
-
 				float duration = 0.2f;
 
 				iTween.MoveTo(mTargetedIcon.gameObject, iTween.Hash("transition", "easeInOut", "position", objSFPoint, "time", duration));
 				iTween.MoveTo(mSelectedIcon.gameObject, iTween.Hash("transition", "easeInOut", "position", objSWPoint, "time", duration, "onComplete", "onEndSwipeAnimation"));
-
-				//			Debug.Log("swipeAnimation true 1");
 			}
 		}
 
@@ -141,8 +122,8 @@ namespace Match.Actions {
 		}
 
 
-		public override GameNotificationEvents getActionEvent() {
-			return  GameNotificationEvents.eMatchActionSwipeEvent;
+		public override EEvents getActionEvent() {
+			return  EEvents.eActionSwipe;
 		}
 
 		public override void doUpdateActionParam(Hashtable aData) {

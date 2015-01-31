@@ -14,7 +14,7 @@ namespace Match.Actions {
 		public void onEndAction(IAction aAction) {	}
 
 		public override bool validation() {
-			mAutoMatches = mActionManager.mMatchController.mMatchSearcher.findMatches(true);
+			mAutoMatches = mActionManager.mMatchController.mSearcher.findMatches(true);
 
 			return mAutoMatches.Count > 0;
 		}
@@ -25,7 +25,7 @@ namespace Match.Actions {
 			foreach (ArrayList match in mAutoMatches) {
 				bool is_hor = true;
 
-				CMatch action = mActionManager.createAction(EMatchAction.eMatchAction) as CMatch;
+				CMatch action = mActionManager.createAction(EAction.eMatch) as CMatch;
 
 				Hashtable hash = new Hashtable();
 				hash["matchIcons"] = match;
@@ -44,8 +44,8 @@ namespace Match.Actions {
 		public void doUpdate() {}
 
 
-		public override GameNotificationEvents getActionEvent() {
-			return GameNotificationEvents.eMatchActionAutoMatchEvent;
+		public override EEvents getActionEvent() {
+			return EEvents.eActionAutoMatch;
 		}
 
 		public override void doUpdateActionParam(Hashtable aData) {

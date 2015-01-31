@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace Match.Actions {
 	public class CBase : Object, IAction {
-		protected CGameActionManager mActionManager;
+		protected Game.CActionManager mActionManager;
 		protected Match.Actions.Delegate mDelegate;
 		protected CField mIconField;
 
-		public void initWithActionManager(CGameActionManager aManager, CField aIconField) {
+		public void initWithActionManager(Game.CActionManager aManager, CField aIconField) {
 			mActionManager = aManager;
 			mIconField = aIconField;
 		}
@@ -46,8 +46,8 @@ namespace Match.Actions {
 			}
 		}
 
-		public virtual GameNotificationEvents getActionEvent() {
-			return GameNotificationEvents.eGameNotificationEventsCount;
+		public virtual EEvents getActionEvent() {
+			return EEvents.eCount;
 		}
 	}
 

@@ -49,7 +49,7 @@ namespace Match.Actions {
 			foreach (int index_icon in mMatchIcons) {
 				CIcon icon = mIconField.getIconByIndex(index_icon);
 
-				IAction destroy_action = mActionManager.createAction(EMatchAction.eDestroyAction);
+				IAction destroy_action = mActionManager.createAction(EAction.eDestroy);
 				Hashtable hash = new Hashtable();
 				hash.Add("target", icon);
 				destroy_action.doUpdateActionParam(hash);
@@ -62,8 +62,8 @@ namespace Match.Actions {
 		}
 
 
-		public override GameNotificationEvents getActionEvent() {
-			return GameNotificationEvents.eMatchActionMatchEvent;
+		public override EEvents getActionEvent() {
+			return EEvents.eActionMatch;
 		}
 
 		public override void doUpdateActionParam(Hashtable aData) {
