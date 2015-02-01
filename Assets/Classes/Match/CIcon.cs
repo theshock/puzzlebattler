@@ -57,7 +57,7 @@ namespace Match {
 		}
 
 		public void onDestroyIcon() {
-			GameObject anim = Instantiate(mMatchField.mPrefab[(int)mIconType], transform.position, transform.rotation) as GameObject;
+			GameObject anim = Instantiate(mMatchField.mConfig.mDie.mPrefabs[(int)mIconType], transform.position, transform.rotation) as GameObject;
 
 			anim.transform.SetParent(transform.parent);
 

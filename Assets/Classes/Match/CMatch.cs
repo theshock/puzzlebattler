@@ -5,9 +5,10 @@ using UnityEngine;
 namespace Match {
 	public class CMatch : MonoBehaviour , INotificationObserver {
 		public CNotificationManager mNotificationManager = new CNotificationManager();
-		public CSearcher mSearcher { get; set; }
+		public CSearcher mSearcher;
 		public CView mView;
-		public Game.CActionManager mActionManager { get; set; }
+		public Game.CGame mGame;
+		public Game.CActionManager mActionManager;
 
 		public void handleNotification(int aEvent, Object aParam, CNotificationManager aManager) {
 			if ((EEvents) aEvent == EEvents.eEndAll) {

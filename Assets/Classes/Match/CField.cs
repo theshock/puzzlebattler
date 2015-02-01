@@ -7,15 +7,33 @@ namespace Match {
 
 	public class CField : MonoBehaviour {
 		private CIcon [,] mIconMatrix;
-		public int mRows;
-		public int mColumns;
-		public Vector2 mStartPoint;
-		public Vector2 mOffset;
+
+		public int mRows {
+			get {
+				return mConfig.mField.mRows * 2;
+			}
+		}
+		public int mColumns {
+			get {
+				return mConfig.mField.mColumns;
+			}
+		}
+		public Vector2 mStartPoint {
+			get {
+				return mConfig.mField.mStartPoint;
+			}
+		}
+
+		public Vector2 mOffset {
+			get {
+				return mConfig.mField.mOffset;
+			}
+		}
+
 		public delegate void UpdatePositionDelegate();
 		private UpdatePositionDelegate mDelegate;
 		private int mCountStartMoveCells;
-		public GameObject[] mPrefab = null;
-		public GameObject mGemPrefab;
+		public Config.Match.CMatch mConfig;
 
 		public void initMatchField() {
 			mIconMatrix = new CIcon[mRows, mColumns];
@@ -110,29 +128,19 @@ namespace Match {
 				mIconMatrix[row, col] = createIcon().GetComponent<CIcon>();
 			}
 
-			CIcon component = mIconMatrix[row, col];
+			CIcon icon = mIconMatrix[row, col];
 
-			component.initWithParams(this, new Vector2(row, col), aIconType, row * mColumns + col);
+			icon.initWithParams(this, new Vector2(row, col), aIconType, row * mColumns + col);
 
-			if (row < mRows / 2) {
-				component.IconState = EIconState.eOpen;
-			} else {
-				component.IconState = EIconState.eInvisible;
-			}
+			icon.IconState = row < mRows / 2 ? EIconState.eOpen : EIconState.eInvisible;
+			icon.gameObject.transform.position = getIconCenterByIndex(aIsSetStartPosition ? row : row + mRows / 2, col);
+			icon.gameObject.transform.localScale = new Vector3(1,1,1);
 
-			if (aIsSetStartPosition) {
-				component.gameObject.transform.position = getIconCenterByIndex(row, col);
-			} else {
-				component.gameObject.transform.position = getIconCenterByIndex(row + mRows / 2, col);
-			}
-
-			component.gameObject.transform.localScale = new Vector3(1,1,1);
-
-			component.IconType = aIconType;
+			icon.IconType = aIconType;
 		}
 
 		GameObject createIcon() {
-			GameObject icon = Instantiate(mGemPrefab) as GameObject;
+			GameObject icon = Instantiate(mConfig.mGems.mPrefab) as GameObject;
 
 			icon.transform.SetParent(this.transform);
 
@@ -168,7 +176,6 @@ namespace Match {
 
 			return icons;
 		}
-
 
 		public bool IsIconsTheSame (List<CIcon> icons) {
 			if (icons.Count < 1) {

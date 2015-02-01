@@ -5,8 +5,8 @@ using Libraries;
 namespace Game {
 	public class CGame : MonoBehaviour, INotificationObserver {
 		public CNotificationManager mNotificationManager = new CNotificationManager();
-		public CUi mGameUI;
 		public Match.CMatch mMatch;
+		public Config.CConfig mConfig;
 
 		public void handleNotification(int aEvent, Object aParam, CNotificationManager aManager) {
 		}

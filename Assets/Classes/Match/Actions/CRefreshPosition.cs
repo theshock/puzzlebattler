@@ -9,7 +9,6 @@ namespace Match.Actions {
 			return new CRefreshPosition();
 		}
 
-
 		public override bool validation() {
 			return mIconField.HasEmptyIcon();
 		}
