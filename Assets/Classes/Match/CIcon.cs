@@ -10,6 +10,12 @@ namespace Match {
 		public delegate void SwipeDelegate();
 		public SwipeDelegate mDelegate = null;
 
+		public Sprite mImageRed;
+		public Sprite mImageBlue;
+		public Sprite mImageYellow;
+		public Sprite mImageGreen;
+		public Sprite mImagePurple;
+
 		private EIconType mIconType;
 		public EIconType IconType {
 			get {
@@ -17,17 +23,9 @@ namespace Match {
 			}
 			set {
 				mIconType = value;
-
-				if (mIconSpriteRenderer) {
-					Sprite spr = mMatchField.iconSprites[(int)mIconType];
-
-					mIconSpriteRenderer.sprite = spr;
-					mIconSpriteRenderer.SetNativeSize();
-				}
-
+				GetComponent<Image>().sprite = GetCorrectSprite();
 			}
 		}
-
 
 		private EIconState mIconState;
 		public EIconState IconState {
@@ -36,34 +34,31 @@ namespace Match {
 			}
 			set {
 				mIconState = value;
-
-				if (mIconSpriteRenderer) {
-					mIconSpriteRenderer.enabled = (mIconState != EIconState.eClear);
-				} else {
-					Debug.LogError("mIconSpriteRenderer fail");
-				}
-
+				GetComponent<Image>().enabled = (mIconState != EIconState.eClear);
 			}
 		}
 
 		public int mRow;
 		public int mColumn;
 		public int mIndex { get; set; }
-		public Image mIconSpriteRenderer = null;
 		public CField mMatchField { get; set; }
+		private Image mIconSpriteRenderer = null;
 
-		public string getLogInfo() {
-			return "Icon Info [Row : " + mRow + "] [mCol : " + mColumn + "] [State : " + mIconState + "]";
-		}
-
-		void Start() {
-			if (mIconSpriteRenderer == null) {
-				mIconSpriteRenderer = GetComponent<Image>();
+		private Sprite GetCorrectSprite () {
+			switch (mIconType) {
+				case EIconType.eRed   : return mImageRed;
+				case EIconType.eBlue  : return mImageBlue;
+				case EIconType.eGreen : return mImageGreen;
+				case EIconType.ePurple: return mImagePurple;
+				case EIconType.eYellow: return mImageYellow;
 			}
+
+			return null;
 		}
 
 		public void onDestroyIcon() {
 			GameObject anim = Instantiate(mMatchField.mPrefab[(int)mIconType], transform.position, transform.rotation) as GameObject;
+
 			anim.transform.SetParent(transform.parent);
 
 			Destroy(anim, 2);

@@ -89,7 +89,7 @@ namespace Match.Actions {
 			mTargetedIcon.mDelegate = OnEndSwipeAnimation;
 			mSelectedIcon.mDelegate = OnEndSwipeAnimation;
 
-			float duration = 1.4f;
+			float duration = 0.2f;
 
 			iTween.MoveTo(mTargetedIcon.gameObject, iTween.Hash("transition", "easeInOut", "position", objSFPoint, "time", duration));
 			iTween.MoveTo(mSelectedIcon.gameObject, iTween.Hash("transition", "easeInOut", "position", objSWPoint, "time", duration, "oncomplete", "onEndSwipeAnimation"));

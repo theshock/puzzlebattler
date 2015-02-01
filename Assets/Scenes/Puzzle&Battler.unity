@@ -400,13 +400,13 @@ MonoBehaviour:
   mColumns: 6
   mStartPoint: {x: -7.30000019, y: -16.8999996}
   mOffset: {x: 3.54999995, y: 3.54999995}
-  iconSprites: []
   mPrefab:
   - {fileID: 100000, guid: f7dc1ceeb26f269458a75d56bdb104bc, type: 2}
   - {fileID: 100000, guid: 7213f4f55929f441faaefb096430970f, type: 2}
   - {fileID: 100000, guid: 59e7b1f3ffd18444c84004150fa23730, type: 2}
   - {fileID: 100000, guid: 9e05183a2a82a48b7b189dec30f8a759, type: 2}
   - {fileID: 100000, guid: f3b65738c289a46f68f52c1a68f49933, type: 2}
+  mGemPrefab: {fileID: 197280, guid: 816abbf4949a008428c3362453e9fb99, type: 2}
 --- !u!224 &875817893
 RectTransform:
   m_ObjectHideFlags: 0

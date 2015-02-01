@@ -14,18 +14,8 @@ namespace Match {
 		public delegate void UpdatePositionDelegate();
 		private UpdatePositionDelegate mDelegate;
 		private int mCountStartMoveCells;
-		public Sprite[] iconSprites;
 		public GameObject[] mPrefab = null;
-
-		void Awake() {
-			iconSprites = new Sprite[(int)EIconType.Count];
-			// load all frames in fruitsSprites array
-			for (int i = 0; i < (int)EIconType.Count; i++) {
-				string name = "match_icon/match_icon_" + i;
-				var spr = Resources.Load<Sprite>(name);
-				iconSprites[i] = spr;
-			}
-		}
+		public GameObject mGemPrefab;
 
 		public void initMatchField() {
 			mIconMatrix = new CIcon[mRows, mColumns];
@@ -58,7 +48,7 @@ namespace Match {
 
 		}
 
-		EIconType genIconType() {
+		EIconType GenIconType() {
 			int count = EIconType.Count.GetHashCode();
 			int type = Random.Range(0, count);
 
@@ -110,76 +100,40 @@ namespace Match {
 
 		void CreateIconByPos(Vector2 aIconPos, EIconType aIconType, bool aIsSetStartPosition) {
 			if (aIconType == EIconType.Count) {
-				aIconType = genIconType();
+				aIconType = GenIconType();
 			}
 
-			int r = (int)aIconPos.x;
-			int c = (int)aIconPos.y;
+			int row = (int) aIconPos.x;
+			int col = (int) aIconPos.y;
 
-			if (mIconMatrix[r, c] == null) {
-				//			Debug.Log("createIconByPos new Object");
+			if (mIconMatrix[row, col] == null) {
+				mIconMatrix[row, col] = createIcon().GetComponent<CIcon>();
+			}
 
-				GameObject icon = createIcon();
-				CIcon component = icon.GetComponent<CIcon>();
-				Image render = icon.GetComponent<Image>();
-				BoxCollider2D collider = icon.GetComponent<BoxCollider2D>();
+			CIcon component = mIconMatrix[row, col];
 
-				collider.size = new Vector2(157.0f, 158.0f);
+			component.initWithParams(this, new Vector2(row, col), aIconType, row * mColumns + col);
 
-				mIconMatrix[r, c] = component;
-
-				component.initWithParams(this, new Vector2(r, c), aIconType, r * mColumns + c);
-				component.mIconSpriteRenderer = render;
-
-				if (r < mRows / 2) {
-					component.IconState = EIconState.eOpen;
-				} else {
-					component.IconState = EIconState.eInvisible;
-				}
-
-
-				//			icon.transform.SetParent(this.transform);
-				icon.transform.localScale = new Vector3(1, 1, 1);
-				if (aIsSetStartPosition) {
-					icon.transform.position = getIconCenterByIndex(r, c);
-				} else {
-					icon.transform.position = getIconCenterByIndex(r + mRows / 2, c);
-				}
-
-				component.IconType = aIconType;
+			if (row < mRows / 2) {
+				component.IconState = EIconState.eOpen;
 			} else {
-				//			Debug.Log("createIconByPos reinit Object");
-
-				CIcon component = mIconMatrix[r, c];
-				GameObject icon = component.gameObject;
-
-				component.initWithParams(this, new Vector2(r, c), aIconType, r * mColumns + c);
-
-				if (r < mRows / 2) {
-					component.IconState = EIconState.eOpen;
-				} else {
-					component.IconState = EIconState.eInvisible;
-				}
-
-				if (aIsSetStartPosition) {
-					icon.transform.position = getIconCenterByIndex(r, c);
-				} else {
-					icon.transform.position = getIconCenterByIndex(r + mRows / 2, c);
-				}
-
-				component.IconType = aIconType;
+				component.IconState = EIconState.eInvisible;
 			}
 
+			if (aIsSetStartPosition) {
+				component.gameObject.transform.position = getIconCenterByIndex(row, col);
+			} else {
+				component.gameObject.transform.position = getIconCenterByIndex(row + mRows / 2, col);
+			}
 
+			component.gameObject.transform.localScale = new Vector3(1,1,1);
+
+			component.IconType = aIconType;
 		}
 
 		GameObject createIcon() {
-			GameObject icon = new GameObject();
+			GameObject icon = Instantiate(mGemPrefab) as GameObject;
 
-			icon.AddComponent<CanvasRenderer>();
-			icon.AddComponent<BoxCollider2D>();
-			icon.AddComponent<Image>();
-			icon.AddComponent("CIcon");
 			icon.transform.SetParent(this.transform);
 
 			return icon;
