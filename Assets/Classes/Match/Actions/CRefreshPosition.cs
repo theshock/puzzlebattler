@@ -11,7 +11,7 @@ namespace Match.Actions {
 
 
 		public override bool validation() {
-			return mIconField.isHaveEmptyIcon();
+			return mIconField.HasEmptyIcon();
 		}
 
 		public override void startAction() {

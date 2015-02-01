@@ -33,7 +33,7 @@ namespace Match {
 			for (int r = 0; r < mRows; r++) {
 				for (int c = 0; c < mColumns; c++) {
 					mIconMatrix[r, c] = null;
-					createIconByPos(new Vector2(r, c), EIconType.Count, true);
+					CreateIconByPos(new Vector2(r, c), EIconType.Count, true);
 				}
 			}
 
@@ -108,7 +108,7 @@ namespace Match {
 			return mCountStartMoveCells;
 		}
 
-		void createIconByPos(Vector2 aIconPos, EIconType aIconType, bool aIsSetStartPosition) {
+		void CreateIconByPos(Vector2 aIconPos, EIconType aIconType, bool aIsSetStartPosition) {
 			if (aIconType == EIconType.Count) {
 				aIconType = genIconType();
 			}
@@ -189,107 +189,48 @@ namespace Match {
 			for ( int c = 0; c < mColumns; c++ ) {
 				for ( int r = 0; r < mRows; r++ ) {
 					if ( mIconMatrix[r, c].IconState == EIconState.eClear) {
-						createIconByPos(new Vector2(r, c), EIconType.Count, false);
+						CreateIconByPos(new Vector2(r, c), EIconType.Count, false);
 					}
 				}
 			}
 		}
 
-		public ArrayList getIconsByRow(int aRow) {
-			ArrayList res = new ArrayList();
+		public List<CIcon> getIconsByRow(int aRow) {
+			var icons = new List<CIcon>();
 
 			for (int c = 0; c < mColumns; c++) {
-				res.Add(mIconMatrix[aRow, c]);
+				icons.Add(mIconMatrix[aRow, c]);
 			}
 
-
-			return res;
+			return icons;
 		}
 
-		public ArrayList getIconsByColumn(int aColumn) {
-			ArrayList res = new ArrayList();
+		public List<CIcon> GetIconsByColumn(int aColumn) {
+			var icons = new List<CIcon>();
 
 			for (int r = 0; r < mRows; r++) {
-				res.Add(mIconMatrix[r, aColumn]);
+				icons.Add(mIconMatrix[r, aColumn]);
 			}
 
-			return res;
+			return icons;
 		}
 
-		// todo: merge with isTheSameIconOne, iconsInTheSameCol, isTheSameIconOne
-		public bool iconsInTheSameRow(ArrayList aSlice) {
-			if (aSlice.Count < 1)
-				return false;
-
-			CIcon first_icon = aSlice[0] as CIcon;
-
-			int standart = first_icon.mRow;
-			int count = 0;
-
-			foreach (CIcon icon in aSlice) {
-				if (icon.mRow == standart) {
-					count++;
-				}
-			}
-
-			bool res = (count == aSlice.Count);
-
-			return res;
-		}
-
-		public bool iconsInTheSameCol(ArrayList aSlice) {
-			if (aSlice.Count < 1)
-				return false;
-
-			CIcon first_icon = aSlice[0] as CIcon;
-
-			int standart = first_icon.mColumn;
-			int count = 0;
-
-			foreach (CIcon icon in aSlice) {
-				if (icon.mColumn == standart) {
-					count++;
-				}
-			}
-
-			return (count == aSlice.Count);
-		}
 
 		public bool IsIconsTheSame (List<CIcon> icons) {
 			if (icons.Count < 1) {
 				return false;
 			}
 
-			int count = 0;
-
 			foreach (CIcon icon in icons) {
-				if (icon.IconType == icons[0].IconType) {
-					count++;
+				if (icon.IconType != icons[0].IconType) {
+					return false;
 				}
 			}
 
-			return (count == icons.Count);
+			return true;
 		}
 
-		public bool isTheSameIconOne(ArrayList aSlice) {
-			if (aSlice.Count < 1)
-				return false;
-
-			CIcon first_icon = aSlice[0] as CIcon;
-
-			EIconType standart = first_icon.IconType;
-			int count = 0;
-
-			foreach (CIcon icon in aSlice) {
-				if (icon.IconType == standart) {
-					count++;
-				}
-			}
-
-			return (count == aSlice.Count);
-		}
-
-		public bool isHaveEmptyIcon() {
+		public bool HasEmptyIcon() {
 			for (int r = 0; r < mRows; r++) {
 				for (int c = 0; c < mColumns; c++) {
 					if (mIconMatrix[r, c].IconState == EIconState.eClear) {
@@ -309,7 +250,7 @@ namespace Match {
 			int row = aIndex / mRows;
 			int column = aIndex - row * mColumns;
 
-			return new Vector3(mStartPoint.x + column * mOffset.x, mStartPoint.y + row * mOffset.y, 0);
+			return getIconCenterByIndex(row, column);
 		}
 
 		public CIcon getIconByPos(int aRow, int aColumn) {

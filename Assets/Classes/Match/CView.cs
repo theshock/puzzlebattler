@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Match {
@@ -28,7 +29,7 @@ namespace Match {
 		}
 
 		public void DestroyColumn(int aCol) {
-			DestroyList(mField.getIconsByColumn(aCol));
+			DestroyList(mField.GetIconsByColumn(aCol));
 		}
 
 		public void OnInputBegin (Vector2 aPosition) {
@@ -53,7 +54,7 @@ namespace Match {
 			mSelectedIcon = null;
 		}
 
-		private void DestroyList (ArrayList aIcons) {
+		private void DestroyList (List<CIcon> aIcons) {
 			foreach (CIcon icon in aIcons) {
 				var destroyAction = mController.mActionManager.createAction(EAction.eDestroy) as Actions.CDestroy;
 				destroyAction.configure(icon);
