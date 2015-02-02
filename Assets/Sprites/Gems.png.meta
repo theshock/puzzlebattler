@@ -26,8 +26,8 @@ TextureImporter:
   grayScaleToAlpha: 0
   generateCubemap: 0
   seamlessCubemap: 0
-  textureFormat: -3
-  maxTextureSize: 2048
+  textureFormat: -1
+  maxTextureSize: 1024
   textureSettings:
     filterMode: 1
     aniso: 16
@@ -53,48 +53,48 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 157
-        height: 158
+        width: 160
+        height: 160
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Green
       rect:
         serializedVersion: 2
-        x: 157
+        x: 160
         y: 0
-        width: 157
-        height: 158
+        width: 160
+        height: 160
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Blue
       rect:
         serializedVersion: 2
-        x: 314
+        x: 320
         y: 0
-        width: 157
-        height: 158
+        width: 160
+        height: 160
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Purple
       rect:
         serializedVersion: 2
-        x: 471
+        x: 480
         y: 0
-        width: 157
-        height: 158
+        width: 160
+        height: 160
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Yellow
       rect:
         serializedVersion: 2
-        x: 628
+        x: 640
         y: 0
-        width: 157
-        height: 158
+        width: 160
+        height: 160
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
