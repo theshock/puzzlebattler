@@ -223,7 +223,7 @@ namespace Match {
 				for (int c = 0; c < mColumns; c++) {
 					CIcon icon = mIconMatrix[r, c];
 
-					if (icon && icon.hitTest(aPos) && icon.getIsReadyMove()) {
+					if (icon && icon.hitTest(aPos) && icon.IsMoveReady()) {
 						return icon;
 					}
 				}

@@ -43,7 +43,7 @@ namespace Match {
 
 			if (IsActiveIcon(targetIcon) && mSelectedIcon != targetIcon) {
 				if (mSelectedIcon.IsNeighbour(targetIcon)) {
-					startSwipe(mSelectedIcon, targetIcon);
+					StartSwipe(mSelectedIcon, targetIcon);
 				}
 
 				mSelectedIcon = null;
@@ -62,7 +62,7 @@ namespace Match {
 			}
 		}
 
-		private void startSwipe (CIcon aSelected, CIcon aTargeted) {
+		private void StartSwipe(CIcon aSelected, CIcon aTargeted) {
 			var swipeAction = mController.mActionManager.createAction(EAction.eSwipe) as Actions.CSwipe;
 
 			swipeAction.configure(aSelected, aTargeted);
@@ -73,7 +73,7 @@ namespace Match {
 		}
 
 		private bool IsActiveIcon (CIcon aIcon) {
-			return aIcon != null && aIcon.getIsReadyMove();
+			return aIcon != null && aIcon.IsMoveReady();
 		}
 	}
 

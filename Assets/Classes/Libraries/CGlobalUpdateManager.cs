@@ -2,9 +2,9 @@ using UnityEngine;
 using System.Collections;
 
 namespace Libraries {
-	public delegate void UpdatingEventHandler();
-
 	public class CGlobalUpdateManager {
+		public delegate void UpdatingEventHandler();
+
 		public event UpdatingEventHandler mUpdatingEvent;
 
 		static CGlobalUpdateManager mInst = null;

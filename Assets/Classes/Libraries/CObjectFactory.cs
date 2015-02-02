@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Libraries {
-	public delegate Match.Actions.IAction ObjectFactoryDelegate();
 
 	public class CObjectFactory {
+		public delegate Match.Actions.IAction ObjectFactoryDelegate();
+
 		static private Dictionary<string, ObjectFactoryDelegate> mDictionary = new Dictionary<string, ObjectFactoryDelegate>();
 
 		static public void registerCreator(string aKey, ObjectFactoryDelegate aFunc) {

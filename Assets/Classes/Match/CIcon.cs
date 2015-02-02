@@ -68,7 +68,7 @@ namespace Match {
 			return (mIconState == EIconState.eOpen);
 		}
 
-		public bool getIsReadyMove() {
+		public bool IsMoveReady() {
 			return (mIconState == EIconState.eOpen);
 		}
 
@@ -90,6 +90,8 @@ namespace Match {
 		}
 
 		public bool IsNeighbour (CIcon target) {
+			if (this == target) return false;
+
 			int rowDistance = Mathf.Abs(mRow - target.mRow);
 			int colDistance = Mathf.Abs(mColumn - target.mColumn);
 
