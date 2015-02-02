@@ -42,7 +42,6 @@ namespace Match {
 		public int mColumn;
 		public int mIndex { get; set; }
 		public CField mMatchField { get; set; }
-		private Image mIconSpriteRenderer = null;
 
 		private Sprite GetCorrectSprite () {
 			switch (mIconType) {

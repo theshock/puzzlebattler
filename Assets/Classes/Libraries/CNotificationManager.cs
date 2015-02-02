@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace Libraries {
 	public class CNotificationManager {
-		private new Dictionary<int, List<INotificationObserver>> mDictionary = new Dictionary<int, List<INotificationObserver>>();
+		private Dictionary<int, List<INotificationObserver>> mDictionary = new Dictionary<int, List<INotificationObserver>>();
 
 		public void addObserver(int aEvent, INotificationObserver aObserver) {
 

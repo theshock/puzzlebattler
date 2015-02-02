@@ -3,8 +3,6 @@ using System.Collections;
 
 namespace Match.Actions {
 	public class CRefreshPosition : CBase {
-		private int mCountStartUpdateIcon = 0;
-
 		public static IAction create() {
 			return new CRefreshPosition();
 		}
