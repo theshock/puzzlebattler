@@ -15,7 +15,7 @@ namespace Match.Actions {
 		}
 
 		public EIconType getMatchIconType() {
-			CIcon icon = mIconField.getIconByIndex(mMatchIcons[0]);
+			CIcon icon = mIconField.GetIconByIndex(mMatchIcons[0]);
 			return icon.IconType;
 		}
 
@@ -25,9 +25,9 @@ namespace Match.Actions {
 		public override bool validation() {
 			if (mMatchIcons != null) {
 				foreach (int index_icon in mMatchIcons) {
-					CIcon icon = mIconField.getIconByIndex(index_icon);
+					CIcon icon = mIconField.GetIconByIndex(index_icon);
 
-					if (!icon || (icon && !icon.getIsReadyAction())) {
+					if (!icon || (icon && !icon.IsActionReady())) {
 						return false;
 					}
 				}
@@ -46,7 +46,7 @@ namespace Match.Actions {
 			mStartDestroyIcon = 0;
 
 			foreach (int index_icon in mMatchIcons) {
-				CIcon icon = mIconField.getIconByIndex(index_icon);
+				CIcon icon = mIconField.GetIconByIndex(index_icon);
 
 				var destroy_action = mActionManager.createAction(EAction.eDestroy) as Actions.CDestroy;
 				destroy_action.configure(icon);

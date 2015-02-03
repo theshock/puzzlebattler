@@ -22,8 +22,8 @@ namespace Match.Actions {
 		public override bool validation() {
 			return mSelectedIcon != null
 				&& mTargetedIcon != null
-				&& mSelectedIcon.getIsReadyAction()
-				&& mTargetedIcon.getIsReadyAction();
+				&& mSelectedIcon.IsActionReady()
+				&& mTargetedIcon.IsActionReady();
 		}
 
 		public override void startAction() {

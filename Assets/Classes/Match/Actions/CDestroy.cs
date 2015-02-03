@@ -12,7 +12,7 @@ namespace Match.Actions {
 		}
 
 		public override bool validation() {
-			return mIconTarget && mIconTarget.getIsReadyAction();
+			return mIconTarget && mIconTarget.IsActionReady();
 		}
 
 		public override void startAction() {

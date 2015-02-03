@@ -70,16 +70,16 @@ namespace Match {
 			var icons = new List<CIcon>();
 			var field = mController.mView.mField;
 
-			icons.Add( field.getIconByIndex(first) );
-			icons.Add( field.getIconByIndex(second) );
-			icons.Add( field.getIconByIndex(third) );
+			icons.Add( field.GetIconByIndex(first) );
+			icons.Add( field.GetIconByIndex(second) );
+			icons.Add( field.GetIconByIndex(third) );
 
 			return IsAllIconsActive(icons) && field.IsIconsTheSame(icons);
 		}
 
 		private bool IsAllIconsActive (List<CIcon> icons) {
 			foreach (CIcon icon in icons) {
-				if(icon && !icon.getIsReadyAction()) {
+				if(icon && !icon.IsActionReady()) {
 					return false;
 				}
 			}

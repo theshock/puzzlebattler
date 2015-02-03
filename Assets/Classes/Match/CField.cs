@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Libraries;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -41,7 +42,7 @@ namespace Match {
 			for (int r = 0; r < mRows; r++) {
 				for (int c = 0; c < mColumns; c++) {
 					mIconMatrix[r, c] = null;
-					CreateIconByPos(new Vector2(r, c), EIconType.Count, true);
+					CreateIconByPos(new CCell(r, c), EIconType.Count, true);
 				}
 			}
 
@@ -49,21 +50,12 @@ namespace Match {
 
 		public void swipeCellInMatrix(CIcon aFirstIcon, CIcon aSecondIcon) {
 
-			int row    = aFirstIcon.mRow;
-			int column = aFirstIcon.mColumn;
-			int index  = aFirstIcon.mIndex;
+			CCell cell = aFirstIcon.mCell.Clone();
+			mIconMatrix[aFirstIcon.mCell.row, aFirstIcon.mCell.col] = aSecondIcon;
+			mIconMatrix[aSecondIcon.mCell.row, aSecondIcon.mCell.col] = aFirstIcon;
 
-			mIconMatrix[aFirstIcon.mRow, aFirstIcon.mColumn] = aSecondIcon;
-			mIconMatrix[aSecondIcon.mRow, aSecondIcon.mColumn] = aFirstIcon;
-
-			aFirstIcon.mRow = aSecondIcon.mRow;
-			aFirstIcon.mColumn = aSecondIcon.mColumn;
-			aFirstIcon.mIndex = aSecondIcon.mIndex;
-
-			aSecondIcon.mRow = row;
-			aSecondIcon.mColumn = column;
-			aSecondIcon.mIndex = index;
-
+			aFirstIcon .mCell.Set(aSecondIcon.mCell);
+			aSecondIcon.mCell.Set(cell);
 		}
 
 		EIconType GenIconType() {
@@ -106,7 +98,7 @@ namespace Match {
 			for ( int c = 0; c < mColumns; c++ ) {
 				float delay = 0;
 				for ( int r = 0; r < mRows; r++ ) {
-					if ( mIconMatrix[r, c].moveTo(r, c, delay) ) {
+					if ( mIconMatrix[r, c].MoveTo(new CCell(r, c), delay) ) {
 						mCountStartMoveCells++;
 						delay += 0.01f;
 					}
@@ -116,42 +108,50 @@ namespace Match {
 			return mCountStartMoveCells;
 		}
 
-		void CreateIconByPos(Vector2 aIconPos, EIconType aIconType, bool aIsSetStartPosition) {
+		void CreateIconByPos(CCell aPosition, EIconType aIconType, bool aIsSetStartPosition) {
 			if (aIconType == EIconType.Count) {
 				aIconType = GenIconType();
 			}
 
-			int row = (int) aIconPos.x;
-			int col = (int) aIconPos.y;
+			CIcon icon = GetMatrixCell(aPosition);
 
-			if (mIconMatrix[row, col] == null) {
-				mIconMatrix[row, col] = createIcon().GetComponent<CIcon>();
+			if (icon == null) {
+				icon = createIcon();
+				SetMatrixCell(aPosition, icon);
 			}
 
-			CIcon icon = mIconMatrix[row, col];
-
-			icon.initWithParams(this, new Vector2(row, col), aIconType, row * mColumns + col);
-
-			icon.IconState = row < mRows / 2 ? EIconState.eOpen : EIconState.eInvisible;
-			icon.gameObject.transform.position = getIconCenterByIndex(aIsSetStartPosition ? row : row + mRows / 2, col);
-			icon.gameObject.transform.localScale = new Vector3(1,1,1);
+			icon.mField = this;
+			icon.mCell.Set(aPosition);
+			icon.IconState = aPosition.row < mRows / 2 ? EIconState.eOpen : EIconState.eInvisible;
+			icon.gameObject.transform.position = GetIconCenterByIndex(
+				aIsSetStartPosition ? aPosition : new CCell(aPosition.row + mRows / 2, aPosition.col)
+			);
 
 			icon.IconType = aIconType;
 		}
 
-		GameObject createIcon() {
+		public void SetMatrixCell (CCell position, CIcon icon) {
+			mIconMatrix[position.row, position.col] = icon;
+		}
+
+		public CIcon GetMatrixCell (CCell position) {
+			return mIconMatrix[position.row, position.col];
+		}
+
+		CIcon createIcon() {
 			GameObject icon = Instantiate(mConfig.mGems.mPrefab) as GameObject;
+			Transform transform = icon.transform;
+			transform.SetParent(this.transform);
+			transform.localScale = new Vector3(1,1,1);
 
-			icon.transform.SetParent(this.transform);
-
-			return icon;
+			return icon.GetComponent<CIcon>();
 		}
 
 		void fillFreeIcons() {
 			for ( int c = 0; c < mColumns; c++ ) {
 				for ( int r = 0; r < mRows; r++ ) {
 					if ( mIconMatrix[r, c].IconState == EIconState.eClear) {
-						CreateIconByPos(new Vector2(r, c), EIconType.Count, false);
+						CreateIconByPos(new CCell(r, c), EIconType.Count, false);
 					}
 				}
 			}
@@ -203,19 +203,16 @@ namespace Match {
 			return false;
 		}
 
-		public Vector3 getIconCenterByIndex(int aRow, int aColumn) {
-			return new Vector3(mStartPoint.x + aColumn * mOffset.x, mStartPoint.y + aRow * mOffset.y, 0);
-		}
-
-		public Vector3 getIconCenterByIndex(int aIndex) {
-			int row = aIndex / mRows;
-			int column = aIndex - row * mColumns;
-
-			return getIconCenterByIndex(row, column);
+		public Vector3 GetIconCenterByIndex(CCell cell) {
+			return new Vector3(
+				mStartPoint.x + cell.col * mOffset.x,
+				mStartPoint.y + cell.row * mOffset.y,
+				this.transform.position.z
+			);
 		}
 
 		public CIcon getIconByPos(int aRow, int aColumn) {
-			return mIconMatrix[aRow, aColumn];
+			return GetMatrixCell(new CCell(aRow, aColumn));
 		}
 
 		public CIcon GetIconByPosition(Vector2 aPos) {
@@ -223,7 +220,7 @@ namespace Match {
 				for (int c = 0; c < mColumns; c++) {
 					CIcon icon = mIconMatrix[r, c];
 
-					if (icon && icon.hitTest(aPos) && icon.IsMoveReady()) {
+					if (icon && icon.HitTest(aPos) && icon.IsMoveReady()) {
 						return icon;
 					}
 				}
@@ -232,7 +229,7 @@ namespace Match {
 			return null;
 		}
 
-		public CIcon getIconByIndex(int aIndex) {
+		public CIcon GetIconByIndex(int aIndex) {
 			if (aIndex >= mRows * mColumns)
 				return null;
 
