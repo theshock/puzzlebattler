@@ -58,9 +58,9 @@ namespace Match {
 		}
 
 		public bool HitTest(Vector2 aCoordinates) {
-			var worldPoint = Camera.main.ScreenToWorldPoint(aCoordinates as Vector3);
+			var worldPoint = Camera.main.ScreenToWorldPoint((Vector3) aCoordinates);
 
-			return collider2D.OverlapPoint(worldPoint as Vector2);
+			return collider2D.OverlapPoint((Vector2) worldPoint);
 		}
 
 		public void onEndSwipeAnimation() {
