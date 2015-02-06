@@ -12,7 +12,8 @@ namespace Match {
 		private CIcon mSelectedIcon = null;
 
 		void Start() {
-			mInput = new CInput(this);
+			mInput = new CInput();
+			mInput.registerObserver (this, 0);
 			Input.simulateMouseWithTouches = true;
 		}
 
@@ -32,8 +33,13 @@ namespace Match {
 			DestroyList(mField.GetIconsByColumn(aCol));
 		}
 
-		public void OnInputBegin (Vector2 aPosition) {
+		public bool OnInputBegin (Vector2 aPosition) {
 			mSelectedIcon = mField.GetIconByPosition(aPosition);
+
+			if (mSelectedIcon != null)
+					return true;
+			else
+					return false;
 		}
 
 		public void OnInputMove (Vector2 aPosition) {
