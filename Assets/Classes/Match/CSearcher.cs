@@ -75,7 +75,7 @@ namespace Match {
 			icons.Add( field.GetIconByIndex(second) );
 			icons.Add( field.GetIconByIndex(third) );
 
-			return IsAllIconsActive(icons) && field.IsIconsTheSame(icons);
+			return IsAllIconsActive(icons) && field.AreIconsTheSame(icons);
 		}
 
 		private bool IsAllIconsActive (List<CIcon> icons) {

@@ -40,8 +40,8 @@ namespace Match {
 		public CMove SwipeIcons (CIcon aFirstIcon, CIcon aSecondIcon) {
 			var move = new CMove(mConfig);
 			SwipeIconsCells(aFirstIcon, aSecondIcon);
-			move.addMove(aFirstIcon, GetIconCenterByIndex(aFirstIcon.mCell));
-			move.addMove(aSecondIcon, GetIconCenterByIndex(aSecondIcon.mCell));
+			move.addMove(aFirstIcon, GetIconCenterByCoord(aFirstIcon.mCell));
+			move.addMove(aSecondIcon, GetIconCenterByCoord(aSecondIcon.mCell));
 			return move;
 		}
 
@@ -99,7 +99,7 @@ namespace Match {
 			return mIconMatrix[row, column];
 		}
 
-		public bool IsIconsTheSame (List<CIcon> icons) {
+		public bool AreIconsTheSame(List<CIcon> icons) {
 			if (icons.Count < 1) {
 				return false;
 			}
@@ -123,7 +123,7 @@ namespace Match {
 			return false;
 		}
 
-		public Vector3 GetIconCenterByIndex(CCell cell) {
+		public Vector3 GetIconCenterByCoord(CCell cell) {
 			return new Vector3(
 				mStartPoint.x + cell.col * mOffset.x,
 				mStartPoint.y + cell.row * mOffset.y,
@@ -185,7 +185,7 @@ namespace Match {
 
 			for ( int c = 0; c < mColumns; c++ ) {
 				for ( int r = 0; r < mRows; r++ ) {
-					move.addMove(mIconMatrix[r, c], GetIconCenterByIndex(new CCell(r, c)));
+					move.addMove(mIconMatrix[r, c], GetIconCenterByCoord(new CCell(r, c)));
 				}
 			}
 
@@ -193,10 +193,6 @@ namespace Match {
 		}
 
 		private void CreateIconByPos(CCell aPosition, EType aIconType, bool aIsSetStartPosition) {
-			if (aIconType == EType.Count) {
-				aIconType = GenIconType();
-			}
-
 			CIcon icon = GetMatrixCell(aPosition);
 
 			if (icon == null) {
@@ -207,11 +203,47 @@ namespace Match {
 			icon.mField = this;
 			icon.mCell.Set(aPosition);
 			icon.IconState = aPosition.row < mRows / 2 ? EState.Open : EState.Invisible;
-			icon.gameObject.transform.position = GetIconCenterByIndex(
+			icon.gameObject.transform.position = GetIconCenterByCoord(
 				aIsSetStartPosition ? aPosition : new CCell(aPosition.row + mRows / 2, aPosition.col)
 			);
 
-			icon.IconType = aIconType;
+			if (aIsSetStartPosition) {
+				do {
+					icon.IconType = GenIconType();
+				} while (CanCreateMatch(icon));
+			} else {
+				if (aIconType == EType.Count) {
+					aIconType = GenIconType();
+				}
+
+				icon.IconType = aIconType;
+			}
+		}
+
+		private bool CanCreateMatch (CIcon icon) {
+			CCell cell = icon.mCell;
+
+			if (cell.col >= 2 && AreIconsTheSame(
+				new List<CIcon>{
+					icon,
+					GetMatrixCell(new CCell(cell.row, cell.col-1)),
+					GetMatrixCell(new CCell(cell.row, cell.col-2))
+				}
+			)) {
+				return true;
+			}
+
+			if (cell.row >= 2 && AreIconsTheSame(
+				new List<CIcon>{
+					icon,
+					GetMatrixCell(new CCell(cell.row-1, cell.col)),
+					GetMatrixCell(new CCell(cell.row-2, cell.col))
+				}
+			)) {
+				return true;
+			}
+
+			return false;
 		}
 
 		private CIcon CreateIcon() {
