@@ -1,16 +1,21 @@
+using Config;
 using Libraries;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Match {
+namespace Match.Gem {
 
-	public class CIconMove {
+	public class CMove {
 
-		private float mTimeDelay = 1.5f;
-		private IIconMoveListener listener;
+		private float mMovingTime = 0.3f;
+		private IMoveObserver listener;
 		private List<CIcon> moving = new List<CIcon>();
 
-		public void SetListener (IIconMoveListener listener) {
+		public CMove (Config.Match.CMatch config) {
+			mMovingTime = config.mGems.mMovingTime;
+		}
+
+		public void SetObserver(IMoveObserver listener) {
 			this.listener = listener;
 		}
 
@@ -23,7 +28,7 @@ namespace Match {
 				return;
 			}
 
-			icon.IconState = EIconState.eOpen;
+			icon.IconState = EState.Open;
 			moving.Remove(icon);
 
 			if (IsFinished() && listener != null) {
@@ -36,9 +41,9 @@ namespace Match {
 				return false;
 			} else {
 				moving.Add(icon);
-				icon.IconState = EIconState.eLock;
+				icon.IconState = EState.Lock;
 				icon.mMover = this;
-				iTween.MoveTo(icon.gameObject, iTween.Hash("position", pos, "time", mTimeDelay, "onComplete", "OnEndMoveComplete" ));
+				iTween.MoveTo(icon.gameObject, iTween.Hash("position", pos, "time", mMovingTime, "onComplete", "OnEndMoveComplete" ));
 				return true;
 			}
 		}

@@ -1,8 +1,11 @@
 using Match;
+using Match.Gem;
 using UnityEngine;
 
 namespace Config.Match {
 	public class CGems : MonoBehaviour {
+		public float mMovingTime = 0.3f;
+
 		public GameObject mPrefab;
 
 		public int mChanceRed;
@@ -17,17 +20,17 @@ namespace Config.Match {
 		public Sprite mImageGreen;
 		public Sprite mImagePurple;
 
-		public float GetChance (EIconType type) {
+		public float GetChance (EType type) {
 			return (float) GetChanceValue(type) / (float) GetChanceSum();
 		}
 
-		private int GetChanceValue (EIconType type) {
+		private int GetChanceValue (EType type) {
 			switch (type) {
-				case EIconType.eRed   : return mChanceRed;
-				case EIconType.eBlue  : return mChanceBlue;
-				case EIconType.eGreen : return mChanceGreen;
-				case EIconType.ePurple: return mChancePurple;
-				case EIconType.eYellow: return mChanceYellow;
+				case EType.Red   : return mChanceRed;
+				case EType.Blue  : return mChanceBlue;
+				case EType.Green : return mChanceGreen;
+				case EType.Purple: return mChancePurple;
+				case EType.Yellow: return mChanceYellow;
 			}
 
 			return 0;
@@ -37,13 +40,13 @@ namespace Config.Match {
 			return mChanceRed + mChanceBlue + mChanceGreen + mChancePurple + mChanceYellow;
 		}
 
-		public Sprite GetCorrectSprite (EIconType type) {
+		public Sprite GetCorrectSprite (EType type) {
 			switch (type) {
-				case EIconType.eRed   : return mImageRed;
-				case EIconType.eBlue  : return mImageBlue;
-				case EIconType.eGreen : return mImageGreen;
-				case EIconType.ePurple: return mImagePurple;
-				case EIconType.eYellow: return mImageYellow;
+				case EType.Red   : return mImageRed;
+				case EType.Blue  : return mImageBlue;
+				case EType.Green : return mImageGreen;
+				case EType.Purple: return mImagePurple;
+				case EType.Yellow: return mImageYellow;
 			}
 
 			return null;

@@ -3,16 +3,14 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Match {
+namespace Match.Gem {
 
 	public class CIcon : MonoBehaviour {
 
-		public delegate void SwipeDelegate();
-		public SwipeDelegate mDelegate = null;
-		public CIconMove mMover;
+		public CMove mMover;
 
-		private EIconType mIconType;
-		public EIconType IconType {
+		private EType mIconType;
+		public EType IconType {
 			get {
 				return mIconType;
 			}
@@ -22,17 +20,16 @@ namespace Match {
 			}
 		}
 
-		private EIconState mIconState;
-		public EIconState IconState {
+		private EState mIconState;
+		public EState IconState {
 			get {
 				return mIconState;
 			}
 			set {
 				mIconState = value;
-				GetComponent<Image>().enabled = (mIconState != EIconState.eClear);
+				GetComponent<Image>().enabled = (mIconState != EState.Clear);
 			}
 		}
-
 
 		public CField mField;
 		public CCell mCell = CCell.zero;
@@ -41,16 +38,8 @@ namespace Match {
 			get { return mCell.row * mField.mColumns + mCell.col; }
 		}
 
-		public void OnDestroyIcon() {
-			GameObject anim = Instantiate(mField.mConfig.mDie.GetPrefab(mIconType), transform.position, transform.rotation) as GameObject;
-
-			anim.transform.SetParent(transform.parent);
-
-			Destroy(anim, 2);
-		}
-
 		public bool IsActionReady() {
-			return (mIconState == EIconState.eOpen);
+			return (mIconState == EState.Open);
 		}
 
 		public bool IsInside () {
@@ -58,7 +47,7 @@ namespace Match {
 		}
 
 		public bool IsMoveReady() {
-			return (mIconState == EIconState.eOpen);
+			return (mIconState == EState.Open);
 		}
 
 		public bool HitTest(Vector2 aCoordinates) {

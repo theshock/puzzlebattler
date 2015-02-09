@@ -1,3 +1,4 @@
+using Match.Gem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,13 +9,13 @@ namespace Match.Actions {
 
 		private int mStartDestroyIcon;
 
-		private EIconType mCreateIconType;
+		private EType mCreateIconType;
 
 		public static IAction create() {
 			return new CMatch();
 		}
 
-		public EIconType getMatchIconType() {
+		public EType getMatchIconType() {
 			return mIconField.GetIconByIndex(mMatchIcons[0]).IconType;
 		}
 

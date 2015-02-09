@@ -1,8 +1,9 @@
-using UnityEngine;
+using Match.Gem;
 using System.Collections;
+using UnityEngine;
 
 namespace Match.Actions {
-	public class CRefreshPosition : CBase, IIconMoveListener {
+	public class CRefreshPosition : CBase, IMoveObserver {
 		public static IAction create() {
 			return new CRefreshPosition();
 		}
@@ -17,7 +18,7 @@ namespace Match.Actions {
 			if (move.IsFinished()) {
 				LaunchAutoMatch();
 			} else {
-				move.SetListener(this);
+				move.SetObserver(this);
 			}
 		}
 

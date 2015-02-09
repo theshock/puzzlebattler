@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Match.Gem;
 
 namespace Match.Actions {
-	public class CSwipe : CBase, IIconMoveListener {
+	public class CSwipe : CBase, IMoveObserver {
 		private bool mIsReverseSwipe = false;
 
 		public CIcon mSelectedIcon = null;
@@ -72,7 +73,7 @@ namespace Match.Actions {
 		}
 
 		private void SwipeAnimation() {
-			mIconField.SwipeIcons(mSelectedIcon, mTargetedIcon).SetListener(this);
+			mIconField.SwipeIcons(mSelectedIcon, mTargetedIcon).SetObserver(this);
 		}
 
 		public override EEvents getActionEvent() {

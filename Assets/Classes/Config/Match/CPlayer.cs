@@ -1,4 +1,4 @@
-using Match;
+using Match.Gem;
 using UnityEngine;
 
 namespace Config.Match {
@@ -11,13 +11,13 @@ namespace Config.Match {
 		public int mPurplePower;
 		public int mYellowPower;
 
-		public int GetPower (EIconType type) {
+		public int GetPower (EType type) {
 			switch (type) {
-				case EIconType.eRed   : return mRedPower;
-				case EIconType.eBlue  : return mBluePower;
-				case EIconType.eGreen : return mGreenPower;
-				case EIconType.ePurple: return mPurplePower;
-				case EIconType.eYellow: return mYellowPower;
+				case EType.Red   : return mRedPower;
+				case EType.Blue  : return mBluePower;
+				case EType.Green : return mGreenPower;
+				case EType.Purple: return mPurplePower;
+				case EType.Yellow: return mYellowPower;
 			}
 
 			return 0;

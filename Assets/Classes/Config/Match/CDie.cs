@@ -1,4 +1,4 @@
-using Match;
+using Match.Gem;
 using UnityEngine;
 
 namespace Config.Match {
@@ -6,7 +6,7 @@ namespace Config.Match {
 		public GameObject[] mPrefabs;
 
 
-		public GameObject GetPrefab (EIconType type) {
+		public GameObject GetPrefab (EType type) {
 			return mPrefabs[(int)type];
 		}
 	}
