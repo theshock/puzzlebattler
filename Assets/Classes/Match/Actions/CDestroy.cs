@@ -17,14 +17,14 @@ namespace Match.Actions {
 
 		public override void startAction() {
 			mIconTarget.IconState = EIconState.eLock;
-			mIconTarget.onDestroyIcon();
+			mIconTarget.OnDestroyIcon();
 
 			CGlobalUpdateManager.shared().subscribeUpdateEvent(doUpdate);
 		}
 
 		public void emptyCell() {
 			mIconTarget.IconState = EIconState.eClear;
-			complateAction();
+			ComplateAction();
 		}
 
 		public void doUpdate() {

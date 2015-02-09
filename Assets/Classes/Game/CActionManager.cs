@@ -29,14 +29,14 @@ namespace Game {
 		}
 
 		// todo: change to bool
-		public int addAction(IAction aAction) {
+		public bool AddAction(IAction aAction) {
 			if (aAction.validation()) {
 				aAction.startAction();
 				mActiveActions.Add(aAction);
-				return 1;
+				return true;
+			} else {
+				return false;
 			}
-
-			return 0;
 		}
 
 		public void removeAction(IAction aAction) {

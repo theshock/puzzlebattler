@@ -26,10 +26,10 @@ namespace Match.Actions {
 				action.configure(match);
 				action.setDelegate(onEndAction);
 
-				mCountStartMatch += mActionManager.addAction(action);
+				mCountStartMatch += mActionManager.AddAction(action) ? 1 : 0;
 			}
 
-			complateAction();
+			ComplateAction();
 		}
 
 

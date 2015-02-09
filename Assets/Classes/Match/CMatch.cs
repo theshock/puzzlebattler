@@ -13,7 +13,7 @@ namespace Match {
 		public void handleNotification(int aEvent, Object aParam, CNotificationManager aManager) {
 			if ((EEvents) aEvent == EEvents.eEndAll) {
 				Actions.IAction action = mActionManager.createAction(EAction.eRefreshPosition);
-				mActionManager.addAction(action);
+				mActionManager.AddAction(action);
 			}
 		}
 
@@ -30,7 +30,7 @@ namespace Match {
 
 			var action = mActionManager.createAction(EAction.eAutoMatch) as Actions.CAutoMatch;
 			action.autoConfigure();
-			mActionManager.addAction(action);
+			mActionManager.AddAction(action);
 		}
 
 		void Update() {

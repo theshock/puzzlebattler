@@ -60,22 +60,23 @@ namespace Match {
 			foreach (CIcon icon in aIcons) {
 				var destroyAction = mController.mActionManager.createAction(EAction.eDestroy) as Actions.CDestroy;
 				destroyAction.configure(icon);
-				mController.mActionManager.addAction(destroyAction);
+				mController.mActionManager.AddAction(destroyAction);
 			}
 		}
 
 		private void StartSwipe(CIcon aSelected, CIcon aTargeted) {
 			var swipeAction = mController.mActionManager.createAction(EAction.eSwipe) as Actions.CSwipe;
 
-			swipeAction.configure(aSelected, aTargeted);
+			swipeAction.mSelectedIcon = aSelected;
+			swipeAction.mTargetedIcon = aTargeted;
 
-			if (mController.mActionManager.addAction(swipeAction) == 1) {
+			if (mController.mActionManager.AddAction(swipeAction)) {
 				mInput.Block();
 			}
 		}
 
-		private bool IsActiveIcon (CIcon aIcon) {
-			return aIcon != null && aIcon.IsMoveReady();
+		private bool IsActiveIcon (CIcon icon) {
+			return icon != null && icon.IsMoveReady() && icon.IsInside();
 		}
 	}
 

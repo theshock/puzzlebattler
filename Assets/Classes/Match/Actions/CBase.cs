@@ -26,7 +26,7 @@ namespace Match.Actions {
 
 		}
 
-		public virtual void complateAction() {
+		public virtual void ComplateAction() {
 			try {
 				mActionManager.mMatchController.mNotificationManager.notify((int)getActionEvent(), this);
 

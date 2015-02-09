@@ -15,24 +15,23 @@ namespace Match.Actions {
 		}
 
 		public EIconType getMatchIconType() {
-			CIcon icon = mIconField.GetIconByIndex(mMatchIcons[0]);
-			return icon.IconType;
+			return mIconField.GetIconByIndex(mMatchIcons[0]).IconType;
 		}
 
 		public void onEndAction(IAction aAction) {
 		}
 
 		public override bool validation() {
-			if (mMatchIcons != null) {
-				foreach (int index_icon in mMatchIcons) {
-					CIcon icon = mIconField.GetIconByIndex(index_icon);
-
-					if (!icon || (icon && !icon.IsActionReady())) {
-						return false;
-					}
-				}
-			} else {
+			if (mMatchIcons == null) {
 				return false;
+			}
+
+			foreach (int index in mMatchIcons) {
+				CIcon icon = mIconField.GetIconByIndex(index);
+
+				if (icon == null || !icon.IsActionReady()) {
+					return false;
+				}
 			}
 
 			return true;
@@ -45,17 +44,17 @@ namespace Match.Actions {
 		public override void startAction() {
 			mStartDestroyIcon = 0;
 
-			foreach (int index_icon in mMatchIcons) {
-				CIcon icon = mIconField.GetIconByIndex(index_icon);
+			foreach (int index in mMatchIcons) {
+				CIcon icon = mIconField.GetIconByIndex(index);
 
-				var destroy_action = mActionManager.createAction(EAction.eDestroy) as Actions.CDestroy;
-				destroy_action.configure(icon);
-				destroy_action.setDelegate(onEndAction);
+				var destroyAction = mActionManager.createAction(EAction.eDestroy) as Actions.CDestroy;
+				destroyAction.configure(icon);
+				destroyAction.setDelegate(onEndAction);
 
-				mStartDestroyIcon += mActionManager.addAction(destroy_action);
+				mStartDestroyIcon += mActionManager.AddAction(destroyAction) ? 1 : 0;
 			}
 
-			complateAction();
+			ComplateAction();
 		}
 
 

@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Match.Actions {
-	public class CSwipe : CBase {
+	public class CSwipe : CBase, IIconMoveListener {
 		private bool mIsReverseSwipe = false;
 
-		private CIcon mSelectedIcon = null;
-		private CIcon mTargetedIcon = null;
+		public CIcon mSelectedIcon = null;
+		public CIcon mTargetedIcon = null;
 
 		public static IAction create() {
 			return new CSwipe();
 		}
 
-		public override void complateAction() {
-			mSelectedIcon.mDelegate = null;
-			mTargetedIcon.mDelegate = null;
-			base.complateAction();
+		public override void ComplateAction() {
+			base.ComplateAction();
 		}
 
 		public override bool validation() {
@@ -30,15 +28,9 @@ namespace Match.Actions {
 			SwipeAnimation();
 		}
 
-		public void OnEndSwipeAnimation() {
-			mIconField.mOnIconsMoveEnd -= OnEndSwipeAnimation;
-
-			// we should open icons before exit of before searching matches
-			mSelectedIcon.IconState = EIconState.eOpen;
-			mTargetedIcon.IconState = EIconState.eOpen;
-
+		public void OnMoveEnd () {
 			if (mIsReverseSwipe || IsCorrectSwipe()) {
-				complateAction();
+				ComplateAction();
 			} else {
 				mIsReverseSwipe = true;
 				SwipeAnimation();
@@ -70,7 +62,7 @@ namespace Match.Actions {
 					var matchAction = mActionManager.createAction(EAction.eMatch) as Actions.CMatch;
 
 					matchAction.configure(aMatch);
-					mActionManager.addAction(matchAction);
+					mActionManager.AddAction(matchAction);
 
 					return true;
 				}
@@ -80,17 +72,11 @@ namespace Match.Actions {
 		}
 
 		private void SwipeAnimation() {
-			mIconField.mOnIconsMoveEnd += OnEndSwipeAnimation;
-			mIconField.SwipeIcons(mSelectedIcon, mTargetedIcon);
+			mIconField.SwipeIcons(mSelectedIcon, mTargetedIcon).SetListener(this);
 		}
 
 		public override EEvents getActionEvent() {
 			return EEvents.eSwipe;
-		}
-
-		public void configure (CIcon selected, CIcon targeted) {
-			mSelectedIcon = selected;
-			mTargetedIcon = targeted;
 		}
 	}
 }

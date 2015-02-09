@@ -9,6 +9,7 @@ namespace Match {
 
 		public delegate void SwipeDelegate();
 		public SwipeDelegate mDelegate = null;
+		public CIconMove mMover;
 
 		private EIconType mIconType;
 		public EIconType IconType {
@@ -40,7 +41,7 @@ namespace Match {
 			get { return mCell.row * mField.mColumns + mCell.col; }
 		}
 
-		public void onDestroyIcon() {
+		public void OnDestroyIcon() {
 			GameObject anim = Instantiate(mField.mConfig.mDie.GetPrefab(mIconType), transform.position, transform.rotation) as GameObject;
 
 			anim.transform.SetParent(transform.parent);
@@ -50,6 +51,10 @@ namespace Match {
 
 		public bool IsActionReady() {
 			return (mIconState == EIconState.eOpen);
+		}
+
+		public bool IsInside () {
+			return mCell.row < mField.mRows / 2;
 		}
 
 		public bool IsMoveReady() {
@@ -62,12 +67,6 @@ namespace Match {
 			return collider2D.OverlapPoint((Vector2) worldPoint);
 		}
 
-		public void onEndSwipeAnimation() {
-			if (mDelegate != null) {
-				mDelegate.Invoke();
-			}
-		}
-
 		public bool IsNeighbour (CIcon target) {
 			if (this == target) return false;
 
@@ -77,9 +76,8 @@ namespace Match {
 			return (rowDistance == 1 && colDistance == 0) || (rowDistance == 0 && colDistance == 1);
 		}
 
-		public void onEndMoveComplete() {
-			mIconState = EIconState.eOpen;
-			mField.OnEndMoveComplete(this);
+		public void OnEndMoveComplete() {
+			mMover.OnEndMoveComplete(this);
 		}
 	}
 }

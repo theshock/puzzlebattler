@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 namespace Match.Actions {
-	public class CRefreshPosition : CBase {
+	public class CRefreshPosition : CBase, IIconMoveListener {
 		public static IAction create() {
 			return new CRefreshPosition();
 		}
@@ -12,23 +12,27 @@ namespace Match.Actions {
 		}
 
 		public override void startAction() {
-			mIconField.mOnIconsMoveEnd += LaunchAutoMatch;
+			var move = mIconField.UpdatePositionIcons();
 
-			if (!mIconField.UpdatePositionIcons()) {
+			if (move.IsFinished()) {
 				LaunchAutoMatch();
+			} else {
+				move.SetListener(this);
 			}
+		}
+
+		public void OnMoveEnd () {
+			LaunchAutoMatch();
 		}
 
 		public void doUpdate() {}
 
 		private void LaunchAutoMatch () {
-			mIconField.mOnIconsMoveEnd -= LaunchAutoMatch;
-
 			var action = mActionManager.createAction(EAction.eAutoMatch) as Actions.CAutoMatch;
 			action.autoConfigure();
-			mActionManager.addAction(action);
+			mActionManager.AddAction(action);
 
-			complateAction();
+			ComplateAction();
 		}
 
 		public override EEvents getActionEvent() {
