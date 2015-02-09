@@ -13,12 +13,11 @@ namespace Match {
 
 		void Start() {
 			mInput = new CInput();
-			mInput.registerObserver (this, 0);
-			Input.simulateMouseWithTouches = true;
+			mInput.registerObserver(this, 0);
 		}
 
 		public void init() {
-			mField.initMatchField();
+			mField.InitMatchField();
 		}
 
 		public void Update() {
@@ -26,7 +25,7 @@ namespace Match {
 		}
 
 		public void DestroyRow(int aRow) {
-			DestroyList(mField.getIconsByRow(aRow));
+			DestroyList(mField.GetIconsByRow(aRow));
 		}
 
 		public void DestroyColumn(int aCol) {
@@ -36,10 +35,7 @@ namespace Match {
 		public bool OnInputBegin (Vector2 aPosition) {
 			mSelectedIcon = mField.GetIconByPosition(aPosition);
 
-			if (mSelectedIcon != null)
-					return true;
-			else
-					return false;
+			return mSelectedIcon != null && mSelectedIcon.IsMoveReady();
 		}
 
 		public void OnInputMove (Vector2 aPosition) {
@@ -56,7 +52,7 @@ namespace Match {
 			}
 		}
 
-		public void OnInputEnd () {
+		public void OnInputEnd (Vector2 aPosition) {
 			mSelectedIcon = null;
 		}
 

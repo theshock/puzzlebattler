@@ -12,18 +12,18 @@ namespace Match.Actions {
 		}
 
 		public override void startAction() {
-			if (mIconField.updatePositionIcons(onEndMove) == 0) {
+			mIconField.mOnIconsMoveEnd += LaunchAutoMatch;
+
+			if (!mIconField.UpdatePositionIcons()) {
 				LaunchAutoMatch();
 			}
 		}
 
 		public void doUpdate() {}
 
-		public void onEndMove() {
-			LaunchAutoMatch();
-		}
-
 		private void LaunchAutoMatch () {
+			mIconField.mOnIconsMoveEnd -= LaunchAutoMatch;
+
 			var action = mActionManager.createAction(EAction.eAutoMatch) as Actions.CAutoMatch;
 			action.autoConfigure();
 			mActionManager.addAction(action);

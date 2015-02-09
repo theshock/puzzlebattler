@@ -6,7 +6,6 @@ using UnityEngine.UI;
 namespace Match {
 
 	public class CIcon : MonoBehaviour {
-		float mTimeDelay = 0.1f;
 
 		public delegate void SwipeDelegate();
 		public SwipeDelegate mDelegate = null;
@@ -78,22 +77,9 @@ namespace Match {
 			return (rowDistance == 1 && colDistance == 0) || (rowDistance == 0 && colDistance == 1);
 		}
 
-		public bool MoveTo(CCell cell, float aDelay) {
-			Vector3 pos = mField.GetIconCenterByIndex(cell);
-
-			if (this.transform.position == pos) {
-				return false;
-			}
-
-			mIconState = EIconState.eLock;
-			iTween.MoveTo(this.gameObject, iTween.Hash("position", pos, "time", mTimeDelay, "onComplete", "onEndMoveComplete"));
-
-			return true;
-		}
-
 		public void onEndMoveComplete() {
 			mIconState = EIconState.eOpen;
-			mField.onEndMoveComplete(this);
+			mField.OnEndMoveComplete(this);
 		}
 	}
 }

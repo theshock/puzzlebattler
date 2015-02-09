@@ -8,18 +8,15 @@ namespace Match {
 
 		private bool mIsBlocked = false;
 		private bool mIsClickStart = false;
-		private IInputObserver mObserver = null;
+		private IInputObserver mCurrentObserver = null;
 		private Dictionary<int, List<IInputObserver>> mDictionary = new Dictionary<int, List<IInputObserver>>();
 
-		public CInput ()
-		{
-
+		public CInput () {
+			Input.simulateMouseWithTouches = true;
 		}
 
-		public void registerObserver(IInputObserver aObserver, int aPriority)
-		{
-			if (!mDictionary.ContainsKey(aPriority)) 
-			{
+		public void registerObserver(IInputObserver aObserver, int aPriority) {
+			if (!mDictionary.ContainsKey(aPriority)) {
 				mDictionary.Add(aPriority, new List<IInputObserver>());
 			}
 			mDictionary[aPriority].Add(aObserver);
@@ -32,7 +29,7 @@ namespace Match {
 				Trace.TraceError(e.ToString());
 			}
 		}
-		
+
 		public void unregisterObserver(IInputObserver aObserver) {
 			foreach (KeyValuePair<int, List<IInputObserver>> pair in mDictionary) {
 				unregisterObserver(pair.Key, aObserver);
@@ -50,14 +47,14 @@ namespace Match {
 			}
 		}
 
-		public void Block () {
+		public void Block() {
 			mIsBlocked = true;
 		}
 
 		private void Reset() {
 			mIsClickStart = false;
 			mIsBlocked = false;
-			mObserver = null;
+			mCurrentObserver = null;
 		}
 
 		private void HandleMouse(Vector2 mousePosition) {
@@ -71,29 +68,17 @@ namespace Match {
 
 		private void HandleTouch(Touch aTouch) {
 			switch (aTouch.phase) {
-				case TouchPhase.Began:
-					OnBegin(aTouch.position);
-					break;
-
-				case TouchPhase.Moved:
-					OnMove(aTouch.position);
-					break;
-
-				case TouchPhase.Ended:
-					OnEnd();
-					break;
+				case TouchPhase.Began: OnBegin(aTouch.position); break;
+				case TouchPhase.Moved: OnMove (aTouch.position); break;
+				case TouchPhase.Ended: OnEnd  (aTouch.position); break;
 			}
 		}
 
-		private void OnBegin(Vector2 aPosition) 
-		{
-			foreach (KeyValuePair<int, List<IInputObserver>> pair in mDictionary)
-			{
-				for(int i = 0; i < pair.Value.Count; i++)
-				{
-					if(pair.Value[i].OnInputBegin(aPosition))
-					{
-						mObserver = pair.Value[i];
+		private void OnBegin(Vector2 aPosition) {
+			foreach (KeyValuePair<int, List<IInputObserver>> pair in mDictionary) {
+				for (int i = 0; i < pair.Value.Count; i++) {
+					if (pair.Value[i].OnInputBegin(aPosition)) {
+						mCurrentObserver = pair.Value[i];
 						return;
 					}
 				}
@@ -101,16 +86,15 @@ namespace Match {
 		}
 
 		private void OnMove(Vector2 aPosition) {
-			if (!mIsBlocked) {
-
-				if(mObserver != null)
-					mObserver.OnInputMove(aPosition);
+			if (!mIsBlocked && mCurrentObserver != null) {
+				mCurrentObserver.OnInputMove(aPosition);
 			}
 		}
 
-		private void OnEnd () {
-			if(mObserver != null)
-				mObserver.OnInputEnd();
+		private void OnEnd(Vector2 aPosition) {
+			if (mCurrentObserver != null) {
+				mCurrentObserver.OnInputEnd(aPosition);
+			}
 
 			Reset();
 		}

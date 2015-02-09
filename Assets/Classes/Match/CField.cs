@@ -10,34 +10,28 @@ namespace Match {
 		private CIcon [,] mIconMatrix;
 
 		public int mRows {
-			get {
-				return mConfig.mField.mRows * 2;
-			}
+			get { return mConfig.mField.mRows * 2; }
 		}
 		public int mColumns {
-			get {
-				return mConfig.mField.mColumns;
-			}
+			get { return mConfig.mField.mColumns; }
 		}
 		public Vector2 mStartPoint {
-			get {
-				return mConfig.mField.mStartPoint;
-			}
+			get { return mConfig.mField.mStartPoint; }
 		}
 
 		public Vector2 mOffset {
-			get {
-				return mConfig.mField.mOffset;
-			}
+			get { return mConfig.mField.mOffset; }
 		}
 
-		public delegate void UpdatePositionDelegate();
-		private UpdatePositionDelegate mDelegate;
-		private int mCountStartMoveCells;
+		public delegate void OnIconsMoveEnd();
+		public event OnIconsMoveEnd mOnIconsMoveEnd;
+
+		private List<CIcon> mMovingIcons;
 		public Config.Match.CMatch mConfig;
 
-		public void initMatchField() {
-			mIconMatrix = new CIcon[mRows, mColumns];
+		public void InitMatchField() {
+			mIconMatrix  = new CIcon[mRows, mColumns];
+			mMovingIcons = new List<CIcon>();
 
 			for (int r = 0; r < mRows; r++) {
 				for (int c = 0; c < mColumns; c++) {
@@ -45,14 +39,18 @@ namespace Match {
 					CreateIconByPos(new CCell(r, c), EIconType.Count, true);
 				}
 			}
-
 		}
 
-		public void swipeCellInMatrix(CIcon aFirstIcon, CIcon aSecondIcon) {
+		public void SwipeIcons (CIcon aFirstIcon, CIcon aSecondIcon) {
+			SwipeIconsCells(aFirstIcon, aSecondIcon);
+			EnsureIconsPosition();
+		}
 
+		public void SwipeIconsCells (CIcon aFirstIcon, CIcon aSecondIcon) {
 			CCell cell = aFirstIcon.mCell.Clone();
-			mIconMatrix[aFirstIcon.mCell.row, aFirstIcon.mCell.col] = aSecondIcon;
-			mIconMatrix[aSecondIcon.mCell.row, aSecondIcon.mCell.col] = aFirstIcon;
+
+			SetMatrixCell(aFirstIcon.mCell, aSecondIcon);
+			SetMatrixCell(aSecondIcon.mCell, aFirstIcon);
 
 			aFirstIcon .mCell.Set(aSecondIcon.mCell);
 			aSecondIcon.mCell.Set(cell);
@@ -60,55 +58,84 @@ namespace Match {
 
 		EIconType GenIconType() {
 			int count = EIconType.Count.GetHashCode();
-			int type = Random.Range(0, count);
 
-			EIconType res = (EIconType) type;
-
-			return res;
+			return (EIconType) Random.Range(0, count);
 		}
 
-		public void onEndMoveComplete(CIcon aIcon) {
-			mCountStartMoveCells--;
+		public void OnEndMoveComplete(CIcon aIcon) {
+			if (mMovingIcons.Count != 0) {
+				mMovingIcons.Remove(aIcon);
 
-			if (mCountStartMoveCells == 0) {
-				mDelegate.Invoke();
-			}
-		}
-
-		public int updatePositionIcons(UpdatePositionDelegate aDelegate) {
-			mCountStartMoveCells = 0;
-			mDelegate = aDelegate;
-
-			for ( int c = 0; c < mColumns; c++ ) {
-				bool moved = true;
-				while (moved) {
-					moved = false;
-					for ( int r = 0; r < mRows; r++ ) {
-						if ( mIconMatrix[r, c].IconState == EIconState.eClear && (r + 1) < mRows && mIconMatrix[r + 1, c].IconState != EIconState.eClear ) {
-							swipeCellInMatrix(mIconMatrix[r, c], mIconMatrix[r + 1, c]);
-
-							moved = true;
-						}
-					}
+				if (mMovingIcons.Count == 0) {
+					mOnIconsMoveEnd();
 				}
 			}
+		}
 
-			fillFreeIcons();
+		public bool UpdatePositionIcons() {
+			FallToRealPosition();
+			FillFreeIcons();
+			EnsureIconsPosition();
 
+			return mMovingIcons.Count > 0;
+		}
+
+		float mTimeDelay = 0.15f;
+
+		private void FillFreeIcons() {
 			for ( int c = 0; c < mColumns; c++ ) {
-				float delay = 0;
 				for ( int r = 0; r < mRows; r++ ) {
-					if ( mIconMatrix[r, c].MoveTo(new CCell(r, c), delay) ) {
-						mCountStartMoveCells++;
-						delay += 0.01f;
+					if ( mIconMatrix[r, c].IconState == EIconState.eClear) {
+						CreateIconByPos(new CCell(r, c), EIconType.Count, false);
 					}
 				}
 			}
-
-			return mCountStartMoveCells;
 		}
 
-		void CreateIconByPos(CCell aPosition, EIconType aIconType, bool aIsSetStartPosition) {
+		private void FallToRealPosition () {
+			// Find destroyed cells and search
+			// for live cells in top of them
+			for ( int col = 0; col < mColumns; col++ ) {
+				for ( int row = 0; row < mRows - 1; row++ ) {
+					CIcon current = mIconMatrix[row, col];
+
+					if ( current.IconState != EIconState.eClear ) continue;
+
+					for (int topRow = row + 1; topRow < mRows; topRow++) {
+						CIcon top = mIconMatrix[topRow, col];
+
+						if (top.IconState == EIconState.eClear) continue;
+
+						SwipeIconsCells(current, top);
+						break;
+					}
+				}
+			}
+		}
+
+		private void EnsureIconsPosition () {
+			for ( int c = 0; c < mColumns; c++ ) {
+				for ( int r = 0; r < mRows; r++ ) {
+					MoveIconTo(mIconMatrix[r, c], new CCell(r, c));
+				}
+			}
+		}
+
+		private bool MoveIconTo (CIcon icon, CCell cell) {
+			Vector3 pos = GetIconCenterByIndex(cell);
+
+			if (icon.transform.position == pos) {
+				return false;
+			} else {
+				mMovingIcons.Add(icon);
+				icon.IconState = EIconState.eLock;
+				iTween.MoveTo(icon.gameObject, iTween.Hash("position", pos, "time", mTimeDelay, "onComplete", "onEndMoveComplete" ));
+
+				return true;
+			}
+		}
+
+		private void CreateIconByPos(CCell aPosition, EIconType aIconType, bool aIsSetStartPosition) {
 			if (aIconType == EIconType.Count) {
 				aIconType = GenIconType();
 			}
@@ -116,7 +143,7 @@ namespace Match {
 			CIcon icon = GetMatrixCell(aPosition);
 
 			if (icon == null) {
-				icon = createIcon();
+				icon = CreateIcon();
 				SetMatrixCell(aPosition, icon);
 			}
 
@@ -130,15 +157,7 @@ namespace Match {
 			icon.IconType = aIconType;
 		}
 
-		public void SetMatrixCell (CCell position, CIcon icon) {
-			mIconMatrix[position.row, position.col] = icon;
-		}
-
-		public CIcon GetMatrixCell (CCell position) {
-			return mIconMatrix[position.row, position.col];
-		}
-
-		CIcon createIcon() {
+		private CIcon CreateIcon() {
 			GameObject icon = Instantiate(mConfig.mGems.mPrefab) as GameObject;
 			Transform transform = icon.transform;
 			transform.SetParent(this.transform);
@@ -147,17 +166,15 @@ namespace Match {
 			return icon.GetComponent<CIcon>();
 		}
 
-		void fillFreeIcons() {
-			for ( int c = 0; c < mColumns; c++ ) {
-				for ( int r = 0; r < mRows; r++ ) {
-					if ( mIconMatrix[r, c].IconState == EIconState.eClear) {
-						CreateIconByPos(new CCell(r, c), EIconType.Count, false);
-					}
-				}
-			}
+		public void SetMatrixCell (CCell position, CIcon icon) {
+			mIconMatrix[position.row, position.col] = icon;
 		}
 
-		public List<CIcon> getIconsByRow(int aRow) {
+		public CIcon GetMatrixCell (CCell position) {
+			return mIconMatrix[position.row, position.col];
+		}
+
+		public List<CIcon> GetIconsByRow(int aRow) {
 			var icons = new List<CIcon>();
 
 			for (int c = 0; c < mColumns; c++) {
@@ -177,6 +194,16 @@ namespace Match {
 			return icons;
 		}
 
+		public CIcon GetIconByIndex(int aIndex) {
+			if (aIndex >= mRows * mColumns) {
+				return null;
+			}
+
+			int row = aIndex / mColumns;
+			int column = aIndex - row * mColumns;
+			return mIconMatrix[row, column];
+		}
+
 		public bool IsIconsTheSame (List<CIcon> icons) {
 			if (icons.Count < 1) {
 				return false;
@@ -192,11 +219,9 @@ namespace Match {
 		}
 
 		public bool HasEmptyIcon() {
-			for (int r = 0; r < mRows; r++) {
-				for (int c = 0; c < mColumns; c++) {
-					if (mIconMatrix[r, c].IconState == EIconState.eClear) {
-						return true;
-					}
+			foreach (CIcon icon in mIconMatrix) {
+				if (icon.IconState == EIconState.eClear) {
+					return true;
 				}
 			}
 
@@ -211,31 +236,14 @@ namespace Match {
 			);
 		}
 
-		public CIcon getIconByPos(int aRow, int aColumn) {
-			return GetMatrixCell(new CCell(aRow, aColumn));
-		}
-
 		public CIcon GetIconByPosition(Vector2 aPos) {
-			for (int r = 0; r < mRows; r++) {
-				for (int c = 0; c < mColumns; c++) {
-					CIcon icon = mIconMatrix[r, c];
-
-					if (icon && icon.HitTest(aPos) && icon.IsMoveReady()) {
-						return icon;
-					}
+			foreach (CIcon icon in mIconMatrix) {
+				if (icon.HitTest(aPos)) {
+					return icon;
 				}
 			}
 
 			return null;
-		}
-
-		public CIcon GetIconByIndex(int aIndex) {
-			if (aIndex >= mRows * mColumns)
-				return null;
-
-			int row = aIndex / mColumns;
-			int column = aIndex - row * mColumns;
-			return mIconMatrix[row, column];
 		}
 	}
 }

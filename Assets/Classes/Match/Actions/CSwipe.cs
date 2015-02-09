@@ -27,11 +27,11 @@ namespace Match.Actions {
 		}
 
 		public override void startAction() {
-			swipeAnimation();
+			SwipeAnimation();
 		}
 
 		public void OnEndSwipeAnimation() {
-			mIconField.swipeCellInMatrix(mSelectedIcon, mTargetedIcon);
+			mIconField.mOnIconsMoveEnd -= OnEndSwipeAnimation;
 
 			// we should open icons before exit of before searching matches
 			mSelectedIcon.IconState = EIconState.eOpen;
@@ -41,7 +41,7 @@ namespace Match.Actions {
 				complateAction();
 			} else {
 				mIsReverseSwipe = true;
-				swipeAnimation();
+				SwipeAnimation();
 			}
 		}
 
@@ -79,20 +79,9 @@ namespace Match.Actions {
 			return false;
 		}
 
-		private void swipeAnimation() {
-			Vector3 objSFPoint = mSelectedIcon.transform.position;
-			Vector3 objSWPoint = mTargetedIcon.transform.position;
-
-			mSelectedIcon.IconState = EIconState.eLock;
-			mTargetedIcon.IconState = EIconState.eLock;
-
-			mTargetedIcon.mDelegate = OnEndSwipeAnimation;
-			mSelectedIcon.mDelegate = OnEndSwipeAnimation;
-
-			float duration = 0.2f;
-
-			iTween.MoveTo(mTargetedIcon.gameObject, iTween.Hash("transition", "easeInOut", "position", objSFPoint, "time", duration));
-			iTween.MoveTo(mSelectedIcon.gameObject, iTween.Hash("transition", "easeInOut", "position", objSWPoint, "time", duration, "oncomplete", "onEndSwipeAnimation"));
+		private void SwipeAnimation() {
+			mIconField.mOnIconsMoveEnd += OnEndSwipeAnimation;
+			mIconField.SwipeIcons(mSelectedIcon, mTargetedIcon);
 		}
 
 		public override EEvents getActionEvent() {
