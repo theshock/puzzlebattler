@@ -11,14 +11,6 @@ namespace Game {
 		public void handleNotification(int aEvent, Object aParam, CNotificationManager aManager) {
 		}
 
-		int calculateMult(int aCountMatch) {
-			if (aCountMatch < 4) {
-				return 3;
-			} else {
-				return ((aCountMatch - 1) * aCountMatch) / 2 - aCountMatch - 3;
-			}
-		}
-
 		void Start() {
 			mMatch.mNotificationManager.addObserver((int)Match.EEvents.eMatch, this);
 		}

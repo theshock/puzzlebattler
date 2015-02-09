@@ -7,8 +7,6 @@ namespace Match.Actions {
 	public class CMatch : CBase {
 		private List<int> mMatchIcons;
 
-		private int mStartDestroyIcon;
-
 		private EType mCreateIconType;
 
 		public static IAction create() {
@@ -38,13 +36,11 @@ namespace Match.Actions {
 			return true;
 		}
 
-		public int getCountMatchIcon() {
+		public int GetCountMatchIcon() {
 			return mMatchIcons.Count;
 		}
 
 		public override void startAction() {
-			mStartDestroyIcon = 0;
-
 			foreach (int index in mMatchIcons) {
 				CIcon icon = mIconField.GetIconByIndex(index);
 
@@ -52,8 +48,10 @@ namespace Match.Actions {
 				destroyAction.configure(icon);
 				destroyAction.setDelegate(onEndAction);
 
-				mStartDestroyIcon += mActionManager.AddAction(destroyAction) ? 1 : 0;
+				mActionManager.AddAction(destroyAction);
 			}
+
+			mIconField.mMatch.AddScore(GetCountMatchIcon());
 
 			ComplateAction();
 		}

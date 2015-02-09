@@ -38,6 +38,15 @@ namespace Match.Gem {
 			get { return mCell.row * mField.mColumns + mCell.col; }
 		}
 
+		public void TmpHL () {
+			var prefab = mField.mConfig.mDie.GetPrefab(IconType);
+			GameObject anim = Instantiate(prefab, transform.position, transform.rotation) as GameObject;
+
+			anim.transform.SetParent(transform.parent);
+
+			Destroy(anim, 10);
+		}
+
 		public bool IsActionReady() {
 			return (mIconState == EState.Open);
 		}

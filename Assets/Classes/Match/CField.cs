@@ -25,6 +25,7 @@ namespace Match {
 		}
 
 		public Config.Match.CMatch mConfig;
+		public CMatch mMatch;
 
 		public void InitMatchField() {
 			mIconMatrix  = new CIcon[mRows, mColumns];

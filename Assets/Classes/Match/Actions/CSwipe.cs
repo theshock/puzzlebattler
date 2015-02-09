@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Match;
 using Match.Gem;
 
 namespace Match.Actions {
@@ -9,6 +10,7 @@ namespace Match.Actions {
 
 		public CIcon mSelectedIcon = null;
 		public CIcon mTargetedIcon = null;
+		public CPlayer mOwner = null;
 
 		public static IAction create() {
 			return new CSwipe();
@@ -19,13 +21,17 @@ namespace Match.Actions {
 		}
 
 		public override bool validation() {
-			return mSelectedIcon != null
+			return mOwner != null
+				&& mSelectedIcon != null
 				&& mTargetedIcon != null
 				&& mSelectedIcon.IsActionReady()
-				&& mTargetedIcon.IsActionReady();
+				&& mTargetedIcon.IsActionReady()
+				&& mOwner.active
+				&& mOwner.matches > 0;
 		}
 
 		public override void startAction() {
+			mOwner.matches--;
 			SwipeAnimation();
 		}
 
@@ -33,6 +39,7 @@ namespace Match.Actions {
 			if (mIsReverseSwipe || IsCorrectSwipe()) {
 				ComplateAction();
 			} else {
+				mOwner.matches++;
 				mIsReverseSwipe = true;
 				SwipeAnimation();
 			}

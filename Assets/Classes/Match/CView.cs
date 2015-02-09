@@ -46,11 +46,15 @@ namespace Match {
 
 			if (IsActiveIcon(targetIcon) && mSelectedIcon != targetIcon) {
 				if (mSelectedIcon.IsNeighbour(targetIcon)) {
-					StartSwipe(mSelectedIcon, targetIcon);
+					StartSwipe(mSelectedIcon, targetIcon, mController.player);
 				}
 
 				mSelectedIcon = null;
 			}
+		}
+
+		public void AiSwipe (CIcon aSelected, CIcon aTargeted) {
+			StartSwipe(aSelected, aTargeted, mController.opponent);
 		}
 
 		public void OnInputEnd (Vector2 aPosition) {
@@ -65,11 +69,12 @@ namespace Match {
 			}
 		}
 
-		private void StartSwipe(CIcon aSelected, CIcon aTargeted) {
+		private void StartSwipe(CIcon aSelected, CIcon aTargeted, CPlayer owner) {
 			var swipeAction = mController.mActionManager.createAction(EAction.eSwipe) as Actions.CSwipe;
 
 			swipeAction.mSelectedIcon = aSelected;
 			swipeAction.mTargetedIcon = aTargeted;
+			swipeAction.mOwner = owner;
 
 			if (mController.mActionManager.AddAction(swipeAction)) {
 				mInput.Block();

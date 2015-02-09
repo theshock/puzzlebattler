@@ -28,7 +28,6 @@ namespace Game {
 			return action;
 		}
 
-		// todo: change to bool
 		public bool AddAction(IAction aAction) {
 			if (aAction.validation()) {
 				aAction.startAction();
@@ -50,12 +49,12 @@ namespace Game {
 		public void onEndAction(IAction aAction) {
 			removeAction(aAction);
 
-			if (!isHaveAction()) {
+			if (!HasActions()) {
 				mMatchController.mNotificationManager.notify((int)Match.EEvents.eEndAll, null);
 			}
 		}
 
-		public bool isHaveAction() {
+		public bool HasActions() {
 			return (mActiveActions.Count > 0);
 		}
 	}
