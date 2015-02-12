@@ -4,30 +4,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Match.Actions {
-	public class CMatch : CBase {
-		private List<int> mMatchIcons;
-
-		private EType mCreateIconType;
+	public class CMatch : CBase, IObserver {
+		private List<CIcon> mMatchIcons;
 
 		public static IAction create() {
 			return new CMatch();
 		}
 
-		public EType getMatchIconType() {
-			return mIconField.GetIconByIndex(mMatchIcons[0]).IconType;
+		public EType GetMatchIconType() {
+			return mMatchIcons[0].IconType;
 		}
 
-		public void onEndAction(IAction aAction) {
-		}
+		public void OnActionEnd (IAction aAction) {}
 
-		public override bool validation() {
+		public override bool Validation() {
 			if (mMatchIcons == null) {
 				return false;
 			}
 
-			foreach (int index in mMatchIcons) {
-				CIcon icon = mIconField.GetIconByIndex(index);
-
+			foreach (CIcon icon in mMatchIcons) {
 				if (icon == null || !icon.IsActionReady()) {
 					return false;
 				}
@@ -40,28 +35,27 @@ namespace Match.Actions {
 			return mMatchIcons.Count;
 		}
 
-		public override void startAction() {
-			foreach (int index in mMatchIcons) {
-				CIcon icon = mIconField.GetIconByIndex(index);
-
-				var destroyAction = mActionManager.createAction(EAction.eDestroy) as Actions.CDestroy;
+		public override void StartAction() {
+			foreach (CIcon icon in mMatchIcons) {
+				var destroyAction = mActionManager.createAction(EAction.Destroy) as Actions.CDestroy;
 				destroyAction.configure(icon);
-				destroyAction.setDelegate(onEndAction);
+				destroyAction.SetObserver(this);
 
 				mActionManager.AddAction(destroyAction);
 			}
 
-			mIconField.mMatch.AddScore(GetCountMatchIcon());
+			// todo: add score count
+			// mIconField.mMatch.AddScore(GetCountMatchIcon());
 
 			ComplateAction();
 		}
 
 
-		public override EEvents getActionEvent() {
-			return EEvents.eMatch;
+		public override EEvents GetActionEvent() {
+			return EEvents.Match;
 		}
 
-		public void configure (List<int> aMatchIcons) {
+		public void Configure(List<CIcon> aMatchIcons) {
 			mMatchIcons = aMatchIcons;
 		}
 	}

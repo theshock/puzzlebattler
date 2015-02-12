@@ -3,14 +3,12 @@ using System.Collections;
 
 namespace Match.Actions {
 	public interface IAction {
-		void initWithActionManager(Game.CActionManager aManager, CField aIconField);
+		void SetActionManager(Game.CActionManager aManager, CField aIconField);
 
-		bool validation();
+		bool Validation();
 
-		void startAction();
+		void StartAction();
 
-		void setDelegate(Delegate aDelegate);
-
-		EEvents getActionEvent();
+		EEvents GetActionEvent();
 	}
 }

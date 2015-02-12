@@ -41,16 +41,14 @@ namespace Match {
 		}
 
 		protected void SearchTargetMoves (CIcon first, CIcon second, CIcon target) {
-			var field = mController.mView.mField;
+			if (first.IconType != second.IconType) return;
 
-			if (first.IconType == second.IconType) {
-				foreach (CIcon cell in GetNeighbours(target)) {
-					if (cell != first && cell != second && cell.IconType == first.IconType) {
-						moves.Add(new Move(){
-							from = target,
-							to   = cell
-						});
-					}
+			foreach (CIcon cell in GetNeighbours(target)) {
+				if (cell != first && cell != second && cell.IconType == first.IconType) {
+					moves.Add(new Move(){
+						from = target,
+						to   = cell
+					});
 				}
 			}
 		}

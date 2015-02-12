@@ -1,49 +1,35 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 
 namespace Match.Actions {
-	public class CBase : Object, IAction {
+	public abstract class CBase : UnityEngine.Object, IAction {
+
+		protected IObserver mObserver;
 		protected Game.CActionManager mActionManager;
-		protected Match.Actions.Delegate mDelegate;
-		protected CField mIconField;
 
-		public void initWithActionManager(Game.CActionManager aManager, CField aIconField) {
-			mActionManager = aManager;
-			mIconField = aIconField;
+		public void SetObserver (IObserver observer) {
+			this.mObserver = observer;
 		}
 
-		public void setDelegate(Match.Actions.Delegate aDelegate) {
-			mDelegate = aDelegate;
+		public void SetActionManager(Game.CActionManager aManager, CField aIconField) {
+			this.mActionManager = aManager;
 		}
 
-		public virtual bool validation() {
-			return false;
-		}
+		public abstract Match.EEvents GetActionEvent();
+		public abstract bool Validation ();
+		public abstract void StartAction ();
 
-		public virtual void startAction() {
+		public void ComplateAction() {
+			mActionManager.mMatchController.mNotificationManager.notify((int)GetActionEvent(), this);
 
-		}
+			mActionManager.OnActionEnd(this);
 
-		public virtual void ComplateAction() {
-			try {
-				mActionManager.mMatchController.mNotificationManager.notify((int)getActionEvent(), this);
-
-				if (mDelegate != null) {
-					mDelegate.Invoke(this);
-				}
-
-				mActionManager.onEndAction(this);
-
+			if (mObserver != null) {
+				mObserver.OnActionEnd(this);
 			}
-			catch (System.Exception e) {
-				Debug.LogError(e.ToString());
-			}
-		}
-
-		public virtual EEvents getActionEvent() {
-			return EEvents.Count;
 		}
 	}
 

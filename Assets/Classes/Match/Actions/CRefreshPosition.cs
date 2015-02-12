@@ -4,15 +4,17 @@ using UnityEngine;
 
 namespace Match.Actions {
 	public class CRefreshPosition : CBase, IMoveObserver {
+		public CField mIconField;
+
 		public static IAction create() {
 			return new CRefreshPosition();
 		}
 
-		public override bool validation() {
+		public override bool Validation() {
 			return mIconField.HasEmptyIcon();
 		}
 
-		public override void startAction() {
+		public override void StartAction() {
 			var move = mIconField.UpdatePositionIcons();
 
 			if (move.IsFinished()) {
@@ -29,15 +31,15 @@ namespace Match.Actions {
 		public void doUpdate() {}
 
 		private void LaunchAutoMatch () {
-			var action = mActionManager.createAction(EAction.eAutoMatch) as Actions.CAutoMatch;
+			var action = mActionManager.createAction(EAction.AutoMatch) as Actions.CAutoMatch;
 			action.autoConfigure();
 			mActionManager.AddAction(action);
 
 			ComplateAction();
 		}
 
-		public override EEvents getActionEvent() {
-			return EEvents.eRefreshPosition;
+		public override EEvents GetActionEvent() {
+			return EEvents.RefreshPosition;
 		}
 	}
 

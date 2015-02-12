@@ -2,12 +2,10 @@ using UnityEngine;
 
 namespace Match {
 	public enum EAction {
-		eDestroy,
-		eSwipe,
-		eMatch,
-		eAutoMatch,
-		eRefreshPosition,
-
-		Count
+		Destroy,
+		Swipe,
+		Match,
+		AutoMatch,
+		RefreshPosition
 	}
 }

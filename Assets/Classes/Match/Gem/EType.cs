@@ -4,8 +4,6 @@ namespace Match.Gem {
 		Green,
 		Blue,
 		Purple,
-		Yellow,
-
-		Count
+		Yellow
 	};
 }

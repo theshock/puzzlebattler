@@ -10,7 +10,7 @@ namespace Match {
 
 		public CMatcher (CMatch controller) : base(controller) {}
 
-		public List<List<int>> FindMatches() {
+		private List<List<int>> FindMatchesIndexes() {
 			var union = new CWeightedUnion(GetSquare());
 
 			for (int i = 0; i < GetSquare(); i++) {
@@ -26,6 +26,23 @@ namespace Match {
 			}
 
 			return union.GetTrees();
+		}
+
+		public List<List<CIcon>> FindMatches() {
+			var matches = FindMatchesIndexes();
+			var trees = new List<List<CIcon>>();
+
+			foreach (List<int> match in matches) {
+				var tree = new List<CIcon>();
+
+				foreach (int index in match) {;
+					tree.Add( mController.mView.mField.GetIconByIndex(index) );
+				}
+
+				trees.Add(tree);
+			}
+
+			return trees;
 		}
 
 		protected bool IsHorizontalMatch (int index) {
@@ -45,7 +62,7 @@ namespace Match {
 		}
 
 		public bool MatchesExists () {
-			return FindMatches().Count > 0;
+			return FindMatchesIndexes().Count > 0;
 		}
 
 	}

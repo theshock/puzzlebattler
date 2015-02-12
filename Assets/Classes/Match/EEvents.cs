@@ -1,15 +1,11 @@
 namespace Match {
 	public enum EEvents {
-		eDestroy,
-		eSwipe,
-		eMatch,
-		eAutoMatch,
-		eRefreshPosition,
+		Destroy,
+		Swipe,
+		Match,
+		AutoMatch,
+		RefreshPosition,
 
-		eEndAll,
-		eEndInit,
-		eChangeInTheField,
-
-		Count
+		Finish
 	}
 }

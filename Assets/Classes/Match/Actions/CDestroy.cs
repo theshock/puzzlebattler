@@ -12,11 +12,11 @@ namespace Match.Actions {
 			return new CDestroy();
 		}
 
-		public override bool validation() {
+		public override bool Validation() {
 			return mIconTarget && mIconTarget.IsActionReady();
 		}
 
-		public override void startAction() {
+		public override void StartAction() {
 			mIconTarget.IconState = EState.Lock;
 
 			LaunchParticles();
@@ -49,8 +49,8 @@ namespace Match.Actions {
 		}
 
 
-		public override EEvents getActionEvent() {
-			return EEvents.eDestroy;
+		public override EEvents GetActionEvent() {
+			return EEvents.Destroy;
 		}
 
 		public void configure(CIcon target) {

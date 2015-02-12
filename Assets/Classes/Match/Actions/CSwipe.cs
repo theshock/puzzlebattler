@@ -8,6 +8,7 @@ namespace Match.Actions {
 	public class CSwipe : CBase, IMoveObserver {
 		private bool mIsReverseSwipe = false;
 
+		public CField mIconField = null;
 		public CIcon mSelectedIcon = null;
 		public CIcon mTargetedIcon = null;
 		public CPlayer mOwner = null;
@@ -16,11 +17,7 @@ namespace Match.Actions {
 			return new CSwipe();
 		}
 
-		public override void ComplateAction() {
-			base.ComplateAction();
-		}
-
-		public override bool validation() {
+		public override bool Validation() {
 			return mOwner != null
 				&& mSelectedIcon != null
 				&& mTargetedIcon != null
@@ -30,7 +27,7 @@ namespace Match.Actions {
 				&& mOwner.matches > 0;
 		}
 
-		public override void startAction() {
+		public override void StartAction() {
 			mOwner.matches--;
 			SwipeAnimation();
 		}
@@ -46,12 +43,12 @@ namespace Match.Actions {
 		}
 
 		private bool IsCorrectSwipe () {
-			List<List<int>> matches = mActionManager.mMatchController.mSearcher.FindMatches();
+			var matches = mActionManager.mMatchController.mSearcher.FindMatches();
 
 			if (matches.Count > 0) {
 				bool swipeCreateMatch = false;
 
-				foreach (List<int> match in matches) {
+				foreach (List<CIcon> match in matches) {
 					if (TryLaunchMatch(match)) {
 						swipeCreateMatch = true;
 					}
@@ -64,12 +61,12 @@ namespace Match.Actions {
 		}
 
 		// why should we check for icon contains ?
-		private bool TryLaunchMatch (List<int> aMatch) {
+		private bool TryLaunchMatch (List<CIcon> aMatch) {
 			for (int j = 0; j < aMatch.Count; j++) {
-				if (aMatch[j] == mSelectedIcon.mIndex || aMatch[j] == mTargetedIcon.mIndex) {
-					var matchAction = mActionManager.createAction(EAction.eMatch) as Actions.CMatch;
+				if (aMatch[j] == mSelectedIcon || aMatch[j] == mTargetedIcon) {
+					var matchAction = mActionManager.createAction(EAction.Match) as Actions.CMatch;
 
-					matchAction.configure(aMatch);
+					matchAction.Configure(aMatch);
 					mActionManager.AddAction(matchAction);
 
 					return true;
@@ -83,8 +80,8 @@ namespace Match.Actions {
 			mIconField.SwipeIcons(mSelectedIcon, mTargetedIcon).SetObserver(this);
 		}
 
-		public override EEvents getActionEvent() {
-			return EEvents.eSwipe;
+		public override EEvents GetActionEvent() {
+			return EEvents.Swipe;
 		}
 	}
 }

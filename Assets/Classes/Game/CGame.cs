@@ -12,7 +12,7 @@ namespace Game {
 		}
 
 		void Start() {
-			mMatch.mNotificationManager.addObserver((int)Match.EEvents.eMatch, this);
+			mMatch.mNotificationManager.addObserver((int)Match.EEvents.Match, this);
 		}
 	}
 }

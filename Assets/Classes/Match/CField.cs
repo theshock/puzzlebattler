@@ -1,5 +1,6 @@
 ﻿using Libraries;
 using Match.Gem;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,7 +34,7 @@ namespace Match {
 			for (int r = 0; r < mRows; r++) {
 				for (int c = 0; c < mColumns; c++) {
 					mIconMatrix[r, c] = null;
-					CreateIconByPos(new CCell(r, c), EType.Count, true);
+					CreateIconByPos(new CCell(r, c), GenIconType(), true);
 				}
 			}
 		}
@@ -145,16 +146,16 @@ namespace Match {
 		// private starts
 
 		private EType GenIconType() {
-			int count = EType.Count.GetHashCode();
+			int count = Enum.GetNames( typeof( EType ) ).Length;
 
-			return (EType) Random.Range(0, count);
+			return (EType) UnityEngine.Random.Range(0, count);
 		}
 
 		private void FillFreeIcons() {
 			for ( int c = 0; c < mColumns; c++ ) {
 				for ( int r = 0; r < mRows; r++ ) {
 					if ( mIconMatrix[r, c].IconState == EState.Clear) {
-						CreateIconByPos(new CCell(r, c), EType.Count, false);
+						CreateIconByPos(new CCell(r, c), GenIconType(), false);
 					}
 				}
 			}
@@ -213,10 +214,6 @@ namespace Match {
 					icon.IconType = GenIconType();
 				} while (CanCreateMatch(icon));
 			} else {
-				if (aIconType == EType.Count) {
-					aIconType = GenIconType();
-				}
-
 				icon.IconType = aIconType;
 			}
 		}

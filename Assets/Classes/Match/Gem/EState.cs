@@ -3,8 +3,6 @@ namespace Match.Gem {
 		Lock,
 		Clear,
 		Open,
-		Invisible,
-
-		Count
+		Invisible
 	};
 }

@@ -63,15 +63,16 @@ namespace Match {
 
 		private void DestroyList (List<CIcon> aIcons) {
 			foreach (CIcon icon in aIcons) {
-				var destroyAction = mController.mActionManager.createAction(EAction.eDestroy) as Actions.CDestroy;
+				var destroyAction = mController.mActionManager.createAction(EAction.Destroy) as Actions.CDestroy;
 				destroyAction.configure(icon);
 				mController.mActionManager.AddAction(destroyAction);
 			}
 		}
 
 		private void StartSwipe(CIcon aSelected, CIcon aTargeted, CPlayer owner) {
-			var swipeAction = mController.mActionManager.createAction(EAction.eSwipe) as Actions.CSwipe;
+			var swipeAction = mController.mActionManager.createAction(EAction.Swipe) as Actions.CSwipe;
 
+			swipeAction.mIconField = mField;
 			swipeAction.mSelectedIcon = aSelected;
 			swipeAction.mTargetedIcon = aTargeted;
 			swipeAction.mOwner = owner;

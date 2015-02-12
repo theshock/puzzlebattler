@@ -1,5 +1,6 @@
 ﻿using Libraries;
 using Match;
+using Match.Actions;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,8 +19,9 @@ namespace Match {
 		public CPlayer opponent = new CPlayer();
 
 		public void handleNotification(int aEvent, Object aParam, CNotificationManager aManager) {
-			if ((EEvents) aEvent == EEvents.eEndAll) {
-				Actions.IAction action = mActionManager.createAction(EAction.eRefreshPosition);
+			if ((EEvents) aEvent == EEvents.Finish) {
+				CRefreshPosition action = mActionManager.createAction(EAction.RefreshPosition) as CRefreshPosition;
+				action.mIconField = mView.mField;
 				mActionManager.AddAction(action);
 
 				if (!mActionManager.HasActions()) {
@@ -77,13 +79,13 @@ namespace Match {
 			mActionManager = new Game.CActionManager();
 			mActionManager.mMatchController = this;
 
-			mNotificationManager.addObserver((int)EEvents.eEndAll, this);
+			mNotificationManager.addObserver((int)EEvents.Finish, this);
 
 			mSearcher = new CMatcher(this);
 
 			mView.init();
 
-			var action = mActionManager.createAction(EAction.eAutoMatch) as Actions.CAutoMatch;
+			var action = mActionManager.createAction(EAction.AutoMatch) as Actions.CAutoMatch;
 			action.autoConfigure();
 			mActionManager.AddAction(action);
 		}

@@ -11,11 +11,11 @@ namespace Game {
 		public Match.CMatch mMatchController { get; set; }
 
 		public CActionManager() {
-			CObjectFactory.registerCreator("match_action_" + (int)Match.EAction.eDestroy, CDestroy.create);
-			CObjectFactory.registerCreator("match_action_" + (int)Match.EAction.eSwipe, CSwipe.create);
-			CObjectFactory.registerCreator("match_action_" + (int)Match.EAction.eMatch, CMatch.create);
-			CObjectFactory.registerCreator("match_action_" + (int)Match.EAction.eAutoMatch, CAutoMatch.create);
-			CObjectFactory.registerCreator("match_action_" + (int)Match.EAction.eRefreshPosition, CRefreshPosition.create);
+			CObjectFactory.registerCreator("match_action_" + (int)Match.EAction.Destroy, CDestroy.create);
+			CObjectFactory.registerCreator("match_action_" + (int)Match.EAction.Swipe, CSwipe.create);
+			CObjectFactory.registerCreator("match_action_" + (int)Match.EAction.Match, CMatch.create);
+			CObjectFactory.registerCreator("match_action_" + (int)Match.EAction.AutoMatch, CAutoMatch.create);
+			CObjectFactory.registerCreator("match_action_" + (int)Match.EAction.RefreshPosition, CRefreshPosition.create);
 		}
 
 		public IAction createAction(Match.EAction aAction) {
@@ -23,14 +23,14 @@ namespace Game {
 
 			IAction action = CObjectFactory.createObjectByKey(name_action) as IAction;
 
-			action.initWithActionManager(this, mMatchController.mView.mField);
+			action.SetActionManager(this, mMatchController.mView.mField);
 
 			return action;
 		}
 
 		public bool AddAction(IAction aAction) {
-			if (aAction.validation()) {
-				aAction.startAction();
+			if (aAction.Validation()) {
+				aAction.StartAction();
 				mActiveActions.Add(aAction);
 				return true;
 			} else {
@@ -46,11 +46,13 @@ namespace Game {
 			}
 		}
 
-		public void onEndAction(IAction aAction) {
+		public void OnActionEnd(CBase aAction) {
+			mMatchController.mNotificationManager.notify((int)aAction.GetActionEvent(), aAction);
+
 			removeAction(aAction);
 
 			if (!HasActions()) {
-				mMatchController.mNotificationManager.notify((int)Match.EEvents.eEndAll, null);
+				mMatchController.mNotificationManager.notify((int)Match.EEvents.Finish, null);
 			}
 		}
 
