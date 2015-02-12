@@ -10,28 +10,12 @@ namespace Game {
 
 		public Match.CMatch mMatchController { get; set; }
 
-		public CActionManager() {
-			CObjectFactory.registerCreator("match_action_" + (int)Match.EAction.Destroy, CDestroy.create);
-			CObjectFactory.registerCreator("match_action_" + (int)Match.EAction.Swipe, CSwipe.create);
-			CObjectFactory.registerCreator("match_action_" + (int)Match.EAction.Match, CMatch.create);
-			CObjectFactory.registerCreator("match_action_" + (int)Match.EAction.AutoMatch, CAutoMatch.create);
-			CObjectFactory.registerCreator("match_action_" + (int)Match.EAction.RefreshPosition, CRefreshPosition.create);
-		}
-
-		public IAction createAction(Match.EAction aAction) {
-			string name_action = "match_action_" + (int) aAction;
-
-			IAction action = CObjectFactory.createObjectByKey(name_action) as IAction;
-
-			action.SetActionManager(this, mMatchController.mView.mField);
-
-			return action;
-		}
-
 		public bool AddAction(IAction aAction) {
+			aAction.SetActionManager(this);
+
 			if (aAction.Validation()) {
-				aAction.StartAction();
 				mActiveActions.Add(aAction);
+				aAction.StartAction();
 				return true;
 			} else {
 				return false;

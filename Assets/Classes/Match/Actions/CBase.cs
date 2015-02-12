@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 
 namespace Match.Actions {
-	public abstract class CBase : UnityEngine.Object, IAction {
+	public abstract class CBase : UnityEngine.Object, IAction, IObserver {
 
 		protected IObserver mObserver;
 		protected Game.CActionManager mActionManager;
@@ -14,9 +14,12 @@ namespace Match.Actions {
 			this.mObserver = observer;
 		}
 
-		public void SetActionManager(Game.CActionManager aManager, CField aIconField) {
+		public void SetActionManager (Game.CActionManager aManager) {
 			this.mActionManager = aManager;
 		}
+
+		public virtual void OnActionStart (IAction action) {}
+		public virtual void OnActionEnd   (IAction action) {}
 
 		public abstract Match.EEvents GetActionEvent();
 		public abstract bool Validation ();

@@ -13,10 +13,6 @@ namespace Match.Actions {
 		public CIcon mTargetedIcon = null;
 		public CPlayer mOwner = null;
 
-		public static IAction create() {
-			return new CSwipe();
-		}
-
 		public override bool Validation() {
 			return mOwner != null
 				&& mSelectedIcon != null
@@ -64,9 +60,7 @@ namespace Match.Actions {
 		private bool TryLaunchMatch (List<CIcon> aMatch) {
 			for (int j = 0; j < aMatch.Count; j++) {
 				if (aMatch[j] == mSelectedIcon || aMatch[j] == mTargetedIcon) {
-					var matchAction = mActionManager.createAction(EAction.Match) as Actions.CMatch;
-
-					matchAction.Configure(aMatch);
+					var matchAction = new Actions.CMatch(aMatch);
 					mActionManager.AddAction(matchAction);
 
 					return true;

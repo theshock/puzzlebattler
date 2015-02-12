@@ -1,5 +1,6 @@
 namespace Match.Actions {
 	public interface IObserver {
-		void OnActionEnd (IAction action);
+		void OnActionStart (IAction action);
+		void OnActionEnd   (IAction action);
 	}
 }

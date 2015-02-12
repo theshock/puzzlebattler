@@ -8,8 +8,8 @@ namespace Match.Actions {
 		private float mTimeDelayEmpty = 0.1f;
 		private CIcon mIconTarget = null;
 
-		public static IAction create() {
-			return new CDestroy();
+		public CDestroy (CIcon target) {
+			mIconTarget = target;
 		}
 
 		public override bool Validation() {
@@ -48,16 +48,9 @@ namespace Match.Actions {
 			}
 		}
 
-
 		public override EEvents GetActionEvent() {
 			return EEvents.Destroy;
 		}
-
-		public void configure(CIcon target) {
-			mIconTarget = target;
-		}
-
-		public void destroyArray(ArrayList aCells) {}
 	}
 
 }

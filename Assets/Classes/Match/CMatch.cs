@@ -20,8 +20,7 @@ namespace Match {
 
 		public void handleNotification(int aEvent, Object aParam, CNotificationManager aManager) {
 			if ((EEvents) aEvent == EEvents.Finish) {
-				CRefreshPosition action = mActionManager.createAction(EAction.RefreshPosition) as CRefreshPosition;
-				action.mIconField = mView.mField;
+				CRefreshPosition action = new CRefreshPosition(mView.mField);
 				mActionManager.AddAction(action);
 
 				if (!mActionManager.HasActions()) {
@@ -85,8 +84,7 @@ namespace Match {
 
 			mView.init();
 
-			var action = mActionManager.createAction(EAction.AutoMatch) as Actions.CAutoMatch;
-			action.autoConfigure();
+			var action = new Actions.CAutoMatch(mSearcher.FindMatches());
 			mActionManager.AddAction(action);
 		}
 

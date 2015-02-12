@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Match.Actions {
 	public class CRefreshPosition : CBase, IMoveObserver {
-		public CField mIconField;
+		protected CField mIconField;
 
-		public static IAction create() {
-			return new CRefreshPosition();
+		public CRefreshPosition (CField field) {
+			mIconField = field;
 		}
 
 		public override bool Validation() {
@@ -28,11 +28,8 @@ namespace Match.Actions {
 			LaunchAutoMatch();
 		}
 
-		public void doUpdate() {}
-
 		private void LaunchAutoMatch () {
-			var action = mActionManager.createAction(EAction.AutoMatch) as Actions.CAutoMatch;
-			action.autoConfigure();
+			var action = new CAutoMatch(mActionManager.mMatchController.mSearcher.FindMatches());
 			mActionManager.AddAction(action);
 
 			ComplateAction();

@@ -4,18 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Match.Actions {
-	public class CMatch : CBase, IObserver {
+	public class CMatch : CBase {
 		private List<CIcon> mMatchIcons;
 
-		public static IAction create() {
-			return new CMatch();
+		public CMatch (List<CIcon> aMatchIcons) {
+			mMatchIcons = aMatchIcons;
 		}
 
 		public EType GetMatchIconType() {
 			return mMatchIcons[0].IconType;
 		}
 
-		public void OnActionEnd (IAction aAction) {}
+		public override void OnActionEnd (IAction aAction) {}
 
 		public override bool Validation() {
 			if (mMatchIcons == null) {
@@ -37,8 +37,7 @@ namespace Match.Actions {
 
 		public override void StartAction() {
 			foreach (CIcon icon in mMatchIcons) {
-				var destroyAction = mActionManager.createAction(EAction.Destroy) as Actions.CDestroy;
-				destroyAction.configure(icon);
+				var destroyAction = new CDestroy(icon);
 				destroyAction.SetObserver(this);
 
 				mActionManager.AddAction(destroyAction);
@@ -53,10 +52,6 @@ namespace Match.Actions {
 
 		public override EEvents GetActionEvent() {
 			return EEvents.Match;
-		}
-
-		public void Configure(List<CIcon> aMatchIcons) {
-			mMatchIcons = aMatchIcons;
 		}
 	}
 }
