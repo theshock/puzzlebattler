@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Match {
+namespace Libraries {
 	public class CInput {
 
 		private bool mIsBlocked = false;

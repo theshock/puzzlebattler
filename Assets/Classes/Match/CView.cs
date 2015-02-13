@@ -5,15 +5,15 @@ using UnityEngine;
 
 namespace Match {
 
-	public class CView : MonoBehaviour, IInputObserver {
+	public class CView : MonoBehaviour, Libraries.IInputObserver {
 		public CField mField = null;
 		public CMatch mController = null;
 
-		private CInput mInput;
+		private Libraries.CInput mInput;
 		private CIcon mSelectedIcon = null;
 
 		void Start() {
-			mInput = new CInput();
+			mInput = new Libraries.CInput();
 			mInput.registerObserver(this, 0);
 		}
 
