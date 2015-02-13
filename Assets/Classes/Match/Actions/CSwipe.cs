@@ -20,7 +20,8 @@ namespace Match.Actions {
 				return iconField    != null
 					&& selectedIcon != null
 					&& targetedIcon != null
-					&& owner        != null;
+					&& owner        != null
+					&& matcher      != null;
 			}
 		}
 
@@ -54,13 +55,11 @@ namespace Match.Actions {
 		}
 
 		private void CreateSwipeBack () {
-			var swipeBack = new Actions.CSwipeBack(mConfig);
-			swipeBack.SetAnticipant(this);
-			mActionManager.AddAction(swipeBack);
+			Wait(new Actions.CSwipeBack(mConfig));
 		}
 
 		private bool IsCorrectSwipe () {
-			var matches = GetFilteredMatches();
+			var matches = mConfig.matcher.FindMatches();
 
 			if (matches.Count > 0) {
 				foreach (List<CIcon> match in matches) {
@@ -71,22 +70,6 @@ namespace Match.Actions {
 			} else {
 				return false;
 			}
-		}
-
-		private List<List<CIcon>> GetFilteredMatches () {
-			var matches = mConfig.matcher.FindMatches();
-			var filtered = new List<List<CIcon>>();
-
-			foreach (List<CIcon> match in matches) {
-				foreach (CIcon icon in match) {
-					if (icon == mConfig.selectedIcon || icon == mConfig.targetedIcon) {
-						filtered.Add(match);
-						break;
-					}
-				}
-			}
-
-			return filtered;
 		}
 
 		public override int GetIndex() {

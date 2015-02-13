@@ -6,6 +6,10 @@ namespace Match.Actions {
 
 		public CSwipeBack (Config config) : base(config) {}
 
+		public override bool Validation() {
+			return true;
+		}
+
 		public override void OnMoveEnd () {
 			ComplateAction();
 		}

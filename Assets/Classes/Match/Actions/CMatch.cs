@@ -36,7 +36,6 @@ namespace Match.Actions {
 
 		public override void StartAction() {
 			foreach (CIcon icon in mMatchIcons) {
-				Debug.Log("Destroy " + icon.mIndex);
 				Wait(new CDestroy(icon));
 			}
 		}
