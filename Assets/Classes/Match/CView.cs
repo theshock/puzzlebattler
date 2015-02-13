@@ -69,12 +69,16 @@ namespace Match {
 		}
 
 		private void StartSwipe(CIcon aSelected, CIcon aTargeted, CPlayer owner) {
-			var swipeAction = new Actions.CSwipe();
+			var config = new Actions.CSwipe.Config(){
+				iconField = mField,
+				selectedIcon = aSelected,
+				targetedIcon = aTargeted,
+				owner = owner,
+				matcher = mController.mMatcher
+			};
 
-			swipeAction.mIconField = mField;
-			swipeAction.mSelectedIcon = aSelected;
-			swipeAction.mTargetedIcon = aTargeted;
-			swipeAction.mOwner = owner;
+
+			var swipeAction = new Actions.CSwipe(config);
 
 			if (mController.mActionManager.AddAction(swipeAction)) {
 				mInput.Block();

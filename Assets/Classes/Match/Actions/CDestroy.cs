@@ -2,11 +2,12 @@ using Libraries;
 using Match.Gem;
 using System.Collections;
 using UnityEngine;
+using Libraries.ActionSystem;
 
 namespace Match.Actions {
 	public class CDestroy : CBase {
-		private float mTimeDelayEmpty = 0.1f;
 		private CIcon mIconTarget = null;
+		private float mTimeDelayEmpty = 0.1f;
 
 		public CDestroy (CIcon target) {
 			mIconTarget = target;
@@ -17,8 +18,6 @@ namespace Match.Actions {
 		}
 
 		public override void StartAction() {
-			mIconTarget.IconState = EState.Lock;
-
 			LaunchParticles();
 
 			CGlobalUpdateManager.shared().subscribeUpdateEvent(doUpdate);
@@ -48,8 +47,8 @@ namespace Match.Actions {
 			}
 		}
 
-		public override EEvents GetActionEvent() {
-			return EEvents.Destroy;
+		public override int GetIndex() {
+			return (int) EEvents.Destroy;
 		}
 	}
 

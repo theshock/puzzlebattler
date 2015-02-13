@@ -35,8 +35,11 @@ namespace Match {
 			foreach (List<int> match in matches) {
 				var tree = new List<CIcon>();
 
-				foreach (int index in match) {;
-					tree.Add( mController.mView.mField.GetIconByIndex(index) );
+				Debug.Log("Tree ===");
+				foreach (int index in match) {
+					var icon = mController.mView.mField.GetIconByIndex(index);
+					tree.Add( icon );
+					Debug.Log(icon.mIndex);
 				}
 
 				trees.Add(tree);

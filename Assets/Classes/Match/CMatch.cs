@@ -1,4 +1,5 @@
 ﻿using Libraries;
+using Libraries.ActionSystem;
 using Match;
 using Match.Actions;
 using System.Collections;
@@ -6,46 +7,68 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace Match {
-	public class CMatch : MonoBehaviour , INotificationObserver {
-		public CNotificationManager mNotificationManager = new CNotificationManager();
-		public CMatcher mSearcher;
+	public class CMatch : MonoBehaviour {
+		public CMatcher mMatcher;
 		public CView mView;
 		public Game.CGame mGame;
-		public Game.CActionManager mActionManager;
+		public Libraries.ActionSystem.CManager mActionManager;
 
 		public Text playerText;
 		public Text opponentText;
 		public CPlayer player = new CPlayer();
 		public CPlayer opponent = new CPlayer();
 
-		public void handleNotification(int aEvent, Object aParam, CNotificationManager aManager) {
-			if ((EEvents) aEvent == EEvents.Finish) {
-				CRefreshPosition action = new CRefreshPosition(mView.mField);
-				mActionManager.AddAction(action);
+		public void OnRefreshEnd (IAction action) {
+			var autoMatch = new CAutoMatch(mMatcher.FindMatches());
+			mActionManager.AddAction(autoMatch);
+		}
 
-				if (!mActionManager.HasActions()) {
-					if (player.active && player.matches == 0) {
-						player.active = false;
-						opponent.active = true;
-						opponent.matches = 3;
-					} else if (opponent.active && opponent.matches == 0) {
-						opponent.active = false;
-						player.active = true;
-						player.matches = 3;
+		public void OnMatchEnd (IAction action) {
+			AddScore((action as Actions.CMatch).GetCountMatchIcon());
+		}
+
+		public void OnSwipeBegin (IAction action) {
+			if (player.active) {
+				player.matches--;
+			} else {
+				opponent.matches--;
+			}
+		}
+
+		public void OnSwipeBackBegin (IAction action) {
+			if (player.active) {
+				player.matches++;
+			} else {
+				opponent.matches++;
+			}
+		}
+
+		public void OnActionsFinished () {
+			CRefreshPosition refresh = new CRefreshPosition(mView.mField);
+			mActionManager.AddAction(refresh);
+
+			if (!mActionManager.HasActions()) {
+				if (player.active && player.matches == 0) {
+					player.active = false;
+					opponent.active = true;
+					opponent.matches = 3;
+				} else if (opponent.active && opponent.matches == 0) {
+					opponent.active = false;
+					player.active = true;
+					player.matches = 3;
+				}
+
+				if (opponent.active) {
+					var searcher = new CSearcher(this);
+					searcher.FindMoves();
+
+					if (!searcher.MovesExists()) {
+						Debug.Log("No moves");
+						return;
 					}
 
-					if (opponent.active) {
-						var searcher = new CSearcher(this);
-						searcher.FindMoves();
-
-						if (!searcher.MovesExists()) {
-							Debug.Log("No moves");
-							return;
-						}
-
-						var move = searcher.GetMoves()[0];
-						mView.AiSwipe(move.from, move.to);
-					}
+					var move = searcher.GetMoves()[0];
+					mView.AiSwipe(move.from, move.to);
 				}
 			}
 		}
@@ -75,16 +98,19 @@ namespace Match {
 			player.active = true;
 			opponent.matches = 0;
 
-			mActionManager = new Game.CActionManager();
-			mActionManager.mMatchController = this;
+			mActionManager = new Libraries.ActionSystem.CManager();
+			mActionManager.events.OnFinish(OnActionsFinished);
 
-			mNotificationManager.addObserver((int)EEvents.Finish, this);
+			mActionManager.events.On(EActionState.End  , (int) EEvents.RefreshPosition, OnRefreshEnd     );
+			mActionManager.events.On(EActionState.End  , (int) EEvents.Match          , OnMatchEnd       );
+			mActionManager.events.On(EActionState.Begin, (int) EEvents.Swipe          , OnSwipeBegin     );
+			mActionManager.events.On(EActionState.Begin, (int) EEvents.SwipeBack      , OnSwipeBackBegin );
 
-			mSearcher = new CMatcher(this);
+			mMatcher = new CMatcher(this);
 
 			mView.init();
 
-			var action = new Actions.CAutoMatch(mSearcher.FindMatches());
+			var action = new Actions.CAutoMatch(mMatcher.FindMatches());
 			mActionManager.AddAction(action);
 		}
 

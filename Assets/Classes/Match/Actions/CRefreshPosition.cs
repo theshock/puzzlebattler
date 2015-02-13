@@ -1,3 +1,4 @@
+using Libraries.ActionSystem;
 using Match.Gem;
 using System.Collections;
 using UnityEngine;
@@ -18,25 +19,18 @@ namespace Match.Actions {
 			var move = mIconField.UpdatePositionIcons();
 
 			if (move.IsFinished()) {
-				LaunchAutoMatch();
+				ComplateAction();
 			} else {
 				move.SetObserver(this);
 			}
 		}
 
 		public void OnMoveEnd () {
-			LaunchAutoMatch();
-		}
-
-		private void LaunchAutoMatch () {
-			var action = new CAutoMatch(mActionManager.mMatchController.mSearcher.FindMatches());
-			mActionManager.AddAction(action);
-
 			ComplateAction();
 		}
 
-		public override EEvents GetActionEvent() {
-			return EEvents.RefreshPosition;
+		public override int GetIndex() {
+			return (int) EEvents.RefreshPosition;
 		}
 	}
 

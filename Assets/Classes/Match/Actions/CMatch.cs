@@ -2,9 +2,10 @@ using Match.Gem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Libraries.ActionSystem;
 
 namespace Match.Actions {
-	public class CMatch : CBase {
+	public class CMatch : CCreating {
 		private List<CIcon> mMatchIcons;
 
 		public CMatch (List<CIcon> aMatchIcons) {
@@ -14,8 +15,6 @@ namespace Match.Actions {
 		public EType GetMatchIconType() {
 			return mMatchIcons[0].IconType;
 		}
-
-		public override void OnActionEnd (IAction aAction) {}
 
 		public override bool Validation() {
 			if (mMatchIcons == null) {
@@ -37,21 +36,14 @@ namespace Match.Actions {
 
 		public override void StartAction() {
 			foreach (CIcon icon in mMatchIcons) {
-				var destroyAction = new CDestroy(icon);
-				destroyAction.SetObserver(this);
-
-				mActionManager.AddAction(destroyAction);
+				Debug.Log("Destroy " + icon.mIndex);
+				Wait(new CDestroy(icon));
 			}
-
-			// todo: add score count
-			// mIconField.mMatch.AddScore(GetCountMatchIcon());
-
-			ComplateAction();
 		}
 
 
-		public override EEvents GetActionEvent() {
-			return EEvents.Match;
+		public override int GetIndex() {
+			return (int) EEvents.Match;
 		}
 	}
 }

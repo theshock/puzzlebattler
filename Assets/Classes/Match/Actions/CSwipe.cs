@@ -1,81 +1,96 @@
+using Match;
+using Match.Gem;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Match;
-using Match.Gem;
+using Libraries.ActionSystem;
 
 namespace Match.Actions {
-	public class CSwipe : CBase, IMoveObserver {
-		private bool mIsReverseSwipe = false;
+	public class CSwipe : CCreating, IMoveObserver {
 
-		public CField mIconField = null;
-		public CIcon mSelectedIcon = null;
-		public CIcon mTargetedIcon = null;
-		public CPlayer mOwner = null;
+		public struct Config {
+			public CField iconField;
+			public CIcon selectedIcon;
+			public CIcon targetedIcon;
+			public CPlayer owner;
+			public CMatcher matcher;
 
-		public override bool Validation() {
-			return mOwner != null
-				&& mSelectedIcon != null
-				&& mTargetedIcon != null
-				&& mSelectedIcon.IsActionReady()
-				&& mTargetedIcon.IsActionReady()
-				&& mOwner.active
-				&& mOwner.matches > 0;
-		}
-
-		public override void StartAction() {
-			mOwner.matches--;
-			SwipeAnimation();
-		}
-
-		public void OnMoveEnd () {
-			if (mIsReverseSwipe || IsCorrectSwipe()) {
-				ComplateAction();
-			} else {
-				mOwner.matches++;
-				mIsReverseSwipe = true;
-				SwipeAnimation();
+			public bool IsValid () {
+				return iconField    != null
+					&& selectedIcon != null
+					&& targetedIcon != null
+					&& owner        != null;
 			}
 		}
 
+		protected Config mConfig;
+
+		public CSwipe (Config config) {
+			if (config.IsValid()) {
+				this.mConfig = config;
+			} else {
+				throw new Exception("Config not valid");
+			}
+		}
+
+		public override bool Validation() {
+			return mConfig.selectedIcon.IsActionReady()
+				&& mConfig.targetedIcon.IsActionReady()
+				&& mConfig.owner.active
+				&& mConfig.owner.matches > 0;
+		}
+
+		public override void StartAction() {
+			mConfig.iconField
+				.SwipeIcons(mConfig.selectedIcon, mConfig.targetedIcon)
+				.SetObserver(this);
+		}
+
+		public virtual void OnMoveEnd () {
+			if (!IsCorrectSwipe()) {
+				CreateSwipeBack();
+			}
+		}
+
+		private void CreateSwipeBack () {
+			var swipeBack = new Actions.CSwipeBack(mConfig);
+			swipeBack.SetAnticipant(this);
+			mActionManager.AddAction(swipeBack);
+		}
+
 		private bool IsCorrectSwipe () {
-			var matches = mActionManager.mMatchController.mSearcher.FindMatches();
+			var matches = GetFilteredMatches();
 
 			if (matches.Count > 0) {
-				bool swipeCreateMatch = false;
-
 				foreach (List<CIcon> match in matches) {
-					if (TryLaunchMatch(match)) {
-						swipeCreateMatch = true;
-					}
+					Wait(new Actions.CMatch(match));
 				}
 
-				return swipeCreateMatch;
+				return true;
 			} else {
 				return false;
 			}
 		}
 
-		// why should we check for icon contains ?
-		private bool TryLaunchMatch (List<CIcon> aMatch) {
-			for (int j = 0; j < aMatch.Count; j++) {
-				if (aMatch[j] == mSelectedIcon || aMatch[j] == mTargetedIcon) {
-					var matchAction = new Actions.CMatch(aMatch);
-					mActionManager.AddAction(matchAction);
+		private List<List<CIcon>> GetFilteredMatches () {
+			var matches = mConfig.matcher.FindMatches();
+			var filtered = new List<List<CIcon>>();
 
-					return true;
+			foreach (List<CIcon> match in matches) {
+				foreach (CIcon icon in match) {
+					if (icon == mConfig.selectedIcon || icon == mConfig.targetedIcon) {
+						filtered.Add(match);
+						break;
+					}
 				}
 			}
 
-			return false;
+			return filtered;
 		}
 
-		private void SwipeAnimation() {
-			mIconField.SwipeIcons(mSelectedIcon, mTargetedIcon).SetObserver(this);
-		}
-
-		public override EEvents GetActionEvent() {
-			return EEvents.Swipe;
+		public override int GetIndex() {
+			return (int) EEvents.Swipe;
 		}
 	}
 }

@@ -1,6 +1,6 @@
 namespace Match.Gem {
 	public enum EState {
-		Lock,
+		Move,
 		Clear,
 		Open,
 		Invisible
