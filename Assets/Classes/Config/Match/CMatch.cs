@@ -7,5 +7,7 @@ namespace Config.Match {
 		public CPlayer mOpponent;
 		public CGems mGems;
 		public CDie mDie;
+
+		public bool mIsPlayerFirst = true;
 	}
 }

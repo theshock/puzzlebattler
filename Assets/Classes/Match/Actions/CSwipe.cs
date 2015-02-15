@@ -13,14 +13,12 @@ namespace Match.Actions {
 			public CField iconField;
 			public CIcon selectedIcon;
 			public CIcon targetedIcon;
-			public CPlayer owner;
 			public CMatcher matcher;
 
 			public bool IsValid () {
 				return iconField    != null
 					&& selectedIcon != null
 					&& targetedIcon != null
-					&& owner        != null
 					&& matcher      != null;
 			}
 		}
@@ -37,9 +35,7 @@ namespace Match.Actions {
 
 		public override bool Validation() {
 			return mConfig.selectedIcon.IsActionReady()
-				&& mConfig.targetedIcon.IsActionReady()
-				&& mConfig.owner.active
-				&& mConfig.owner.matches > 0;
+				&& mConfig.targetedIcon.IsActionReady();
 		}
 
 		public override void StartAction() {

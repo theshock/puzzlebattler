@@ -7,7 +7,6 @@ using Libraries.ActionSystem;
 namespace Match.Actions {
 	public class CDestroy : CBase, IDieObserver {
 		private CIcon mIconTarget = null;
-		private float mTimeDelayEmpty = 0.1f;
 
 		public CDestroy (CIcon target) {
 			mIconTarget = target;

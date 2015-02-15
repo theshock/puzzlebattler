@@ -20,6 +20,14 @@ namespace Libraries.ActionSystem {
 	 */
 	public class CEvents {
 
+		public void OnBegin (int actionIndex, OnAction callback) {
+			On(EActionState.Begin, actionIndex, callback);
+		}
+
+		public void OnEnd (int actionIndex, OnAction callback) {
+			On(EActionState.End, actionIndex, callback);
+		}
+
 		public void On (EActionState eventType, int actionIndex, OnAction callback) {
 			GetList(eventType, actionIndex).Add(callback);
 		}
@@ -27,16 +35,18 @@ namespace Libraries.ActionSystem {
 			GetList(eventType, actionIndex).Remove(callback);
 		}
 
-		public void OnFinish (OnFinish finish) {
+		public void OnFinish (OnAllFinish finish) {
 			onFinish += finish;
 		}
 
-		public void OffFinish (OnFinish finish) {
+		public void OffFinish (OnAllFinish finish) {
 			onFinish -= finish;
 		}
 
 		public void InvokeFinish() {
-			onFinish.Invoke();
+			if (onFinish != null) {
+				onFinish.Invoke();
+			}
 		}
 
 		public void Invoke (EActionState eventType, IAction action) {
@@ -45,7 +55,7 @@ namespace Libraries.ActionSystem {
 			}
 		}
 
-		protected event OnFinish onFinish;
+		protected event OnAllFinish onFinish;
 		protected Dictionary<int, Dictionary<EActionState, List<OnAction>>> callbacks = new Dictionary<int, Dictionary<EActionState, List<OnAction>>>();
 
 		protected List<OnAction> GetList (EActionState eventType, int actionIndex) {

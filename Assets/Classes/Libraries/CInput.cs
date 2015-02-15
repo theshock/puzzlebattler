@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Libraries {
 	public class CInput {
@@ -23,11 +22,7 @@ namespace Libraries {
 		}
 
 		public void unregisterObserver(int aPriority, IInputObserver aObserver) {
-			try {
-				mDictionary[aPriority].Remove(aObserver);
-			} catch (System.Exception e) {
-				Trace.TraceError(e.ToString());
-			}
+			mDictionary[aPriority].Remove(aObserver);
 		}
 
 		public void unregisterObserver(IInputObserver aObserver) {

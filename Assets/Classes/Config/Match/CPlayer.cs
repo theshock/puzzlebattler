@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace Config.Match {
 	public class CPlayer : MonoBehaviour {
-		public int mHealth = 1000;
+		public int mHealth  = 1000;
+		public int mMatches = 3;
 
 		public int mRedPower;
 		public int mBluePower;
