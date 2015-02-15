@@ -13,7 +13,7 @@ namespace Match.Actions {
 		}
 
 		public EType GetMatchIconType() {
-			return mMatchIcons[0].IconType;
+			return mMatchIcons[0].Type;
 		}
 
 		public override bool Validation() {

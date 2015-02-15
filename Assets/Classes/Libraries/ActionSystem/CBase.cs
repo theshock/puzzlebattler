@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 
 namespace Libraries.ActionSystem {
-	public abstract class CBase : UnityEngine.Object, IAction {
+	public abstract class CBase : IAction {
 
 		protected IAnticipant mAnticipant;
 		protected CManager mActionManager;

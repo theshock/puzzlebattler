@@ -9,25 +9,25 @@ namespace Match.Gem {
 
 		public CMove mMover;
 
-		private EType mIconType;
-		public EType IconType {
+		private EType mType;
+		public EType Type {
 			get {
-				return mIconType;
+				return mType;
 			}
 			set {
-				mIconType = value;
-				GetComponent<Image>().sprite = mField.mConfig.mGems.GetCorrectSprite(mIconType);
+				mType = value;
+				GetComponent<Image>().sprite = mField.mConfig.mGems.GetCorrectSprite(mType);
 			}
 		}
 
-		private EState mIconState;
-		public EState IconState {
+		private EState mState;
+		public EState State {
 			get {
-				return mIconState;
+				return mState;
 			}
 			set {
-				mIconState = value;
-				GetComponent<Image>().enabled = (mIconState != EState.Clear);
+				mState = value;
+				GetComponent<Image>().enabled = (mState != EState.Clear);
 			}
 		}
 
@@ -39,7 +39,7 @@ namespace Match.Gem {
 		}
 
 		public void TmpHL () {
-			var prefab = mField.mConfig.mDie.GetPrefab(IconType);
+			var prefab = mField.mConfig.mDie.GetPrefab(Type);
 			GameObject anim = Instantiate(prefab, transform.position, transform.rotation) as GameObject;
 
 			anim.transform.SetParent(transform.parent);
@@ -48,7 +48,7 @@ namespace Match.Gem {
 		}
 
 		public bool IsActionReady() {
-			return (mIconState == EState.Open);
+			return (mState == EState.Open);
 		}
 
 		public bool IsInside () {
@@ -56,7 +56,7 @@ namespace Match.Gem {
 		}
 
 		public bool IsMoveReady() {
-			return (mIconState == EState.Open);
+			return (mState == EState.Open);
 		}
 
 		public bool HitTest(Vector2 aCoordinates) {
