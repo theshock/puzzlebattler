@@ -4,15 +4,15 @@ namespace Model {
 		public int matches = 0;
 		public int score   = 0;
 
-		public delegate void OnScoreChange(CPlayer player);
+		public delegate void OnScoreChange(CPlayer player, int scoreChange);
 
 		public event OnScoreChange onScoreChange;
 
-		public void AddScore (int scoreIncrease) {
-			score += scoreIncrease;
+		public void AddScore (int scoreChange) {
+			score += scoreChange;
 
 			if (onScoreChange != null) {
-				onScoreChange.Invoke(this);
+				onScoreChange.Invoke(this, scoreChange);
 			}
 		}
 
