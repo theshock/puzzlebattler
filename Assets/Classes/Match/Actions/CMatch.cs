@@ -38,6 +38,7 @@ namespace Match.Actions {
 			foreach (CIcon icon in mMatchIcons) {
 				Wait(new CDestroy(icon));
 			}
+			CheckCompleteness();
 		}
 
 

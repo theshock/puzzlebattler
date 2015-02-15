@@ -7,7 +7,10 @@ namespace Libraries.ActionSystem {
 
 		public void OnActionEnd (IAction action) {
 			mWaiting.Remove(action);
+			CheckCompleteness();
+		}
 
+		protected void CheckCompleteness () {
 			if (mWaiting.Count == 0) {
 				ComplateAction();
 			}

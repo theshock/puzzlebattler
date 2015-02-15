@@ -56,6 +56,7 @@ namespace Match.Actions {
 
 		private void CreateSwipeBack () {
 			Wait(new Actions.CSwipeBack(mConfig));
+			CheckCompleteness();
 		}
 
 		private bool IsCorrectSwipe () {
@@ -65,6 +66,7 @@ namespace Match.Actions {
 				foreach (List<CIcon> match in matches) {
 					Wait(new Actions.CMatch(match));
 				}
+				CheckCompleteness();
 
 				return true;
 			} else {

@@ -21,6 +21,7 @@ namespace Match.Actions {
 			foreach (List<CIcon> match in mAutoMatches) {
 				Wait(new CMatch(match));
 			}
+			CheckCompleteness();
 		}
 
 		public override int GetIndex() {
