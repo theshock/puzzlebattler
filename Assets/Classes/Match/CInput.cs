@@ -20,7 +20,7 @@ namespace Match {
 		}
 
 		public bool OnInputBegin (Vector2 aPosition) {
-			var selectedIcon = mController.mView.mField.GetIconByPosition(aPosition);
+			var selectedIcon = mController.mView.mField.GetIconByPoint(aPosition);
 
 			if (IsActiveIcon(selectedIcon)) {
 				mSelectedIcon = selectedIcon;
@@ -34,7 +34,7 @@ namespace Match {
 			if (!mController.mGame.mModel.player.CanSwipe()) return;
 			if (!IsActiveIcon(mSelectedIcon)) return;
 
-			CIcon targetIcon = mController.mView.mField.GetIconByPosition(aPosition);
+			CIcon targetIcon = mController.mView.mField.GetIconByPoint(aPosition);
 
 			if (mSelectedIcon != targetIcon && IsActiveIcon(targetIcon)) {
 				if (mSelectedIcon.IsNeighbour(targetIcon)) {

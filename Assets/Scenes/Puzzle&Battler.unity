@@ -228,18 +228,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef1860e460af14340b68f01c21c778c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMovingTime: 1.29999995
-  mPrefab: {fileID: 197280, guid: 816abbf4949a008428c3362453e9fb99, type: 2}
-  mChanceRed: 515
-  mChanceBlue: 15
-  mChanceGreen: 234
-  mChancePurple: 123
-  mChanceYellow: 567
-  mImageRed: {fileID: 21300000, guid: b8314e0682d17654088b8d9982390c97, type: 3}
-  mImageBlue: {fileID: 21300004, guid: b8314e0682d17654088b8d9982390c97, type: 3}
-  mImageYellow: {fileID: 21300008, guid: b8314e0682d17654088b8d9982390c97, type: 3}
-  mImageGreen: {fileID: 21300002, guid: b8314e0682d17654088b8d9982390c97, type: 3}
-  mImagePurple: {fileID: 21300006, guid: b8314e0682d17654088b8d9982390c97, type: 3}
+  movingTime: .300000012
+  prefab: {fileID: 197280, guid: 816abbf4949a008428c3362453e9fb99, type: 2}
+  chanceRed: 1
+  chanceBlue: 2
+  chanceGreen: 3
+  chancePurple: 4
+  chanceYellow: 5
+  imageRed: {fileID: 21300000, guid: b8314e0682d17654088b8d9982390c97, type: 3}
+  imageBlue: {fileID: 21300004, guid: b8314e0682d17654088b8d9982390c97, type: 3}
+  imageYellow: {fileID: 21300008, guid: b8314e0682d17654088b8d9982390c97, type: 3}
+  imageGreen: {fileID: 21300002, guid: b8314e0682d17654088b8d9982390c97, type: 3}
+  imagePurple: {fileID: 21300006, guid: b8314e0682d17654088b8d9982390c97, type: 3}
 --- !u!1 &632129696
 GameObject:
   m_ObjectHideFlags: 0
@@ -371,13 +371,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc5cb41204a1211419d52f0fb914af28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mHealth: 100
-  mMatches: 3
-  mRedPower: 5
-  mBluePower: 4
-  mGreenPower: 1
-  mPurplePower: 6
-  mYellowPower: 2
+  health: 1000
+  matchesPerTurn: 3
+  redPower: 1
+  bluePower: 1
+  greenPower: 1
+  purplePower: 1
+  yellowPower: 1
 --- !u!1 &815638880
 GameObject:
   m_ObjectHideFlags: 0
@@ -418,7 +418,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f29f21a661e4ac45b2b25d07d1ea57b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMatch: {fileID: 1967419418}
+  match: {fileID: 1967419418}
 --- !u!1 &840055164
 GameObject:
   m_ObjectHideFlags: 0
@@ -524,7 +524,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee2eff703fc653647b453657dfe4e597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mPrefabs:
+  prefabs:
   - {fileID: 100000, guid: f7dc1ceeb26f269458a75d56bdb104bc, type: 2}
   - {fileID: 100000, guid: 7213f4f55929f441faaefb096430970f, type: 2}
   - {fileID: 100000, guid: 59e7b1f3ffd18444c84004150fa23730, type: 2}
@@ -560,8 +560,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6fd77c15047598449018c6ca2718440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mConfig: {fileID: 1967419418}
-  mMatch: {fileID: 1728815467}
 --- !u!224 &875817893
 RectTransform:
   m_ObjectHideFlags: 0
@@ -860,10 +858,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cde050e5d249f9419dc6e06f5c17694, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mRows: 7
-  mColumns: 6
-  mStartPoint: {x: -7.30000019, y: -16.8999996}
-  mOffset: {x: 3.54999995, y: 3.54999995}
+  rows: 7
+  columns: 6
+  from: {x: -7.30000019, y: -17}
+  offset: {x: 3.54999995, y: 3.54999995}
 --- !u!4 &1297919602
 Transform:
   m_ObjectHideFlags: 0
@@ -976,13 +974,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc5cb41204a1211419d52f0fb914af28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mHealth: 100
-  mMatches: 3
-  mRedPower: 3
-  mBluePower: 3
-  mGreenPower: 4
-  mPurplePower: 5
-  mYellowPower: 6
+  health: 1000
+  matchesPerTurn: 3
+  redPower: 1
+  bluePower: 1
+  greenPower: 1
+  purplePower: 1
+  yellowPower: 1
 --- !u!1 &1412813719
 GameObject:
   m_ObjectHideFlags: 0
@@ -1088,7 +1086,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1417612941}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4bf045164716ee947b6ee52c05114283, type: 3}
+  m_Script: {fileID: 11500000, guid: 6092aa22e40b5474794146e853cd27cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mConfig: {fileID: 815638882}
@@ -1497,12 +1495,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f222d9d20e762e44b32c5b0ae447a24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mField: {fileID: 1297919601}
-  mPlayer: {fileID: 653340169}
-  mOpponent: {fileID: 1376200515}
-  mGems: {fileID: 440969436}
-  mDie: {fileID: 852470479}
-  mIsPlayerFirst: 1
+  field: {fileID: 1297919601}
+  player: {fileID: 653340169}
+  opponent: {fileID: 1376200515}
+  gems: {fileID: 440969436}
+  die: {fileID: 852470479}
+  isPlayerFirst: 1
 --- !u!4 &1967419419
 Transform:
   m_ObjectHideFlags: 0

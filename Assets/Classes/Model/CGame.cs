@@ -4,11 +4,7 @@ namespace Model {
 		public CPlayer player;
 		public CPlayer opponent;
 
-		protected Config.Match.CMatch config;
-
-		public CGame (Config.CConfig config) {
-			this.config = config.mMatch;
-
+		public CGame () {
 			player   = new CPlayer();
 			opponent = new CPlayer();
 		}
@@ -26,7 +22,7 @@ namespace Model {
 		}
 
 		public void ActivateFirst () {
-			if (config.mIsPlayerFirst) {
+			if (Game.Config.match.isPlayerFirst) {
 				ActivatePlayer(player);
 			} else  {
 				ActivatePlayer(opponent);
@@ -36,11 +32,11 @@ namespace Model {
 		public void ActivatePlayer(CPlayer active) {
 			if (active == player) {
 				player.isActive = true;
-				player.matches = config.mPlayer.mMatches;
+				player.matches = Game.Config.match.player.matchesPerTurn;
 				opponent.isActive = false;
 			} else {
 				opponent.isActive = true;
-				opponent.matches = config.mOpponent.mMatches;
+				opponent.matches = Game.Config.match.opponent.matchesPerTurn;
 				player.isActive = false;
 			}
 		}

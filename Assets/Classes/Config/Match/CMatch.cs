@@ -2,12 +2,12 @@ using UnityEngine;
 
 namespace Config.Match {
 	public class CMatch : MonoBehaviour {
-		public CField mField;
-		public CPlayer mPlayer;
-		public CPlayer mOpponent;
-		public CGems mGems;
-		public CDie mDie;
+		public CField  field;
+		public CPlayer player;
+		public CPlayer opponent;
+		public CGems   gems;
+		public CDie    die;
 
-		public bool mIsPlayerFirst = true;
+		public bool isPlayerFirst = true;
 	}
 }

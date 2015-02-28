@@ -3,11 +3,10 @@ using UnityEngine;
 
 namespace Config.Match {
 	public class CDie : MonoBehaviour {
-		public GameObject[] mPrefabs;
-
+		public GameObject[] prefabs;
 
 		public GameObject GetPrefab (EColor type) {
-			return mPrefabs[(int)type];
+			return prefabs[(int)type];
 		}
 	}
 }

@@ -2,10 +2,10 @@ using UnityEngine;
 
 namespace Config.Match {
 	public class CField : MonoBehaviour {
-		public int mRows;
-		public int mColumns;
-		public Vector2 mStartPoint;
-		public Vector2 mOffset;
+		public int rows    = 7;
+		public int columns = 6;
+		public Vector2 from   = new Vector2( -7.3f,   -17f);
+		public Vector2 offset = new Vector2(-3.55f, -3.55f);
 
 	}
 }

@@ -8,31 +8,29 @@ namespace Match.Gem {
 
 	public class CIcon : MonoBehaviour {
 
+		public CCell cell = CCell.zero;
 		public EColor color { get; private set; }
-		public EState state { get; private set; }
-
-		public CField mField;
-		public CCell mCell = CCell.zero;
+		private EState state = EState.Idle;
 
 		public void SetRandomColor() {
 			int count = Enum.GetNames( typeof( EColor ) ).Length;
 
 			color = (EColor) UnityEngine.Random.Range(0, count);
 
-			GetComponent<Image>().sprite = mField.mConfig.mGems.GetCorrectSprite(color);
+			GetComponent<Image>().sprite = Game.Config.match.gems.GetCorrectSprite(color);
 			UpdateName();
 		}
 
 		public void SetState (EState state) {
-			this.SetState(state);
+			this.state = state;
 			UpdateName();
 		}
 
 		protected void UpdateName () {
 			gameObject.name = String.Format("Gem {0} [{1}:{2}] {3}",
 				color.ToString()[0],
-				mCell.col,
-				mCell.row,
+				cell.col,
+				cell.row,
 				IsIdle() ? "" : "*"
 			);
 		}
@@ -41,17 +39,29 @@ namespace Match.Gem {
 			return (state == EState.Idle);
 		}
 
+		public bool IsDead() {
+			return (state == EState.Death);
+		}
+
+		public bool IsMoving() {
+			return (state == EState.Movement);
+		}
+
 		public bool HitTest(Vector2 coordinates) {
 			var worldPoint = Camera.main.ScreenToWorldPoint((Vector3) coordinates);
 
 			return collider2D.OverlapPoint((Vector2) worldPoint);
 		}
 
+		public bool IsMatchable (CIcon icon) {
+			return icon.color == this.color;
+		}
+
 		public bool IsNeighbour (CIcon target) {
 			if (this == target) return false;
 
-			int rowDistance = Mathf.Abs(mCell.row - target.mCell.row);
-			int colDistance = Mathf.Abs(mCell.col - target.mCell.col);
+			int rowDistance = Mathf.Abs(cell.row - target.cell.row);
+			int colDistance = Mathf.Abs(cell.col - target.cell.col);
 
 			return (rowDistance == 1 && colDistance == 0) || (rowDistance == 0 && colDistance == 1);
 		}

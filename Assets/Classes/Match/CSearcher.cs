@@ -31,9 +31,9 @@ namespace Match {
 		}
 
 		protected void SearchAllMoves (int firstIndex, int secondIndex, int thirdIndex) {
-			CIcon first  = mController.mView.mField.GetIconByIndex(firstIndex);
-			CIcon second = mController.mView.mField.GetIconByIndex(secondIndex);
-			CIcon third  = mController.mView.mField.GetIconByIndex(thirdIndex);
+			CIcon first  = GetIconByIndex(firstIndex);
+			CIcon second = GetIconByIndex(secondIndex);
+			CIcon third  = GetIconByIndex(thirdIndex);
 
 			SearchTargetMoves(first, second, third);
 			SearchTargetMoves(third, first, second);

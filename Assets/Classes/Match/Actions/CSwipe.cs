@@ -24,32 +24,32 @@ namespace Match.Actions {
 			}
 		}
 
-		protected Config mConfig;
+		protected Config config;
 
 		public CSwipe (Config config) {
 			if (config.IsValid()) {
-				this.mConfig = config;
+				this.config = config;
 			} else {
 				throw new Exception("Config not valid");
 			}
 		}
 
 		public override bool Validation() {
-			return mConfig.selectedIcon.IsIdle()
-				&& mConfig.targetedIcon.IsIdle();
+			return config.selectedIcon.IsIdle()
+				&& config.targetedIcon.IsIdle();
 		}
 
 		public override void StartAction() {
-			var field = mConfig.iconField;
-			var move = new CMove(field.mConfig);
+			var field = config.iconField;
+			var move = new CMove();
 
-			CCell cell = mConfig.selectedIcon.mCell.Clone();
+			CCell cell = config.selectedIcon.cell.Clone();
 
-			field.SetMatrixCell(mConfig.targetedIcon.mCell, mConfig.selectedIcon);
-			field.SetMatrixCell(cell, mConfig.targetedIcon);
+			field.SetIconAt(config.targetedIcon.cell, config.selectedIcon);
+			field.SetIconAt(cell, config.targetedIcon);
 
-			move.AddMove(mConfig.selectedIcon, field.GetIconCenterByCoord(mConfig.selectedIcon.mCell));
-			move.AddMove(mConfig.targetedIcon, field.GetIconCenterByCoord(mConfig.targetedIcon.mCell));
+			move.AddMove(config.selectedIcon, field.GetIconCenterByCell(config.selectedIcon.cell));
+			move.AddMove(config.targetedIcon, field.GetIconCenterByCell(config.targetedIcon.cell));
 
 			move.SetObserver(this);
 		}
@@ -61,12 +61,12 @@ namespace Match.Actions {
 		}
 
 		private void CreateSwipeBack () {
-			Wait(new Actions.CSwipeBack(mConfig));
+			Wait(new Actions.CSwipeBack(config));
 			CheckCompleteness();
 		}
 
 		private bool IsCorrectSwipe () {
-			var matches = mConfig.matcher.FindMatches();
+			var matches = config.matcher.FindMatches();
 
 			if (matches.Count > 0) {
 				foreach (List<CIcon> match in matches) {

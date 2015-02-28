@@ -11,11 +11,11 @@ namespace Match {
 		}
 
 		protected int GetWidth () {
-			return mController.mView.mField.mColumns;
+			return mController.mView.mField.width;
 		}
 
 		protected int GetHeight () {
-			return mController.mView.mField.mRows;
+			return mController.mView.mField.height;
 		}
 
 		protected int GetSquare () {
@@ -34,31 +34,43 @@ namespace Match {
 			var list = new List<CIcon>();
 			var field = mController.mView.mField;
 
-			if (icon.mCell.col > 0) {
-				list.Add(field.GetMatrixCell(new CCell( icon.mCell.row, icon.mCell.col - 1 )));
+			if (icon.cell.col > 0) {
+				list.Add(field.GetIconAt(new CCell( icon.cell.row, icon.cell.col - 1 )));
 			}
-			if (icon.mCell.col < field.mColumns - 1) {
-				list.Add(field.GetMatrixCell(new CCell( icon.mCell.row, icon.mCell.col + 1 )));
+			if (icon.cell.col < field.width - 1) {
+				list.Add(field.GetIconAt(new CCell( icon.cell.row, icon.cell.col + 1 )));
 			}
-			if (icon.mCell.row > 0) {
-				list.Add(field.GetMatrixCell(new CCell( icon.mCell.row - 1, icon.mCell.col )));
+			if (icon.cell.row > 0) {
+				list.Add(field.GetIconAt(new CCell( icon.cell.row - 1, icon.cell.col )));
 			}
-			if (icon.mCell.row < field.mRows - 1) {
-				list.Add(field.GetMatrixCell(new CCell( icon.mCell.row + 1, icon.mCell.col )));
+			if (icon.cell.row < field.height - 1) {
+				list.Add(field.GetIconAt(new CCell( icon.cell.row + 1, icon.cell.col )));
 			}
 
 			return list;
 		}
 
+		protected CIcon GetIconByIndex(int index) {
+			if (index >= GetSquare()) {
+				return null;
+			}
+
+			int row = index / GetWidth();
+			int column = index - row * GetWidth();
+
+			return mController.mView.mField.GetIconAt(new CCell(row, column));
+		}
+
 		protected bool IsMatch(int first, int second, int third) {
 			var icons = new List<CIcon>();
-			var field = mController.mView.mField;
 
-			icons.Add( field.GetIconByIndex(first) );
-			icons.Add( field.GetIconByIndex(second) );
-			icons.Add( field.GetIconByIndex(third) );
+			icons.Add( GetIconByIndex(first) );
+			icons.Add( GetIconByIndex(second) );
+			icons.Add( GetIconByIndex(third) );
 
-			return IsAllIconsActive(icons) && field.AreIconsTheSame(icons);
+			return IsAllIconsActive(icons)
+				&& icons[1].IsMatchable(icons[0])
+				&& icons[2].IsMatchable(icons[0]);
 		}
 
 		protected bool IsAllIconsActive (List<CIcon> icons) {

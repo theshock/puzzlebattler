@@ -9,7 +9,7 @@ namespace Match {
 		public CModel mModel;
 		public CInput mInput;
 		public CMatcher mMatcher;
-		public Game.CGame mGame;
+		public Game mGame;
 		public Libraries.ActionSystem.CManager mActionManager;
 
 		public Text playerText;

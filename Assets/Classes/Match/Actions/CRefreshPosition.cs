@@ -14,22 +14,28 @@ namespace Match.Actions {
 		}
 
 		public override bool Validation() {
-			return field.HasIconsWithState(EState.Death);
+			foreach (CIcon icon in field.icons) {
+				if (icon.IsDead()) {
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		private void DeadFreeFall (int c, List<CIcon> dead, CMove move) {
 			int number = 0;
-			int height = field.mRows;
+			int height = field.height;
 
 			foreach (CIcon icon in dead) {
-				field.SetMatrixCell(new CCell(height - dead.Count + number, c), icon);
+				field.SetIconAt(new CCell(height - dead.Count + number, c), icon);
 
 				icon.SetState(EState.Idle);
-				icon.gameObject.transform.position = field.GetIconCenterByCoord(
+				icon.gameObject.transform.position = field.GetIconCenterByCell(
 					new CCell(height + number, c)
 				);
 				icon.SetRandomColor();
-				move.AddMove( icon, field.GetIconCenterByCoord(icon.mCell) );
+				move.AddMove( icon, field.GetIconCenterByCell(icon.cell) );
 
 				number++;
 			}
@@ -38,28 +44,28 @@ namespace Match.Actions {
 		private void ColumnFreeFall (int c, CMove move) {
 			List<CIcon> dead = new List<CIcon>();
 
-			for ( int r = 0; r < field.mRows; r++ ) {
-				CIcon current = field.GetMatrixCell(new CCell(r, c));
+			for ( int r = 0; r < field.height; r++ ) {
+				CIcon current = field.GetIconAt(new CCell(r, c));
 
-				if (current.state == EState.Death) {
+				if (current.IsDead()) {
 					dead.Add(current);
 					continue;
 				} else if (dead.Count == 0) {
 					continue; // do nothing - current now at correct place
 				}
 
-				field.SetMatrixCell(new CCell(r - dead.Count, c), current);
+				field.SetIconAt(new CCell(r - dead.Count, c), current);
 
-				move.AddMove( current, field.GetIconCenterByCoord(current.mCell) );
+				move.AddMove( current, field.GetIconCenterByCell(current.cell) );
 			}
 
 			DeadFreeFall(c, dead, move);
 		}
 
 		public override void StartAction() {
-			var move = new CMove(field.mConfig);
+			var move = new CMove();
 
-			for ( int col = 0; col < field.mColumns; col++ ) {
+			for ( int col = 0; col < field.width; col++ ) {
 				ColumnFreeFall(col, move);
 			}
 

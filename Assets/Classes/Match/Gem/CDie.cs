@@ -23,7 +23,7 @@ namespace Match.Gem {
 
 		protected void LaunchParticles () {
 			var transform = mIcon.transform;
-			var prefab = mIcon.mField.mConfig.mDie.GetPrefab(mIcon.color);
+			var prefab = Game.Config.match.die.GetPrefab(mIcon.color);
 			GameObject anim = Instantiate(prefab, transform.position, transform.rotation) as GameObject;
 
 			anim.transform.SetParent(transform.parent);

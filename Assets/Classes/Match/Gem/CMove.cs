@@ -1,4 +1,3 @@
-using Config;
 using DG.Tweening;
 using Libraries;
 using System.Collections.Generic;
@@ -8,13 +7,8 @@ namespace Match.Gem {
 
 	public class CMove {
 
-		private float mMovingTime = 0.3f;
 		private IMoveObserver listener;
 		private List<CIcon> moving = new List<CIcon>();
-
-		public CMove (Config.Match.CMatch config) {
-			mMovingTime = config.mGems.mMovingTime;
-		}
 
 		public void SetObserver(IMoveObserver listener) {
 			this.listener = listener;
@@ -45,7 +39,7 @@ namespace Match.Gem {
 
 				icon.SetState(EState.Movement);
 				icon.gameObject.transform
-					.DOMove(pos, mMovingTime)
+					.DOMove(pos, Game.Config.match.gems.movingTime)
 					.OnComplete(() => OnEndMoveComplete(icon));
 
 				return true;

@@ -4,21 +4,21 @@ using UnityEngine;
 
 namespace Config.Match {
 	public class CGems : MonoBehaviour {
-		public float mMovingTime = 0.3f;
+		public float movingTime = 0.3f;
 
-		public GameObject mPrefab;
+		public GameObject prefab;
 
-		public int mChanceRed;
-		public int mChanceBlue;
-		public int mChanceGreen;
-		public int mChancePurple;
-		public int mChanceYellow;
+		public int chanceRed;
+		public int chanceBlue;
+		public int chanceGreen;
+		public int chancePurple;
+		public int chanceYellow;
 
-		public Sprite mImageRed;
-		public Sprite mImageBlue;
-		public Sprite mImageYellow;
-		public Sprite mImageGreen;
-		public Sprite mImagePurple;
+		public Sprite imageRed;
+		public Sprite imageBlue;
+		public Sprite imageYellow;
+		public Sprite imageGreen;
+		public Sprite imagePurple;
 
 		public float GetChance (EColor type) {
 			return (float) GetChanceValue(type) / (float) GetChanceSum();
@@ -26,27 +26,27 @@ namespace Config.Match {
 
 		private int GetChanceValue (EColor type) {
 			switch (type) {
-				case EColor.Red   : return mChanceRed;
-				case EColor.Blue  : return mChanceBlue;
-				case EColor.Green : return mChanceGreen;
-				case EColor.Purple: return mChancePurple;
-				case EColor.Yellow: return mChanceYellow;
+				case EColor.Red   : return chanceRed;
+				case EColor.Blue  : return chanceBlue;
+				case EColor.Green : return chanceGreen;
+				case EColor.Purple: return chancePurple;
+				case EColor.Yellow: return chanceYellow;
 			}
 
 			return 0;
 		}
 
 		private int GetChanceSum () {
-			return mChanceRed + mChanceBlue + mChanceGreen + mChancePurple + mChanceYellow;
+			return chanceRed + chanceBlue + chanceGreen + chancePurple + chanceYellow;
 		}
 
 		public Sprite GetCorrectSprite (EColor type) {
 			switch (type) {
-				case EColor.Red   : return mImageRed;
-				case EColor.Blue  : return mImageBlue;
-				case EColor.Green : return mImageGreen;
-				case EColor.Purple: return mImagePurple;
-				case EColor.Yellow: return mImageYellow;
+				case EColor.Red   : return imageRed;
+				case EColor.Blue  : return imageBlue;
+				case EColor.Green : return imageGreen;
+				case EColor.Purple: return imagePurple;
+				case EColor.Yellow: return imageYellow;
 			}
 
 			return null;

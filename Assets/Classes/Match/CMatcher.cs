@@ -36,8 +36,7 @@ namespace Match {
 				var tree = new List<CIcon>();
 
 				foreach (int index in match) {
-					var icon = mController.mView.mField.GetIconByIndex(index);
-					tree.Add( icon );
+					tree.Add( GetIconByIndex(index) );
 				}
 
 				trees.Add(tree);

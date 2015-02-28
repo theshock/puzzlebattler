@@ -9,82 +9,49 @@ using UnityEngine.UI;
 namespace Match {
 
 	public class CField : MonoBehaviour {
-		private CIcon [,] mIconMatrix;
+		public CIcon [,] icons;
 
-		public int mRows {
-			get { return mConfig.mField.mRows; }
+		protected Config.Match.CField config {
+			get { return Game.Config.match.field; }
 		}
 
-		public int mColumns {
-			get { return mConfig.mField.mColumns; }
+		public int height {
+			get { return config.rows; }
 		}
 
-		public Config.Match.CMatch mConfig;
-		public CMatch mMatch;
+		public int width {
+			get { return config.columns; }
+		}
 
 		public void InitMatchField() {
-			mIconMatrix = new CIcon[mRows, mColumns];
+			icons = new CIcon[height, width];
 
-			for (int r = 0; r < mRows; r++) {
-				for (int c = 0; c < mColumns; c++) {
+			for (int r = 0; r < height; r++) {
+				for (int c = 0; c < width; c++) {
 					CreateIconByCoord(new CCell(r, c));
 				}
 			}
 		}
 
-		public void SetMatrixCell (CCell position, CIcon icon) {
-			mIconMatrix[position.row, position.col] = icon;
-			icon.mCell.Set(position);
+		public void SetIconAt(CCell position, CIcon icon) {
+			icons[position.row, position.col] = icon;
+			icon.cell.Set(position);
 		}
 
-		public CIcon GetMatrixCell (CCell position) {
-			return mIconMatrix[position.row, position.col];
+		public CIcon GetIconAt(CCell position) {
+			return icons[position.row, position.col];
 		}
 
-		public CIcon GetIconByIndex(int aIndex) {
-			if (aIndex >= mRows * mColumns) {
-				return null;
-			}
-
-			int row = aIndex / mColumns;
-			int column = aIndex - row * mColumns;
-			return mIconMatrix[row, column];
-		}
-
-		public bool AreIconsTheSame(List<CIcon> icons) {
-			if (icons.Count < 1) {
-				return false;
-			}
-
-			foreach (CIcon icon in icons) {
-				if (icon.color != icons[0].color) {
-					return false;
-				}
-			}
-
-			return true;
-		}
-
-		public bool HasIconsWithState (EState state) {
-			foreach (CIcon icon in mIconMatrix) {
-				if (icon.state == state) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		public Vector3 GetIconCenterByCoord(CCell cell) {
+		public Vector3 GetIconCenterByCell(CCell cell) {
 			return new Vector3(
-				mConfig.mField.mStartPoint.x + cell.col * mConfig.mField.mOffset.x,
-				mConfig.mField.mStartPoint.y + cell.row * mConfig.mField.mOffset.y,
+				config.from.x + cell.col * config.offset.x,
+				config.from.y + cell.row * config.offset.y,
 				this.transform.position.z
 			);
 		}
 
-		public CIcon GetIconByPosition(Vector2 position) {
-			foreach (CIcon icon in mIconMatrix) {
+		public CIcon GetIconByPoint(Vector2 position) {
+			foreach (CIcon icon in icons) {
 				if (icon.HitTest(position)) {
 					return icon;
 				}
@@ -94,17 +61,14 @@ namespace Match {
 		}
 
 		private CIcon CreateIconByCoord(CCell position) {
-			GameObject gameObject = Instantiate(mConfig.mGems.mPrefab) as GameObject;
+			GameObject gameObject = Instantiate(Game.Config.match.gems.prefab) as GameObject;
 			gameObject.transform.SetParent(this.transform);
 			gameObject.transform.localScale = Vector3.one;
-			gameObject.transform.position = GetIconCenterByCoord(position);
+			gameObject.transform.position = GetIconCenterByCell(position);
 
 			CIcon icon = gameObject.GetComponent<CIcon>();
 
-			SetMatrixCell(position, icon);
-
-			icon.mField = this;
-			icon.SetState(EState.Idle);
+			SetIconAt(position, icon);
 
 			do {
 				icon.SetRandomColor();
@@ -114,25 +78,19 @@ namespace Match {
 		}
 
 		private bool CanCreateMatch (CIcon icon) {
-			CCell cell = icon.mCell;
+			CCell cell = icon.cell;
 
-			if (cell.col >= 2 && AreIconsTheSame(
-				new List<CIcon>{
-					icon,
-					GetMatrixCell(new CCell(cell.row, cell.col-1)),
-					GetMatrixCell(new CCell(cell.row, cell.col-2))
-				}
-			)) {
+			if (cell.col >= 2
+				&& GetIconAt(new CCell(cell.row, cell.col-1)).IsMatchable(icon)
+				&& GetIconAt(new CCell(cell.row, cell.col-2)).IsMatchable(icon)
+			) {
 				return true;
 			}
 
-			if (cell.row >= 2 && AreIconsTheSame(
-				new List<CIcon>{
-					icon,
-					GetMatrixCell(new CCell(cell.row-1, cell.col)),
-					GetMatrixCell(new CCell(cell.row-2, cell.col))
-				}
-			)) {
+			if (cell.row >= 2
+				&& GetIconAt(new CCell(cell.row-1, cell.col)).IsMatchable(icon)
+				&& GetIconAt(new CCell(cell.row-2, cell.col)).IsMatchable(icon)
+			) {
 				return true;
 			}
 
