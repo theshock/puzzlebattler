@@ -12,7 +12,7 @@ namespace Match {
 		private CIcon [,] mIconMatrix;
 
 		public int mRows {
-			get { return mConfig.mField.mRows * 2; }
+			get { return mConfig.mField.mRows; }
 		}
 		public int mColumns {
 			get { return mConfig.mField.mColumns; }
@@ -29,9 +29,9 @@ namespace Match {
 		public CMatch mMatch;
 
 		public void InitMatchField() {
-			mIconMatrix  = new CIcon[mRows, mColumns];
+			mIconMatrix  = new CIcon[mRows * 2, mColumns];
 
-			for (int r = 0; r < mRows; r++) {
+			for (int r = 0; r < mRows * 2; r++) {
 				for (int c = 0; c < mColumns; c++) {
 					mIconMatrix[r, c] = null;
 					var pos  = new CCell(r, c);
@@ -76,28 +76,8 @@ namespace Match {
 			return mIconMatrix[position.row, position.col];
 		}
 
-		public List<CIcon> GetIconsByRow(int aRow) {
-			var icons = new List<CIcon>();
-
-			for (int c = 0; c < mColumns; c++) {
-				icons.Add(mIconMatrix[aRow, c]);
-			}
-
-			return icons;
-		}
-
-		public List<CIcon> GetIconsByColumn(int aColumn) {
-			var icons = new List<CIcon>();
-
-			for (int r = 0; r < mRows; r++) {
-				icons.Add(mIconMatrix[r, aColumn]);
-			}
-
-			return icons;
-		}
-
 		public CIcon GetIconByIndex(int aIndex) {
-			if (aIndex >= mRows * mColumns) {
+			if (aIndex >= mRows * 2 * mColumns) {
 				return null;
 			}
 
@@ -158,12 +138,12 @@ namespace Match {
 
 		private void FillFreeIcons() {
 			for ( int c = 0; c < mColumns; c++ ) {
-				for ( int r = 0; r < mRows; r++ ) {
+				for ( int r = 0; r < mRows * 2; r++ ) {
 					if ( mIconMatrix[r, c].State == EState.Death) {
 						var pos  = new CCell(r, c);
 						var icon = CreateIconByPos(pos);
 						icon.gameObject.transform.position = GetIconCenterByCoord(
-							new CCell(pos.row + mRows / 2, pos.col)
+							new CCell(pos.row + mRows, pos.col)
 						);
 						icon.Type = GenIconType();
 					}
@@ -175,12 +155,12 @@ namespace Match {
 			// Find destroyed cells and search
 			// for live cells in top of them
 			for ( int col = 0; col < mColumns; col++ ) {
-				for ( int row = 0; row < mRows - 1; row++ ) {
+				for ( int row = 0; row < mRows * 2 - 1; row++ ) {
 					CIcon current = mIconMatrix[row, col];
 
 					if ( current.State != EState.Death ) continue;
 
-					for (int topRow = row + 1; topRow < mRows; topRow++) {
+					for (int topRow = row + 1; topRow < mRows * 2; topRow++) {
 						CIcon top = mIconMatrix[topRow, col];
 
 						if (top.State == EState.Death) continue;
@@ -196,7 +176,7 @@ namespace Match {
 			var move = new CMove(mConfig);
 
 			for ( int c = 0; c < mColumns; c++ ) {
-				for ( int r = 0; r < mRows; r++ ) {
+				for ( int r = 0; r < mRows * 2; r++ ) {
 					move.AddMove(mIconMatrix[r, c], GetIconCenterByCoord(new CCell(r, c)));
 				}
 			}

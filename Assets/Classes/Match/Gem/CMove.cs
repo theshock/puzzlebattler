@@ -1,4 +1,5 @@
 using Config;
+using DG.Tweening;
 using Libraries;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,7 +29,6 @@ namespace Match.Gem {
 				return;
 			}
 
-			icon.mMover = null;
 			icon.State = EState.Idle;
 			moving.Remove(icon);
 
@@ -42,9 +42,12 @@ namespace Match.Gem {
 				return false;
 			} else {
 				moving.Add(icon);
+
 				icon.State = EState.Movement;
-				icon.mMover = this;
-				iTween.MoveTo(icon.gameObject, iTween.Hash("position", pos, "time", mMovingTime, "onComplete", "OnEndMoveComplete" ));
+				icon.gameObject.transform
+					.DOMove(pos, mMovingTime)
+					.OnComplete(() => OnEndMoveComplete(icon));
+
 				return true;
 			}
 		}

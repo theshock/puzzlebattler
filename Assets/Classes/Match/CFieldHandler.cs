@@ -18,7 +18,7 @@ namespace Match {
 		}
 
 		protected int GetSquare () {
-			return GetWidth() * GetHeight() / 2;
+			return GetWidth() * GetHeight();
 		}
 
 		protected bool IsOutOfHorisontalRange (int index) {
@@ -42,7 +42,7 @@ namespace Match {
 			if (icon.mCell.row > 0) {
 				list.Add(field.GetIconByIndex(icon.mIndex - GetWidth()));
 			}
-			if (icon.mCell.row < field.mRows / 2 - 1) {
+			if (icon.mCell.row < field.mRows - 1) {
 				list.Add(field.GetIconByIndex(icon.mIndex + GetWidth()));
 			}
 
@@ -62,7 +62,7 @@ namespace Match {
 
 		protected bool IsAllIconsActive (List<CIcon> icons) {
 			foreach (CIcon icon in icons) {
-				if(icon && !icon.IsActionReady()) {
+				if(icon && !icon.IsIdle()) {
 					return false;
 				}
 			}

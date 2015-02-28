@@ -22,7 +22,7 @@ namespace Match.Actions {
 			}
 
 			foreach (CIcon icon in mMatchIcons) {
-				if (icon == null || !icon.IsActionReady()) {
+				if (icon == null || !icon.IsIdle()) {
 					return false;
 				}
 			}

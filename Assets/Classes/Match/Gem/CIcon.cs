@@ -1,4 +1,5 @@
 ﻿using Libraries;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,8 +7,6 @@ using UnityEngine.UI;
 namespace Match.Gem {
 
 	public class CIcon : MonoBehaviour {
-
-		public CMove mMover;
 
 		private EType mType;
 
@@ -41,21 +40,24 @@ namespace Match.Gem {
 		}
 
 		protected void UpdateName () {
-			gameObject.name = "Gem " + mType.ToString()[0]
-				+ " [" + mCell.col + ":" + mCell.row + "] "
-				+ (IsActionReady() ? "" : "*");
+			gameObject.name = String.Format("Gem {0} [{1}:{2}] {3}",
+				mType.ToString()[0],
+				mCell.col,
+				mCell.row,
+				IsIdle() ? "" : "*"
+			);
 		}
 
-		public bool IsActionReady() {
+		public bool IsIdle() {
 			return (mState == EState.Idle);
 		}
 
-		public bool IsInside () {
-			return mCell.row < mField.mRows / 2;
+		public bool IsInside() {
+			return mCell.row < mField.mRows;
 		}
 
-		public bool HitTest(Vector2 aCoordinates) {
-			var worldPoint = Camera.main.ScreenToWorldPoint((Vector3) aCoordinates);
+		public bool HitTest(Vector2 coordinates) {
+			var worldPoint = Camera.main.ScreenToWorldPoint((Vector3) coordinates);
 
 			return collider2D.OverlapPoint((Vector2) worldPoint);
 		}
@@ -69,8 +71,5 @@ namespace Match.Gem {
 			return (rowDistance == 1 && colDistance == 0) || (rowDistance == 0 && colDistance == 1);
 		}
 
-		public void OnEndMoveComplete() {
-			mMover.OnEndMoveComplete(this);
-		}
 	}
 }

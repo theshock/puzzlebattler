@@ -34,8 +34,8 @@ namespace Match.Actions {
 		}
 
 		public override bool Validation() {
-			return mConfig.selectedIcon.IsActionReady()
-				&& mConfig.targetedIcon.IsActionReady();
+			return mConfig.selectedIcon.IsIdle()
+				&& mConfig.targetedIcon.IsIdle();
 		}
 
 		public override void StartAction() {

@@ -63,7 +63,7 @@ namespace Match {
 		}
 
 		private bool IsActiveIcon (CIcon icon) {
-			return icon != null && icon.IsActionReady() && icon.IsInside();
+			return icon != null && icon.IsIdle() && icon.IsInside();
 		}
 	}
 }
