@@ -29,9 +29,9 @@ namespace Match {
 		public CMatch mMatch;
 
 		public void InitMatchField() {
-			mIconMatrix  = new CIcon[mRows * 2, mColumns];
+			mIconMatrix = new CIcon[mRows, mColumns];
 
-			for (int r = 0; r < mRows * 2; r++) {
+			for (int r = 0; r < mRows; r++) {
 				for (int c = 0; c < mColumns; c++) {
 					mIconMatrix[r, c] = null;
 					var pos  = new CCell(r, c);
@@ -71,7 +71,7 @@ namespace Match {
 		}
 
 		public CIcon GetIconByIndex(int aIndex) {
-			if (aIndex >= mRows * 2 * mColumns) {
+			if (aIndex >= mRows * mColumns) {
 				return null;
 			}
 
@@ -94,9 +94,9 @@ namespace Match {
 			return true;
 		}
 
-		public bool HasEmptyIcon() {
+		public bool HasIconsWithState (EState state) {
 			foreach (CIcon icon in mIconMatrix) {
-				if (icon.State == EState.Death) {
+				if (icon.State == state) {
 					return true;
 				}
 			}

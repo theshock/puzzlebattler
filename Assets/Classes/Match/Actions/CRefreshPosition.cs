@@ -2,6 +2,7 @@ using Libraries;
 using Libraries.ActionSystem;
 using Match.Gem;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Match.Actions {
@@ -13,69 +14,57 @@ namespace Match.Actions {
 		}
 
 		public override bool Validation() {
-			return field.HasEmptyIcon();
+			return field.HasIconsWithState(EState.Death);
 		}
 
-		private void FillFreeIcons() {
-			for ( int c = 0; c < field.mColumns; c++ ) {
-				for ( int r = 0; r < field.mRows * 2; r++ ) {
-					if ( field.GetMatrixCell(new CCell(r, c)).State == EState.Death) {
-						var pos  = new CCell(r, c);
-						var icon = field.GetMatrixCell(pos);
-						icon.mCell.Set(pos);
-						icon.State = EState.Idle;
-						icon.gameObject.transform.position = field.GetIconCenterByCoord(
-							new CCell(pos.row + field.mRows, pos.col)
-						);
-						icon.SetRandomType();
-					}
-				}
+		private void DeadFreeFall (int c, List<CIcon> dead, CMove move) {
+			int number = 0;
+			int height = field.mRows;
+
+			foreach (CIcon icon in dead) {
+				icon.mCell.Set(new CCell(height - dead.Count + number, c));
+				field.SetMatrixCell(icon.mCell, icon);
+				icon.State = EState.Idle;
+				icon.gameObject.transform.position = field.GetIconCenterByCoord(
+					new CCell(height + number, c)
+				);
+				icon.SetRandomType();
+				move.AddMove( icon, field.GetIconCenterByCoord(icon.mCell) );
+
+				number++;
 			}
 		}
 
-		private void GravityIconsFall() {
-			// Find destroyed cells and search
-			// for live cells in top of them
-			for ( int col = 0; col < field.mColumns; col++ ) {
-				for ( int row = 0; row < field.mRows * 2 - 1; row++ ) {
-					CIcon current = field.GetMatrixCell(new CCell(row, col));
+		private void ColumnFreeFall (int c, CMove move) {
+			List<CIcon> dead = new List<CIcon>();
 
-					if ( current.State != EState.Death ) continue;
+			for ( int r = 0; r < field.mRows; r++ ) {
+				CIcon current = field.GetMatrixCell(new CCell(r, c));
 
-					for (int topRow = row + 1; topRow < field.mRows * 2; topRow++) {
-						CIcon top = field.GetMatrixCell(new CCell(topRow, col));
-
-						if (top.State == EState.Death) continue;
-
-						field.SwipeIconsCells(current, top);
-						break;
-					}
+				if (current.State == EState.Death) {
+					dead.Add(current);
+					continue;
+				} else if (dead.Count == 0) {
+					continue; // do nothing - current now at correct place
 				}
-			}
-		}
 
-		private CMove EnsureIconsPosition () {
-			var move = new CMove(field.mConfig);
+				current.mCell.Set(new CCell(r - dead.Count, c));
+				field.SetMatrixCell(current.mCell, current);
 
-			for ( int c = 0; c < field.mColumns; c++ ) {
-				for ( int r = 0; r < field.mRows * 2; r++ ) {
-					move.AddMove(
-						field.GetMatrixCell(new CCell(r, c)),
-						field.GetIconCenterByCoord(new CCell(r, c))
-					);
-				}
+				move.AddMove( current, field.GetIconCenterByCoord(current.mCell) );
 			}
 
-			return move;
+			DeadFreeFall(c, dead, move);
 		}
 
 		public override void StartAction() {
 			Debug.Log("Start refresh");
 
-			GravityIconsFall();
-			FillFreeIcons();
+			var move = new CMove(field.mConfig);
 
-			var move = EnsureIconsPosition();
+			for ( int col = 0; col < field.mColumns; col++ ) {
+				ColumnFreeFall(col, move);
+			}
 
 			if (move.IsFinished()) {
 				ComplateAction();
