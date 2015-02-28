@@ -3,13 +3,13 @@ using UnityEngine;
 
 namespace Match {
 	public class CInput : Libraries.IInputObserver {
-		public CMatch mController = null;
+		public CField field = null;
 
 		protected Libraries.CInput mInput;
 		protected CIcon mSelectedIcon = null;
 
-		public CInput (CMatch controller) {
-			mController = controller;
+		public CInput (CField field) {
+			this.field = field;
 
 			mInput = new Libraries.CInput();
 			mInput.registerObserver(this, 0);
@@ -20,7 +20,7 @@ namespace Match {
 		}
 
 		public bool OnInputBegin (Vector2 aPosition) {
-			var selectedIcon = mController.mView.mField.GetIconByPoint(aPosition);
+			var selectedIcon = field.GetIconByPoint(aPosition);
 
 			if (IsActiveIcon(selectedIcon)) {
 				mSelectedIcon = selectedIcon;
@@ -30,11 +30,11 @@ namespace Match {
 			}
 		}
 
-		public void OnInputMove (Vector2 aPosition) {
-			if (!mController.mGame.mModel.player.CanSwipe()) return;
+		public void OnInputMove (Vector2 position) {
+			if (!Game.Instance.mModel.player.CanSwipe()) return;
 			if (!IsActiveIcon(mSelectedIcon)) return;
 
-			CIcon targetIcon = mController.mView.mField.GetIconByPoint(aPosition);
+			CIcon targetIcon = field.GetIconByPoint(position);
 
 			if (mSelectedIcon != targetIcon && IsActiveIcon(targetIcon)) {
 				if (mSelectedIcon.IsNeighbour(targetIcon)) {
@@ -51,15 +51,8 @@ namespace Match {
 			mSelectedIcon = null;
 		}
 
-		public bool StartSwipe(CIcon aSelected, CIcon aTargeted) {
-			var config = new Actions.CSwipe.Config(){
-				iconField = mController.mView.mField,
-				selectedIcon = aSelected,
-				targetedIcon = aTargeted,
-				matcher = mController.mMatcher
-			};
-
-			return mController.mActionManager.AddAction(new Actions.CSwipe(config));
+		public bool StartSwipe(CIcon selected, CIcon targeted) {
+			return field.actions.AddAction(new Actions.CSwipe(field, selected, targeted));
 		}
 
 		private bool IsActiveIcon (CIcon icon) {

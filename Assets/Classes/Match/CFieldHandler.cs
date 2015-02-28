@@ -4,18 +4,18 @@ using System.Collections.Generic;
 
 namespace Match {
 	public abstract class CFieldHandler {
-		public CMatch mController;
+		public CField field;
 
-		public CFieldHandler (CMatch controller) {
-			this.mController = controller;
+		public CFieldHandler (CField field) {
+			this.field = field;
 		}
 
 		protected int GetWidth () {
-			return mController.mView.mField.width;
+			return field.width;
 		}
 
 		protected int GetHeight () {
-			return mController.mView.mField.height;
+			return field.height;
 		}
 
 		protected int GetSquare () {
@@ -32,7 +32,6 @@ namespace Match {
 
 		public List<CIcon> GetNeighbours (CIcon icon) {
 			var list = new List<CIcon>();
-			var field = mController.mView.mField;
 
 			if (icon.cell.col > 0) {
 				list.Add(field.GetIconAt(new CCell( icon.cell.row, icon.cell.col - 1 )));
@@ -58,7 +57,7 @@ namespace Match {
 			int row = index / GetWidth();
 			int column = index - row * GetWidth();
 
-			return mController.mView.mField.GetIconAt(new CCell(row, column));
+			return field.GetIconAt(new CCell(row, column));
 		}
 
 		protected bool IsMatch(int first, int second, int third) {

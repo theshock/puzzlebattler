@@ -7,12 +7,12 @@ using UnityEngine.UI;
 namespace Match {
 	public class CModel {
 
-		CMatch controller;
+		CField field;
 
-		public CModel (CMatch controller) {
-			this.controller = controller;
+		public CModel (CField field) {
+			this.field = field;
 
-			var actionEvents = controller.mActionManager.events;
+			var actionEvents = field.actions.events;
 
 			actionEvents.OnFinish(OnActionsFinished);
 			actionEvents.OnEnd  ((int) EEvents.RefreshPosition, OnRefreshEnd     );
@@ -22,8 +22,8 @@ namespace Match {
 		}
 
 		public void OnRefreshEnd (IAction action) {
-			var autoMatch = new CAutoMatch(controller.mMatcher.FindMatches());
-			controller.mActionManager.AddAction(autoMatch);
+			var autoMatch = new CAutoMatch(field.FindMatches());
+			field.actions.AddAction(autoMatch);
 		}
 
 		public void OnMatchEnd (IAction action) {
@@ -31,33 +31,33 @@ namespace Match {
 		}
 
 		public void OnSwipeBegin (IAction action) {
-			controller.mGame.mModel.GetActivePlayer().matches--;
+			Game.Instance.mModel.GetActivePlayer().matches--;
 		}
 
 		public void OnSwipeBackBegin (IAction action) {
-			controller.mGame.mModel.GetActivePlayer().matches++;
+			Game.Instance.mModel.GetActivePlayer().matches++;
 		}
 
 		public void OnActionsFinished () {
-			CRefreshPosition refresh = new CRefreshPosition(controller.mView.mField);
-			controller.mActionManager.AddAction(refresh);
+			CRefreshPosition refresh = new CRefreshPosition(field);
+			field.actions.AddAction(refresh);
 
-			if (!controller.mActionManager.HasActions()) {
+			if (!field.actions.HasActions()) {
 				CheckActive();
 				AiTurn();
 			}
 		}
 
 		protected void CheckActive () {
-			if (controller.mGame.mModel.GetActivePlayer().IsStepFinished()) {
-				controller.mGame.mModel.SwitchPlayer();
+			if (Game.Instance.mModel.GetActivePlayer().IsStepFinished()) {
+				Game.Instance.mModel.SwitchPlayer();
 			}
 		}
 
 		protected void AiTurn () {
-			if (!controller.mGame.mModel.opponent.isActive) return;
+			if (!Game.Instance.mModel.opponent.isActive) return;
 
-			var searcher = new CSearcher(controller);
+			var searcher = new CSearcher(field);
 			searcher.FindMoves();
 
 			if (!searcher.MovesExists()) {
@@ -66,16 +66,17 @@ namespace Match {
 			}
 
 			var move = searcher.GetMoves()[0];
-			controller.mInput.StartSwipe(move.from, move.to);
+
+			field.actions.AddAction(new Actions.CSwipe(field, move.from, move.to));
 		}
 
 		public void AddScore (int count) {
-			Text textNode = controller.mGame.mModel.player.isActive
-				? controller.playerText
-				: controller.opponentText;
+			Text textNode = Game.Instance.mModel.player.isActive
+				? field.playerText
+				: field.opponentText;
 
-			controller.mGame.mModel.GetActivePlayer().AddScore(CalculateScore(count));
-			textNode.text = "" + controller.mGame.mModel.GetActivePlayer().score;
+			Game.Instance.mModel.GetActivePlayer().AddScore(CalculateScore(count));
+			textNode.text = "" + Game.Instance.mModel.GetActivePlayer().score;
 		}
 
 		private int CalculateScore (int count) {

@@ -147,48 +147,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
---- !u!1 &235478206
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 235478208}
-  - 114: {fileID: 235478207}
-  m_Layer: 8
-  m_Name: View
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &235478207
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 235478206}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 512b6e7377f16394c8ab2446d3af9100, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mField: {fileID: 875817892}
-  mController: {fileID: 1728815467}
---- !u!4 &235478208
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 235478206}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 875817893}
-  m_Father: {fileID: 1728815468}
-  m_RootOrder: 0
 --- !u!1 &440969434
 GameObject:
   m_ObjectHideFlags: 0
@@ -543,7 +501,7 @@ GameObject:
   - 222: {fileID: 875817895}
   - 114: {fileID: 875817894}
   m_Layer: 8
-  m_Name: Field
+  m_Name: MatchField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -560,6 +518,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6fd77c15047598449018c6ca2718440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerText: {fileID: 840055166}
+  opponentText: {fileID: 1412813721}
 --- !u!224 &875817893
 RectTransform:
   m_ObjectHideFlags: 0
@@ -570,11 +530,11 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 235478208}
-  m_RootOrder: 0
+  m_Father: {fileID: 1417612942}
+  m_RootOrder: 2
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
-  m_AnchoredPosition: {x: 63, y: -354}
+  m_AnchoredPosition: {x: 54, y: -357}
   m_SizeDelta: {x: 1150, y: 1235}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &875817894
@@ -860,7 +820,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rows: 7
   columns: 6
-  from: {x: -7.30000019, y: -17}
+  from: {x: -7.5, y: -17}
   offset: {x: 3.54999995, y: 3.54999995}
 --- !u!4 &1297919602
 Transform:
@@ -1075,7 +1035,7 @@ Transform:
   m_Children:
   - {fileID: 815638881}
   - {fileID: 928828760}
-  - {fileID: 1728815468}
+  - {fileID: 875817893}
   m_Father: {fileID: 632129697}
   m_RootOrder: 0
 --- !u!114 &1417612943
@@ -1090,7 +1050,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mConfig: {fileID: 815638882}
-  mMatch: {fileID: 1728815467}
+  mMatch: {fileID: 0}
   playerValue: {fileID: 1351331627}
   opponentValue: {fileID: 1152416807}
 --- !u!1 &1515118270
@@ -1424,50 +1384,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1721946829}
---- !u!1 &1728815466
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1728815468}
-  - 114: {fileID: 1728815467}
-  m_Layer: 8
-  m_Name: Match
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1728815467
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1728815466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 250868035083ab14d91ddb628f7f9b4a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mView: {fileID: 235478207}
-  mGame: {fileID: 1417612943}
-  playerText: {fileID: 840055166}
-  opponentText: {fileID: 1412813721}
---- !u!4 &1728815468
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1728815466}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.0893364, y: -3.01593781, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 235478208}
-  m_Father: {fileID: 1417612942}
-  m_RootOrder: 2
 --- !u!1 &1967419417
 GameObject:
   m_ObjectHideFlags: 0

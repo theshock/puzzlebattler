@@ -9,7 +9,32 @@ using UnityEngine.UI;
 namespace Match {
 
 	public class CField : MonoBehaviour {
-		public CIcon [,] icons;
+
+		public Libraries.ActionSystem.CManager actions;
+
+		public Text playerText;
+		public Text opponentText;
+
+		private CMatcher matcher;
+		private CInput input;
+		private CModel model;
+
+		public void Start() {
+			Game.Instance.mModel.ActivateFirst();
+
+			actions = new Libraries.ActionSystem.CManager();
+			input = new CInput(this);
+			model = new CModel(this);
+			matcher = new CMatcher(this);
+
+			CreateIcons();
+		}
+
+		public void Update () {
+			if (input != null) {
+				input.Update();
+			}
+		}
 
 		protected Config.Match.CField config {
 			get { return Game.Config.match.field; }
@@ -23,12 +48,14 @@ namespace Match {
 			get { return config.columns; }
 		}
 
-		public void InitMatchField() {
+		public CIcon [,] icons;
+
+		protected void CreateIcons () {
 			icons = new CIcon[height, width];
 
 			for (int r = 0; r < height; r++) {
 				for (int c = 0; c < width; c++) {
-					CreateIconByCoord(new CCell(r, c));
+					RegisterIcon(new CCell(r, c));
 				}
 			}
 		}
@@ -60,7 +87,11 @@ namespace Match {
 			return null;
 		}
 
-		private CIcon CreateIconByCoord(CCell position) {
+		public List<List<CIcon>> FindMatches () {
+			return matcher.FindMatches();
+		}
+
+		private CIcon RegisterIcon(CCell position) {
 			GameObject gameObject = Instantiate(Game.Config.match.gems.prefab) as GameObject;
 			gameObject.transform.SetParent(this.transform);
 			gameObject.transform.localScale = Vector3.one;

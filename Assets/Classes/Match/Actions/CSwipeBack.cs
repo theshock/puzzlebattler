@@ -1,10 +1,11 @@
-using UnityEngine;
 using Libraries.ActionSystem;
+using Match.Gem;
+using UnityEngine;
 
 namespace Match.Actions {
 	public class CSwipeBack : CSwipe {
 
-		public CSwipeBack (Config config) : base(config) {}
+		public CSwipeBack (CField field, CIcon selected, CIcon targeted) : base(field, selected, targeted) {}
 
 		public override bool Validation() {
 			return true;

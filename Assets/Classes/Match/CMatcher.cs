@@ -8,7 +8,7 @@ namespace Match {
 
 	public class CMatcher : CFieldHandler {
 
-		public CMatcher (CMatch controller) : base(controller) {}
+		public CMatcher (CField field) : base(field) {}
 
 		private List<List<int>> FindMatchesIndexes() {
 			var union = new CWeightedUnion(GetSquare());

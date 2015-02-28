@@ -14,7 +14,7 @@ namespace Match {
 
 		private List<Move> moves;
 
-		public CSearcher (CMatch controller) : base(controller) {}
+		public CSearcher (CField controller) : base(controller) {}
 
 		public void FindMoves() {
 			moves = new List<Move>();

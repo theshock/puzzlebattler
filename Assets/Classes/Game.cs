@@ -9,7 +9,7 @@ public class Game : MonoBehaviour {
 
 	public Config.CConfig mConfig;
 	public Model.CGame mModel;
-	public Match.CMatch mMatch;
+	public Match.CField mMatch;
 
 	public Image playerValue;
 	public Image opponentValue;
@@ -22,11 +22,10 @@ public class Game : MonoBehaviour {
 
 	public void Awake() {
 		Instance = this;
+		mModel = new Model.CGame();
 	}
 
 	public void Start() {
-		mModel = new Model.CGame();
-
 		mModel.player  .onScoreChange += OnScoreChange;
 		mModel.opponent.onScoreChange += OnScoreChange;
 

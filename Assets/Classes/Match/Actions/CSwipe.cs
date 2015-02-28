@@ -10,46 +10,31 @@ using UnityEngine;
 namespace Match.Actions {
 	public class CSwipe : CCreating, IMoveObserver {
 
-		public struct Config {
-			public CField iconField;
-			public CIcon selectedIcon;
-			public CIcon targetedIcon;
-			public CMatcher matcher;
+		protected CField field;
+		protected CIcon selected;
+		protected CIcon targeted;
 
-			public bool IsValid () {
-				return iconField    != null
-					&& selectedIcon != null
-					&& targetedIcon != null
-					&& matcher      != null;
-			}
-		}
-
-		protected Config config;
-
-		public CSwipe (Config config) {
-			if (config.IsValid()) {
-				this.config = config;
-			} else {
-				throw new Exception("Config not valid");
-			}
+		public CSwipe (CField field, CIcon selected, CIcon targeted) {
+			this.field = field;
+			this.selected = selected;
+			this.targeted = targeted;
 		}
 
 		public override bool Validation() {
-			return config.selectedIcon.IsIdle()
-				&& config.targetedIcon.IsIdle();
+			return selected.IsIdle()
+				&& targeted.IsIdle();
 		}
 
 		public override void StartAction() {
-			var field = config.iconField;
 			var move = new CMove();
 
-			CCell cell = config.selectedIcon.cell.Clone();
+			CCell cell = selected.cell.Clone();
 
-			field.SetIconAt(config.targetedIcon.cell, config.selectedIcon);
-			field.SetIconAt(cell, config.targetedIcon);
+			field.SetIconAt(targeted.cell, selected);
+			field.SetIconAt(cell, targeted);
 
-			move.AddMove(config.selectedIcon, field.GetIconCenterByCell(config.selectedIcon.cell));
-			move.AddMove(config.targetedIcon, field.GetIconCenterByCell(config.targetedIcon.cell));
+			move.AddMove(selected, field.GetIconCenterByCell(selected.cell));
+			move.AddMove(targeted, field.GetIconCenterByCell(targeted.cell));
 
 			move.SetObserver(this);
 		}
@@ -61,12 +46,12 @@ namespace Match.Actions {
 		}
 
 		private void CreateSwipeBack () {
-			Wait(new Actions.CSwipeBack(config));
+			Wait(new Actions.CSwipeBack(field, selected, targeted));
 			CheckCompleteness();
 		}
 
 		private bool IsCorrectSwipe () {
-			var matches = config.matcher.FindMatches();
+			var matches = field.FindMatches();
 
 			if (matches.Count > 0) {
 				foreach (List<CIcon> match in matches) {
