@@ -1,5 +1,5 @@
 namespace Match.Gem {
-	public enum EType {
+	public enum EColor {
 		Red,
 		Green,
 		Blue,

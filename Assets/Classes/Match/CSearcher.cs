@@ -41,10 +41,10 @@ namespace Match {
 		}
 
 		protected void SearchTargetMoves (CIcon first, CIcon second, CIcon target) {
-			if (first.Type != second.Type) return;
+			if (first.color != second.color) return;
 
 			foreach (CIcon cell in GetNeighbours(target)) {
-				if (cell != first && cell != second && cell.Type == first.Type) {
+				if (cell != first && cell != second && cell.color == first.color) {
 					moves.Add(new Move(){
 						from = target,
 						to   = cell

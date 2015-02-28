@@ -29,7 +29,7 @@ namespace Match.Gem {
 				return;
 			}
 
-			icon.State = EState.Idle;
+			icon.SetState(EState.Idle);
 			moving.Remove(icon);
 
 			if (IsFinished() && listener != null) {
@@ -43,7 +43,7 @@ namespace Match.Gem {
 			} else {
 				moving.Add(icon);
 
-				icon.State = EState.Movement;
+				icon.SetState(EState.Movement);
 				icon.gameObject.transform
 					.DOMove(pos, mMovingTime)
 					.OnComplete(() => OnEndMoveComplete(icon));

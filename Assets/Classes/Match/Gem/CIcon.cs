@@ -8,46 +8,29 @@ namespace Match.Gem {
 
 	public class CIcon : MonoBehaviour {
 
-		private EType mType;
-
-		public EType Type {
-			get {
-				return mType;
-			}
-			set {
-				mType = value;
-				GetComponent<Image>().sprite = mField.mConfig.mGems.GetCorrectSprite(mType);
-				UpdateName();
-			}
-		}
-
-		private EState mState;
-		public EState State {
-			get {
-				return mState;
-			}
-			set {
-				mState = value;
-				UpdateName();
-			}
-		}
+		public EColor color { get; private set; }
+		public EState state { get; private set; }
 
 		public CField mField;
 		public CCell mCell = CCell.zero;
 
-		public int mIndex {
-			get { return mCell.row * mField.mColumns + mCell.col; }
+		public void SetRandomColor() {
+			int count = Enum.GetNames( typeof( EColor ) ).Length;
+
+			color = (EColor) UnityEngine.Random.Range(0, count);
+
+			GetComponent<Image>().sprite = mField.mConfig.mGems.GetCorrectSprite(color);
+			UpdateName();
 		}
 
-		public void SetRandomType () {
-			int count = Enum.GetNames( typeof( EType ) ).Length;
-
-			Type = (EType) UnityEngine.Random.Range(0, count);
+		public void SetState (EState state) {
+			this.SetState(state);
+			UpdateName();
 		}
 
 		protected void UpdateName () {
 			gameObject.name = String.Format("Gem {0} [{1}:{2}] {3}",
-				mType.ToString()[0],
+				color.ToString()[0],
 				mCell.col,
 				mCell.row,
 				IsIdle() ? "" : "*"
@@ -55,11 +38,7 @@ namespace Match.Gem {
 		}
 
 		public bool IsIdle() {
-			return (mState == EState.Idle);
-		}
-
-		public bool IsInside() {
-			return mCell.row < mField.mRows;
+			return (state == EState.Idle);
 		}
 
 		public bool HitTest(Vector2 coordinates) {

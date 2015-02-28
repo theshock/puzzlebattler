@@ -20,17 +20,17 @@ namespace Config.Match {
 		public Sprite mImageGreen;
 		public Sprite mImagePurple;
 
-		public float GetChance (EType type) {
+		public float GetChance (EColor type) {
 			return (float) GetChanceValue(type) / (float) GetChanceSum();
 		}
 
-		private int GetChanceValue (EType type) {
+		private int GetChanceValue (EColor type) {
 			switch (type) {
-				case EType.Red   : return mChanceRed;
-				case EType.Blue  : return mChanceBlue;
-				case EType.Green : return mChanceGreen;
-				case EType.Purple: return mChancePurple;
-				case EType.Yellow: return mChanceYellow;
+				case EColor.Red   : return mChanceRed;
+				case EColor.Blue  : return mChanceBlue;
+				case EColor.Green : return mChanceGreen;
+				case EColor.Purple: return mChancePurple;
+				case EColor.Yellow: return mChanceYellow;
 			}
 
 			return 0;
@@ -40,13 +40,13 @@ namespace Config.Match {
 			return mChanceRed + mChanceBlue + mChanceGreen + mChancePurple + mChanceYellow;
 		}
 
-		public Sprite GetCorrectSprite (EType type) {
+		public Sprite GetCorrectSprite (EColor type) {
 			switch (type) {
-				case EType.Red   : return mImageRed;
-				case EType.Blue  : return mImageBlue;
-				case EType.Green : return mImageGreen;
-				case EType.Purple: return mImagePurple;
-				case EType.Yellow: return mImageYellow;
+				case EColor.Red   : return mImageRed;
+				case EColor.Blue  : return mImageBlue;
+				case EColor.Green : return mImageGreen;
+				case EColor.Purple: return mImagePurple;
+				case EColor.Yellow: return mImageYellow;
 			}
 
 			return null;

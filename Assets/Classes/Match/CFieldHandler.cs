@@ -1,3 +1,4 @@
+using Libraries;
 using Match.Gem;
 using System.Collections.Generic;
 
@@ -34,16 +35,16 @@ namespace Match {
 			var field = mController.mView.mField;
 
 			if (icon.mCell.col > 0) {
-				list.Add(field.GetIconByIndex(icon.mIndex - 1));
+				list.Add(field.GetMatrixCell(new CCell( icon.mCell.row, icon.mCell.col - 1 )));
 			}
 			if (icon.mCell.col < field.mColumns - 1) {
-				list.Add(field.GetIconByIndex(icon.mIndex + 1));
+				list.Add(field.GetMatrixCell(new CCell( icon.mCell.row, icon.mCell.col + 1 )));
 			}
 			if (icon.mCell.row > 0) {
-				list.Add(field.GetIconByIndex(icon.mIndex - GetWidth()));
+				list.Add(field.GetMatrixCell(new CCell( icon.mCell.row - 1, icon.mCell.col )));
 			}
 			if (icon.mCell.row < field.mRows - 1) {
-				list.Add(field.GetIconByIndex(icon.mIndex + GetWidth()));
+				list.Add(field.GetMatrixCell(new CCell( icon.mCell.row + 1, icon.mCell.col )));
 			}
 
 			return list;

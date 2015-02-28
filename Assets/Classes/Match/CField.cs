@@ -14,15 +14,9 @@ namespace Match {
 		public int mRows {
 			get { return mConfig.mField.mRows; }
 		}
+
 		public int mColumns {
 			get { return mConfig.mField.mColumns; }
-		}
-		public Vector2 mStartPoint {
-			get { return mConfig.mField.mStartPoint; }
-		}
-
-		public Vector2 mOffset {
-			get { return mConfig.mField.mOffset; }
 		}
 
 		public Config.Match.CMatch mConfig;
@@ -33,7 +27,7 @@ namespace Match {
 
 			for (int r = 0; r < mRows; r++) {
 				for (int c = 0; c < mColumns; c++) {
-					CreateIconByPos(new CCell(r, c));
+					CreateIconByCoord(new CCell(r, c));
 				}
 			}
 		}
@@ -63,7 +57,7 @@ namespace Match {
 			}
 
 			foreach (CIcon icon in icons) {
-				if (icon.Type != icons[0].Type) {
+				if (icon.color != icons[0].color) {
 					return false;
 				}
 			}
@@ -73,7 +67,7 @@ namespace Match {
 
 		public bool HasIconsWithState (EState state) {
 			foreach (CIcon icon in mIconMatrix) {
-				if (icon.State == state) {
+				if (icon.state == state) {
 					return true;
 				}
 			}
@@ -83,15 +77,15 @@ namespace Match {
 
 		public Vector3 GetIconCenterByCoord(CCell cell) {
 			return new Vector3(
-				mStartPoint.x + cell.col * mOffset.x,
-				mStartPoint.y + cell.row * mOffset.y,
+				mConfig.mField.mStartPoint.x + cell.col * mConfig.mField.mOffset.x,
+				mConfig.mField.mStartPoint.y + cell.row * mConfig.mField.mOffset.y,
 				this.transform.position.z
 			);
 		}
 
-		public CIcon GetIconByPosition(Vector2 aPos) {
+		public CIcon GetIconByPosition(Vector2 position) {
 			foreach (CIcon icon in mIconMatrix) {
-				if (icon.HitTest(aPos)) {
+				if (icon.HitTest(position)) {
 					return icon;
 				}
 			}
@@ -99,16 +93,21 @@ namespace Match {
 			return null;
 		}
 
-		private CIcon CreateIconByPos(CCell position) {
-			CIcon icon = CreateIcon();
+		private CIcon CreateIconByCoord(CCell position) {
+			GameObject gameObject = Instantiate(mConfig.mGems.mPrefab) as GameObject;
+			gameObject.transform.SetParent(this.transform);
+			gameObject.transform.localScale = Vector3.one;
+			gameObject.transform.position = GetIconCenterByCoord(position);
+
+			CIcon icon = gameObject.GetComponent<CIcon>();
+
 			SetMatrixCell(position, icon);
 
 			icon.mField = this;
-			icon.State = EState.Idle;
-			icon.gameObject.transform.position = GetIconCenterByCoord(position);
+			icon.SetState(EState.Idle);
 
 			do {
-				icon.SetRandomType();
+				icon.SetRandomColor();
 			} while (CanCreateMatch(icon));
 
 			return icon;
@@ -140,12 +139,5 @@ namespace Match {
 			return false;
 		}
 
-		private CIcon CreateIcon() {
-			GameObject icon = Instantiate(mConfig.mGems.mPrefab) as GameObject;
-			icon.transform.SetParent(this.transform);
-			icon.transform.localScale = Vector3.one;
-
-			return icon.GetComponent<CIcon>();
-		}
 	}
 }

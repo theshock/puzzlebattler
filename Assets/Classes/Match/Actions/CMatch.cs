@@ -12,8 +12,8 @@ namespace Match.Actions {
 			mMatchIcons = aMatchIcons;
 		}
 
-		public EType GetMatchIconType() {
-			return mMatchIcons[0].Type;
+		public EColor GetMatchIconType() {
+			return mMatchIcons[0].color;
 		}
 
 		public override bool Validation() {

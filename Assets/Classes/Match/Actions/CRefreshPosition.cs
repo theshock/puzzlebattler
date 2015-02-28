@@ -24,11 +24,11 @@ namespace Match.Actions {
 			foreach (CIcon icon in dead) {
 				field.SetMatrixCell(new CCell(height - dead.Count + number, c), icon);
 
-				icon.State = EState.Idle;
+				icon.SetState(EState.Idle);
 				icon.gameObject.transform.position = field.GetIconCenterByCoord(
 					new CCell(height + number, c)
 				);
-				icon.SetRandomType();
+				icon.SetRandomColor();
 				move.AddMove( icon, field.GetIconCenterByCoord(icon.mCell) );
 
 				number++;
@@ -41,7 +41,7 @@ namespace Match.Actions {
 			for ( int r = 0; r < field.mRows; r++ ) {
 				CIcon current = field.GetMatrixCell(new CCell(r, c));
 
-				if (current.State == EState.Death) {
+				if (current.state == EState.Death) {
 					dead.Add(current);
 					continue;
 				} else if (dead.Count == 0) {

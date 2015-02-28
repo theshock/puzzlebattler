@@ -12,13 +12,13 @@ namespace Config.Match {
 		public int mPurplePower;
 		public int mYellowPower;
 
-		public int GetPower (EType type) {
+		public int GetPower (EColor type) {
 			switch (type) {
-				case EType.Red   : return mRedPower;
-				case EType.Blue  : return mBluePower;
-				case EType.Green : return mGreenPower;
-				case EType.Purple: return mPurplePower;
-				case EType.Yellow: return mYellowPower;
+				case EColor.Red   : return mRedPower;
+				case EColor.Blue  : return mBluePower;
+				case EColor.Green : return mGreenPower;
+				case EColor.Purple: return mPurplePower;
+				case EColor.Yellow: return mYellowPower;
 			}
 
 			return 0;

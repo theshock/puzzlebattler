@@ -6,7 +6,7 @@ namespace Config.Match {
 		public GameObject[] mPrefabs;
 
 
-		public GameObject GetPrefab (EType type) {
+		public GameObject GetPrefab (EColor type) {
 			return mPrefabs[(int)type];
 		}
 	}
