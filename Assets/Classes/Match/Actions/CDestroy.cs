@@ -1,14 +1,13 @@
 using Libraries;
-using Match.Gem;
 using System.Collections;
 using UnityEngine;
 using Libraries.ActionSystem;
 
 namespace Match.Actions {
-	public class CDestroy : CBase, IDieObserver {
-		private CIcon mIconTarget = null;
+	public class CDestroy : CBase, Gem.IDieObserver {
+		private Gem.CIcon mIconTarget = null;
 
-		public CDestroy (CIcon target) {
+		public CDestroy (Gem.CIcon target) {
 			mIconTarget = target;
 		}
 
@@ -17,7 +16,7 @@ namespace Match.Actions {
 		}
 
 		public override void StartAction() {
-			new CDie(mIconTarget, this);
+			new Gem.CDie(mIconTarget, this);
 		}
 
 		public void OnDieEnd () {

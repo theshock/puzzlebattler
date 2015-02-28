@@ -34,7 +34,12 @@ namespace Match {
 			for (int r = 0; r < mRows; r++) {
 				for (int c = 0; c < mColumns; c++) {
 					mIconMatrix[r, c] = null;
-					CreateIconByPos(new CCell(r, c), GenIconType(), true);
+					var pos  = new CCell(r, c);
+					var icon = CreateIconByPos(pos);
+					icon.gameObject.transform.position = GetIconCenterByCoord(pos);
+					do {
+						icon.Type = GenIconType();
+					} while (CanCreateMatch(icon));
 				}
 			}
 		}
@@ -42,8 +47,8 @@ namespace Match {
 		public CMove SwipeIcons (CIcon aFirstIcon, CIcon aSecondIcon) {
 			var move = new CMove(mConfig);
 			SwipeIconsCells(aFirstIcon, aSecondIcon);
-			move.addMove(aFirstIcon, GetIconCenterByCoord(aFirstIcon.mCell));
-			move.addMove(aSecondIcon, GetIconCenterByCoord(aSecondIcon.mCell));
+			move.AddMove(aFirstIcon, GetIconCenterByCoord(aFirstIcon.mCell));
+			move.AddMove(aSecondIcon, GetIconCenterByCoord(aSecondIcon.mCell));
 			return move;
 		}
 
@@ -117,7 +122,7 @@ namespace Match {
 
 		public bool HasEmptyIcon() {
 			foreach (CIcon icon in mIconMatrix) {
-				if (icon.State == EState.Clear) {
+				if (icon.State == EState.Death) {
 					return true;
 				}
 			}
@@ -154,8 +159,13 @@ namespace Match {
 		private void FillFreeIcons() {
 			for ( int c = 0; c < mColumns; c++ ) {
 				for ( int r = 0; r < mRows; r++ ) {
-					if ( mIconMatrix[r, c].State == EState.Clear) {
-						CreateIconByPos(new CCell(r, c), GenIconType(), false);
+					if ( mIconMatrix[r, c].State == EState.Death) {
+						var pos  = new CCell(r, c);
+						var icon = CreateIconByPos(pos);
+						icon.gameObject.transform.position = GetIconCenterByCoord(
+							new CCell(pos.row + mRows / 2, pos.col)
+						);
+						icon.Type = GenIconType();
 					}
 				}
 			}
@@ -168,12 +178,12 @@ namespace Match {
 				for ( int row = 0; row < mRows - 1; row++ ) {
 					CIcon current = mIconMatrix[row, col];
 
-					if ( current.State != EState.Clear ) continue;
+					if ( current.State != EState.Death ) continue;
 
 					for (int topRow = row + 1; topRow < mRows; topRow++) {
 						CIcon top = mIconMatrix[topRow, col];
 
-						if (top.State == EState.Clear) continue;
+						if (top.State == EState.Death) continue;
 
 						SwipeIconsCells(current, top);
 						break;
@@ -187,35 +197,26 @@ namespace Match {
 
 			for ( int c = 0; c < mColumns; c++ ) {
 				for ( int r = 0; r < mRows; r++ ) {
-					move.addMove(mIconMatrix[r, c], GetIconCenterByCoord(new CCell(r, c)));
+					move.AddMove(mIconMatrix[r, c], GetIconCenterByCoord(new CCell(r, c)));
 				}
 			}
 
 			return move;
 		}
 
-		private void CreateIconByPos(CCell aPosition, EType aIconType, bool aIsSetStartPosition) {
-			CIcon icon = GetMatrixCell(aPosition);
+		private CIcon CreateIconByPos(CCell position) {
+			CIcon icon = GetMatrixCell(position);
 
 			if (icon == null) {
 				icon = CreateIcon();
-				SetMatrixCell(aPosition, icon);
+				SetMatrixCell(position, icon);
+				icon.mField = this;
 			}
 
-			icon.mField = this;
-			icon.mCell.Set(aPosition);
-			icon.State = aPosition.row < mRows / 2 ? EState.Open : EState.Invisible;
-			icon.gameObject.transform.position = GetIconCenterByCoord(
-				aIsSetStartPosition ? aPosition : new CCell(aPosition.row + mRows / 2, aPosition.col)
-			);
+			icon.mCell.Set(position);
+			icon.State = EState.Idle;
 
-			if (aIsSetStartPosition) {
-				do {
-					icon.Type = GenIconType();
-				} while (CanCreateMatch(icon));
-			} else {
-				icon.Type = aIconType;
-			}
+			return icon;
 		}
 
 		private bool CanCreateMatch (CIcon icon) {
@@ -247,7 +248,7 @@ namespace Match {
 		private CIcon CreateIcon() {
 			GameObject icon = Instantiate(mConfig.mGems.mPrefab) as GameObject;
 			icon.transform.SetParent(this.transform);
-			icon.transform.localScale = new Vector3(1,1,1);
+			icon.transform.localScale = Vector3.one;
 
 			return icon.GetComponent<CIcon>();
 		}

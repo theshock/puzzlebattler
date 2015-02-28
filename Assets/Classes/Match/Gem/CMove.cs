@@ -29,7 +29,7 @@ namespace Match.Gem {
 			}
 
 			icon.mMover = null;
-			icon.State = EState.Open;
+			icon.State = EState.Idle;
 			moving.Remove(icon);
 
 			if (IsFinished() && listener != null) {
@@ -37,12 +37,12 @@ namespace Match.Gem {
 			}
 		}
 
-		public bool addMove(CIcon icon, Vector3 pos) {
+		public bool AddMove(CIcon icon, Vector3 pos) {
 			if (icon.transform.position == pos) {
 				return false;
 			} else {
 				moving.Add(icon);
-				icon.State = EState.Move;
+				icon.State = EState.Movement;
 				icon.mMover = this;
 				iTween.MoveTo(icon.gameObject, iTween.Hash("position", pos, "time", mMovingTime, "onComplete", "OnEndMoveComplete" ));
 				return true;

@@ -10,6 +10,7 @@ namespace Match.Gem {
 		public CMove mMover;
 
 		private EType mType;
+
 		public EType Type {
 			get {
 				return mType;
@@ -17,6 +18,7 @@ namespace Match.Gem {
 			set {
 				mType = value;
 				GetComponent<Image>().sprite = mField.mConfig.mGems.GetCorrectSprite(mType);
+				UpdateName();
 			}
 		}
 
@@ -27,7 +29,7 @@ namespace Match.Gem {
 			}
 			set {
 				mState = value;
-				GetComponent<Image>().enabled = (mState != EState.Clear);
+				UpdateName();
 			}
 		}
 
@@ -38,25 +40,18 @@ namespace Match.Gem {
 			get { return mCell.row * mField.mColumns + mCell.col; }
 		}
 
-		public void TmpHL () {
-			var prefab = mField.mConfig.mDie.GetPrefab(Type);
-			GameObject anim = Instantiate(prefab, transform.position, transform.rotation) as GameObject;
-
-			anim.transform.SetParent(transform.parent);
-
-			Destroy(anim, 10);
+		protected void UpdateName () {
+			gameObject.name = "Gem " + mType.ToString()[0]
+				+ " [" + mCell.col + ":" + mCell.row + "] "
+				+ (IsActionReady() ? "" : "*");
 		}
 
 		public bool IsActionReady() {
-			return (mState == EState.Open);
+			return (mState == EState.Idle);
 		}
 
 		public bool IsInside () {
 			return mCell.row < mField.mRows / 2;
-		}
-
-		public bool IsMoveReady() {
-			return (mState == EState.Open);
 		}
 
 		public bool HitTest(Vector2 aCoordinates) {

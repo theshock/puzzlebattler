@@ -17,7 +17,7 @@ namespace Match.Gem {
 		protected IEnumerator DieEnd () {
 			yield return new WaitForSeconds(0.1f);
 
-			mIcon.State = EState.Clear;
+			mIcon.State = EState.Death;
 			mObserver.OnDieEnd();
 		}
 
