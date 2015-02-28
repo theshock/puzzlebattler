@@ -39,6 +39,12 @@ namespace Match.Gem {
 			get { return mCell.row * mField.mColumns + mCell.col; }
 		}
 
+		public void SetRandomType () {
+			int count = Enum.GetNames( typeof( EType ) ).Length;
+
+			Type = (EType) UnityEngine.Random.Range(0, count);
+		}
+
 		protected void UpdateName () {
 			gameObject.name = String.Format("Gem {0} [{1}:{2}] {3}",
 				mType.ToString()[0],

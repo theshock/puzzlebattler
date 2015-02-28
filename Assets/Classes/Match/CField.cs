@@ -38,7 +38,7 @@ namespace Match {
 					var icon = CreateIconByPos(pos);
 					icon.gameObject.transform.position = GetIconCenterByCoord(pos);
 					do {
-						icon.Type = GenIconType();
+						icon.SetRandomType();
 					} while (CanCreateMatch(icon));
 				}
 			}
@@ -60,12 +60,6 @@ namespace Match {
 
 			aFirstIcon .mCell.Set(aSecondIcon.mCell);
 			aSecondIcon.mCell.Set(cell);
-		}
-
-		public CMove UpdatePositionIcons() {
-			GravityIconsFall();
-			FillFreeIcons();
-			return EnsureIconsPosition();
 		}
 
 		public void SetMatrixCell (CCell position, CIcon icon) {
@@ -126,62 +120,6 @@ namespace Match {
 			}
 
 			return null;
-		}
-
-		// private starts
-
-		private EType GenIconType() {
-			int count = Enum.GetNames( typeof( EType ) ).Length;
-
-			return (EType) UnityEngine.Random.Range(0, count);
-		}
-
-		private void FillFreeIcons() {
-			for ( int c = 0; c < mColumns; c++ ) {
-				for ( int r = 0; r < mRows * 2; r++ ) {
-					if ( mIconMatrix[r, c].State == EState.Death) {
-						var pos  = new CCell(r, c);
-						var icon = CreateIconByPos(pos);
-						icon.gameObject.transform.position = GetIconCenterByCoord(
-							new CCell(pos.row + mRows, pos.col)
-						);
-						icon.Type = GenIconType();
-					}
-				}
-			}
-		}
-
-		private void GravityIconsFall() {
-			// Find destroyed cells and search
-			// for live cells in top of them
-			for ( int col = 0; col < mColumns; col++ ) {
-				for ( int row = 0; row < mRows * 2 - 1; row++ ) {
-					CIcon current = mIconMatrix[row, col];
-
-					if ( current.State != EState.Death ) continue;
-
-					for (int topRow = row + 1; topRow < mRows * 2; topRow++) {
-						CIcon top = mIconMatrix[topRow, col];
-
-						if (top.State == EState.Death) continue;
-
-						SwipeIconsCells(current, top);
-						break;
-					}
-				}
-			}
-		}
-
-		private CMove EnsureIconsPosition () {
-			var move = new CMove(mConfig);
-
-			for ( int c = 0; c < mColumns; c++ ) {
-				for ( int r = 0; r < mRows * 2; r++ ) {
-					move.AddMove(mIconMatrix[r, c], GetIconCenterByCoord(new CCell(r, c)));
-				}
-			}
-
-			return move;
 		}
 
 		private CIcon CreateIconByPos(CCell position) {
