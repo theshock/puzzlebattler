@@ -33,37 +33,14 @@ namespace Match {
 
 			for (int r = 0; r < mRows; r++) {
 				for (int c = 0; c < mColumns; c++) {
-					mIconMatrix[r, c] = null;
-					var pos  = new CCell(r, c);
-					var icon = CreateIconByPos(pos);
-					icon.gameObject.transform.position = GetIconCenterByCoord(pos);
-					do {
-						icon.SetRandomType();
-					} while (CanCreateMatch(icon));
+					CreateIconByPos(new CCell(r, c));
 				}
 			}
 		}
 
-		public CMove SwipeIcons (CIcon aFirstIcon, CIcon aSecondIcon) {
-			var move = new CMove(mConfig);
-			SwipeIconsCells(aFirstIcon, aSecondIcon);
-			move.AddMove(aFirstIcon, GetIconCenterByCoord(aFirstIcon.mCell));
-			move.AddMove(aSecondIcon, GetIconCenterByCoord(aSecondIcon.mCell));
-			return move;
-		}
-
-		public void SwipeIconsCells (CIcon aFirstIcon, CIcon aSecondIcon) {
-			CCell cell = aFirstIcon.mCell.Clone();
-
-			SetMatrixCell(aFirstIcon.mCell, aSecondIcon);
-			SetMatrixCell(aSecondIcon.mCell, aFirstIcon);
-
-			aFirstIcon .mCell.Set(aSecondIcon.mCell);
-			aSecondIcon.mCell.Set(cell);
-		}
-
 		public void SetMatrixCell (CCell position, CIcon icon) {
 			mIconMatrix[position.row, position.col] = icon;
+			icon.mCell.Set(position);
 		}
 
 		public CIcon GetMatrixCell (CCell position) {
@@ -123,16 +100,16 @@ namespace Match {
 		}
 
 		private CIcon CreateIconByPos(CCell position) {
-			CIcon icon = GetMatrixCell(position);
+			CIcon icon = CreateIcon();
+			SetMatrixCell(position, icon);
 
-			if (icon == null) {
-				icon = CreateIcon();
-				SetMatrixCell(position, icon);
-				icon.mField = this;
-			}
-
-			icon.mCell.Set(position);
+			icon.mField = this;
 			icon.State = EState.Idle;
+			icon.gameObject.transform.position = GetIconCenterByCoord(position);
+
+			do {
+				icon.SetRandomType();
+			} while (CanCreateMatch(icon));
 
 			return icon;
 		}

@@ -22,8 +22,8 @@ namespace Match.Actions {
 			int height = field.mRows;
 
 			foreach (CIcon icon in dead) {
-				icon.mCell.Set(new CCell(height - dead.Count + number, c));
-				field.SetMatrixCell(icon.mCell, icon);
+				field.SetMatrixCell(new CCell(height - dead.Count + number, c), icon);
+
 				icon.State = EState.Idle;
 				icon.gameObject.transform.position = field.GetIconCenterByCoord(
 					new CCell(height + number, c)
@@ -48,8 +48,7 @@ namespace Match.Actions {
 					continue; // do nothing - current now at correct place
 				}
 
-				current.mCell.Set(new CCell(r - dead.Count, c));
-				field.SetMatrixCell(current.mCell, current);
+				field.SetMatrixCell(new CCell(r - dead.Count, c), current);
 
 				move.AddMove( current, field.GetIconCenterByCoord(current.mCell) );
 			}
@@ -58,8 +57,6 @@ namespace Match.Actions {
 		}
 
 		public override void StartAction() {
-			Debug.Log("Start refresh");
-
 			var move = new CMove(field.mConfig);
 
 			for ( int col = 0; col < field.mColumns; col++ ) {

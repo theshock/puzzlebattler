@@ -1,10 +1,11 @@
+using Libraries;
+using Libraries.ActionSystem;
 using Match;
 using Match.Gem;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Libraries.ActionSystem;
 
 namespace Match.Actions {
 	public class CSwipe : CCreating, IMoveObserver {
@@ -39,9 +40,18 @@ namespace Match.Actions {
 		}
 
 		public override void StartAction() {
-			mConfig.iconField
-				.SwipeIcons(mConfig.selectedIcon, mConfig.targetedIcon)
-				.SetObserver(this);
+			var field = mConfig.iconField;
+			var move = new CMove(field.mConfig);
+
+			CCell cell = mConfig.selectedIcon.mCell.Clone();
+
+			field.SetMatrixCell(mConfig.targetedIcon.mCell, mConfig.selectedIcon);
+			field.SetMatrixCell(cell, mConfig.targetedIcon);
+
+			move.AddMove(mConfig.selectedIcon, field.GetIconCenterByCoord(mConfig.selectedIcon.mCell));
+			move.AddMove(mConfig.targetedIcon, field.GetIconCenterByCoord(mConfig.targetedIcon.mCell));
+
+			move.SetObserver(this);
 		}
 
 		public virtual void OnMoveEnd () {
