@@ -676,6 +676,7 @@ GameObject:
   - 224: {fileID: 1152416806}
   - 222: {fileID: 1152416808}
   - 114: {fileID: 1152416807}
+  - 114: {fileID: 1152416809}
   m_Layer: 0
   m_Name: Value
   m_TagString: Untagged
@@ -727,6 +728,17 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1152416805}
+--- !u!114 &1152416809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1152416805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99c4bad526d9b2f44929a286aea0fc86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1215820543
 GameObject:
   m_ObjectHideFlags: 0
@@ -841,6 +853,7 @@ GameObject:
   - 224: {fileID: 1351331626}
   - 222: {fileID: 1351331628}
   - 114: {fileID: 1351331627}
+  - 114: {fileID: 1351331629}
   m_Layer: 0
   m_Name: Value
   m_TagString: Untagged
@@ -892,6 +905,17 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1351331625}
+--- !u!114 &1351331629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1351331625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99c4bad526d9b2f44929a286aea0fc86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1376200513
 GameObject:
   m_ObjectHideFlags: 0
@@ -1048,8 +1072,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   config: {fileID: 815638882}
   match: {fileID: 875817892}
-  playerValue: {fileID: 1351331627}
-  opponentValue: {fileID: 1152416807}
+  playerProgress: {fileID: 1351331629}
+  opponentProgress: {fileID: 1152416809}
   playerText: {fileID: 840055166}
   opponentText: {fileID: 1412813721}
 --- !u!1 &1515118270

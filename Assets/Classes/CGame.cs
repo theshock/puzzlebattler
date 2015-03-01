@@ -12,8 +12,8 @@ public class CGame : MonoBehaviour {
 	public Match.CField match;
 	public CInput input;
 
-	public Image playerValue;
-	public Image opponentValue;
+	public CProgressBar playerProgress;
+	public CProgressBar opponentProgress;
 
 	public Text playerText;
 	public Text opponentText;
@@ -50,8 +50,8 @@ public class CGame : MonoBehaviour {
 	}
 
 	public void Recount() {
-		Count(model.player, Config.match.opponent.health, opponentValue);
-		Count(model.opponent, Config.match.player.health, playerValue);
+		Count(model.player, Config.match.opponent.health, opponentProgress);
+		Count(model.opponent, Config.match.player.health, playerProgress);
 
 		  playerText.text = "" + CGame.Instance.model.player.score;
 		opponentText.text = "" + CGame.Instance.model.opponent.score;
@@ -61,17 +61,7 @@ public class CGame : MonoBehaviour {
 		input.Check();
 	}
 
-	protected void Count(CPlayer player, int maxHealth, Image image) {
-		var currentHealth = (maxHealth - player.score);
-		if (currentHealth < 0) {
-			currentHealth = 0;
-		}
-
-		float bar = currentHealth / (float) maxHealth;
-
-		var rect = image.GetComponent<RectTransform>();
-		image.GetComponent<RectTransform>().sizeDelta = new Vector2(24 + bar * 300, rect.sizeDelta.y);
-
-		image.GetComponent<Image>().color = new Color(bar >= 0.5f ? (1 - bar) * 2 : 1, bar <= 0.5f ?      bar * 2 : 1, 0);
+	protected void Count(CPlayer player, int maxHealth, CProgressBar progress) {
+		progress.SetValue((maxHealth - player.score) / (float) maxHealth);
 	}
 }
