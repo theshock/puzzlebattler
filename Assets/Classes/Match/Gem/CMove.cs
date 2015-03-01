@@ -39,7 +39,7 @@ namespace Match.Gem {
 
 				icon.SetState(EState.Movement);
 				icon.gameObject.transform
-					.DOMove(pos, Game.Config.match.gems.movingTime)
+					.DOMove(pos, CGame.Config.match.gems.movingTime)
 					.OnComplete(() => OnEndMoveComplete(icon));
 
 				return true;

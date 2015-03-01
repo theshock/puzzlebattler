@@ -6,26 +6,27 @@ using UnityEngine;
 
 namespace Libraries.ActionSystem {
 	public class CManager : IAnticipant {
-		private List<IAction> mActiveActions = new List<IAction>();
+		private List<IAction> activeActions = new List<IAction>();
 
 		public CEvents events = new CEvents();
 
-		public bool AddAction(IAction aAction) {
-			aAction.SetActionManager(this);
+		public bool Add(IAction action) {
+			action.SetActionManager(this);
 
-			if (aAction.Validation()) {
-				mActiveActions.Add(aAction);
-				events.Invoke(EActionState.Begin, aAction);
-				aAction.StartAction();
+			if (action.Validation()) {
+				activeActions.Add(action);
+				events.Invoke(EActionState.Begin, action);
+				action.StartAction();
 				return true;
 			} else {
+				events.Invoke(EActionState.Break, action);
 				return false;
 			}
 		}
 
-		public void OnActionEnd (IAction aAction) {
-			mActiveActions.Remove(aAction);
-			events.Invoke(EActionState.End, aAction);
+		public void OnActionEnd (IAction action) {
+			activeActions.Remove(action);
+			events.Invoke(EActionState.End, action);
 
 			if (!HasActions()) {
 				events.InvokeFinish();
@@ -33,7 +34,7 @@ namespace Libraries.ActionSystem {
 		}
 
 		public bool HasActions() {
-			return (mActiveActions.Count > 0);
+			return (activeActions.Count > 0);
 		}
 	}
 }

@@ -227,8 +227,6 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 1417612942}
-  - {fileID: 840055165}
-  - {fileID: 1412813720}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_AnchorMin: {x: 0, y: 0}
@@ -329,7 +327,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc5cb41204a1211419d52f0fb914af28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 1000
+  health: 100
   matchesPerTurn: 3
   redPower: 1
   bluePower: 1
@@ -388,7 +386,7 @@ GameObject:
   - 222: {fileID: 840055167}
   - 114: {fileID: 840055166}
   m_Layer: 5
-  m_Name: PlayerText
+  m_Name: Score
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -404,11 +402,11 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 632129697}
+  m_Father: {fileID: 1033048765}
   m_RootOrder: 1
   m_AnchorMin: {x: .5, y: 1}
   m_AnchorMax: {x: .5, y: 1}
-  m_AnchoredPosition: {x: -546, y: -77}
+  m_AnchoredPosition: {x: -208.81604, y: 216.156738}
   m_SizeDelta: {x: 300, y: 128}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &840055166
@@ -518,8 +516,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6fd77c15047598449018c6ca2718440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerText: {fileID: 840055166}
-  opponentText: {fileID: 1412813721}
 --- !u!224 &875817893
 RectTransform:
   m_ObjectHideFlags: 0
@@ -635,11 +631,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1515118271}
+  - {fileID: 840055165}
   m_Father: {fileID: 928828760}
   m_RootOrder: 2
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
-  m_AnchoredPosition: {x: -287.094574, y: 554.859253}
+  m_AnchoredPosition: {x: -287, y: 555}
   m_SizeDelta: {x: 402, y: 450}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &1033048766
@@ -934,7 +931,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc5cb41204a1211419d52f0fb914af28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 1000
+  health: 100
   matchesPerTurn: 3
   redPower: 1
   bluePower: 1
@@ -952,7 +949,7 @@ GameObject:
   - 222: {fileID: 1412813722}
   - 114: {fileID: 1412813721}
   m_Layer: 5
-  m_Name: OpponentText
+  m_Name: Score
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -966,13 +963,13 @@ RectTransform:
   m_GameObject: {fileID: 1412813719}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .999977112, y: .999977112, z: .999977112}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 632129697}
-  m_RootOrder: 2
+  m_Father: {fileID: 1721946830}
+  m_RootOrder: 1
   m_AnchorMin: {x: .5, y: 1}
   m_AnchorMax: {x: .5, y: 1}
-  m_AnchoredPosition: {x: 560, y: -77}
+  m_AnchoredPosition: {x: 275.183929, y: 216.156738}
   m_SizeDelta: {x: 300, y: 128}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &1412813721
@@ -1046,13 +1043,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1417612941}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6092aa22e40b5474794146e853cd27cd, type: 3}
+  m_Script: {fileID: 11500000, guid: cf95d12829cde514ea724be04637eeef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mConfig: {fileID: 815638882}
-  mMatch: {fileID: 0}
+  config: {fileID: 815638882}
+  match: {fileID: 875817892}
   playerValue: {fileID: 1351331627}
   opponentValue: {fileID: 1152416807}
+  playerText: {fileID: 840055166}
+  opponentText: {fileID: 1412813721}
 --- !u!1 &1515118270
 GameObject:
   m_ObjectHideFlags: 0
@@ -1350,11 +1349,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1605940172}
+  - {fileID: 1412813720}
   m_Father: {fileID: 928828760}
   m_RootOrder: 3
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
-  m_AnchoredPosition: {x: 334.905396, y: 554.859253}
+  m_AnchoredPosition: {x: 335, y: 555}
   m_SizeDelta: {x: 550, y: 450}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &1721946831

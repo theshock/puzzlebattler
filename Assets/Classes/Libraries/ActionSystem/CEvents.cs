@@ -13,6 +13,9 @@ namespace Libraries.ActionSystem {
 			7: {
 				End: [ OnAction(IAction), OnAction(IAction), OnAction(IAction) ]
 			}
+			8: {
+				Break: [ OnAction(IAction), OnAction(IAction), OnAction(IAction) ]
+			}
 			12: {
 				Begin: [ OnAction(IAction), OnAction(IAction) ]
 			}
@@ -22,6 +25,10 @@ namespace Libraries.ActionSystem {
 
 		public void OnBegin (int actionIndex, OnAction callback) {
 			On(EActionState.Begin, actionIndex, callback);
+		}
+
+		public void OnBreak (int actionIndex, OnAction callback) {
+			On(EActionState.Break, actionIndex, callback);
 		}
 
 		public void OnEnd (int actionIndex, OnAction callback) {

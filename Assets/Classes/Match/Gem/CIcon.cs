@@ -17,7 +17,7 @@ namespace Match.Gem {
 
 			color = (EColor) UnityEngine.Random.Range(0, count);
 
-			GetComponent<Image>().sprite = Game.Config.match.gems.GetCorrectSprite(color);
+			GetComponent<Image>().sprite = CGame.Config.match.gems.GetCorrectSprite(color);
 			UpdateName();
 		}
 

@@ -19,7 +19,7 @@ namespace Libraries.ActionSystem {
 		protected void Wait (IAction action) {
 			action.SetAnticipant(this);
 
-			if (mActionManager.AddAction(action)) {
+			if (mActionManager.Add(action)) {
 				mWaiting.Add(action);
 			}
 		}

@@ -5,6 +5,6 @@ namespace Match.Actions {
 		SwipeBack,
 		Match,
 		AutoMatch,
-		RefreshPosition
+		FreeFall
 	}
 }

@@ -51,10 +51,10 @@ namespace Match.Actions {
 		}
 
 		private bool IsCorrectSwipe () {
-			var matches = field.FindMatches();
+			var matcher = new CMatcher(field).FindMatches();
 
-			if (matches.Count > 0) {
-				foreach (List<CIcon> match in matches) {
+			if (matcher.MatchesExists()) {
+				foreach (List<CIcon> match in matcher.GetMatches()) {
 					Wait(new Actions.CMatch(match));
 				}
 				CheckCompleteness();

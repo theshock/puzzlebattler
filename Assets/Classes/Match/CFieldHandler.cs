@@ -10,24 +10,16 @@ namespace Match {
 			this.field = field;
 		}
 
-		protected int GetWidth () {
-			return field.width;
-		}
-
-		protected int GetHeight () {
-			return field.height;
-		}
-
 		protected int GetSquare () {
-			return GetWidth() * GetHeight();
+			return field.width * field.height;
 		}
 
 		protected bool IsOutOfHorisontalRange (int index) {
-			return index % GetWidth() >= GetWidth() - 2;
+			return index % field.width >= field.width - 2;
 		}
 
 		protected bool IsOutOfVeticalRange (int index) {
-			return index >= (GetSquare() - GetWidth() * 2);
+			return index >= (GetSquare() - field.width * 2);
 		}
 
 		public List<CIcon> GetNeighbours (CIcon icon) {
@@ -50,12 +42,12 @@ namespace Match {
 		}
 
 		protected CIcon GetIconByIndex(int index) {
-			if (index >= GetSquare()) {
+			if (index < 0 || index >= GetSquare()) {
 				return null;
 			}
 
-			int row = index / GetWidth();
-			int column = index - row * GetWidth();
+			int row = index / field.width;
+			int column = index - row * field.width;
 
 			return field.GetIconAt(new CCell(row, column));
 		}

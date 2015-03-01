@@ -16,7 +16,7 @@ namespace Match {
 
 		public CSearcher (CField controller) : base(controller) {}
 
-		public void FindMoves() {
+		public CSearcher FindMoves() {
 			moves = new List<Move>();
 
 			for (int i = 0; i < GetSquare(); i++) {
@@ -25,9 +25,11 @@ namespace Match {
 				}
 
 				if (!IsOutOfVeticalRange(i)) {
-					SearchAllMoves(i, i+GetWidth(), i+GetWidth()*2);
+					SearchAllMoves(i, i+field.width, i+field.width*2);
 				}
 			}
+
+			return this;
 		}
 
 		protected void SearchAllMoves (int firstIndex, int secondIndex, int thirdIndex) {

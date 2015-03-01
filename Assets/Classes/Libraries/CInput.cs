@@ -5,28 +5,28 @@ using System.Collections.Generic;
 namespace Libraries {
 	public class CInput {
 
-		private bool mIsBlocked = false;
-		private bool mIsClickStart = false;
-		private IInputObserver mCurrentObserver = null;
-		private Dictionary<int, List<IInputObserver>> mDictionary = new Dictionary<int, List<IInputObserver>>();
+		private bool isBlocked = false;
+		private bool isClickStart = false;
+		private IInputObserver currentObserver = null;
+		private Dictionary<int, List<IInputObserver>> observers = new Dictionary<int, List<IInputObserver>>();
 
 		public CInput () {
 			Input.simulateMouseWithTouches = true;
 		}
 
 		public void registerObserver(IInputObserver aObserver, int aPriority) {
-			if (!mDictionary.ContainsKey(aPriority)) {
-				mDictionary.Add(aPriority, new List<IInputObserver>());
+			if (!observers.ContainsKey(aPriority)) {
+				observers.Add(aPriority, new List<IInputObserver>());
 			}
-			mDictionary[aPriority].Add(aObserver);
+			observers[aPriority].Add(aObserver);
 		}
 
 		public void unregisterObserver(int aPriority, IInputObserver aObserver) {
-			mDictionary[aPriority].Remove(aObserver);
+			observers[aPriority].Remove(aObserver);
 		}
 
 		public void unregisterObserver(IInputObserver aObserver) {
-			foreach (KeyValuePair<int, List<IInputObserver>> pair in mDictionary) {
+			foreach (KeyValuePair<int, List<IInputObserver>> pair in observers) {
 				unregisterObserver(pair.Key, aObserver);
 			}
 		}
@@ -37,26 +37,26 @@ namespace Libraries {
 				HandleTouch(Input.GetTouch(0));
 			} else if ( Input.GetMouseButton(0) ) {
 				HandleMouse((Vector2) Input.mousePosition);
-			} else if (mIsClickStart) {
+			} else if (isClickStart) {
 				Reset();
 			}
 		}
 
 		public void Block() {
-			mIsBlocked = true;
+			isBlocked = true;
 		}
 
 		private void Reset() {
-			mIsClickStart = false;
-			mIsBlocked = false;
-			mCurrentObserver = null;
+			isClickStart = false;
+			isBlocked = false;
+			currentObserver = null;
 		}
 
 		private void HandleMouse(Vector2 mousePosition) {
-			if (mIsClickStart) {
+			if (isClickStart) {
 				OnMove(mousePosition);
 			} else {
-				mIsClickStart = true;
+				isClickStart = true;
 				OnBegin(mousePosition);
 			}
 		}
@@ -70,10 +70,10 @@ namespace Libraries {
 		}
 
 		private void OnBegin(Vector2 aPosition) {
-			foreach (KeyValuePair<int, List<IInputObserver>> pair in mDictionary) {
+			foreach (KeyValuePair<int, List<IInputObserver>> pair in observers) {
 				for (int i = 0; i < pair.Value.Count; i++) {
 					if (pair.Value[i].OnInputBegin(aPosition)) {
-						mCurrentObserver = pair.Value[i];
+						currentObserver = pair.Value[i];
 						return;
 					}
 				}
@@ -81,14 +81,14 @@ namespace Libraries {
 		}
 
 		private void OnMove(Vector2 aPosition) {
-			if (!mIsBlocked && mCurrentObserver != null) {
-				mCurrentObserver.OnInputMove(aPosition);
+			if (!isBlocked && currentObserver != null) {
+				currentObserver.OnInputMove(aPosition);
 			}
 		}
 
 		private void OnEnd(Vector2 aPosition) {
-			if (mCurrentObserver != null) {
-				mCurrentObserver.OnInputEnd(aPosition);
+			if (currentObserver != null) {
+				currentObserver.OnInputEnd(aPosition);
 			}
 
 			Reset();

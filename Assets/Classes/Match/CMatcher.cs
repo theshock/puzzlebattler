@@ -10,6 +10,8 @@ namespace Match {
 
 		public CMatcher (CField field) : base(field) {}
 
+		private List<List<CIcon>> trees;
+
 		private List<List<int>> FindMatchesIndexes() {
 			var union = new CWeightedUnion(GetSquare());
 
@@ -20,17 +22,17 @@ namespace Match {
 				}
 
 				if (IsVerticalMatch(i)) {
-					union.unite(i, i + GetWidth());
-					union.unite(i, i + GetWidth()*2);
+					union.unite(i, i + field.width);
+					union.unite(i, i + field.width*2);
 				}
 			}
 
 			return union.GetTrees();
 		}
 
-		public List<List<CIcon>> FindMatches() {
+		public CMatcher FindMatches() {
 			var matches = FindMatchesIndexes();
-			var trees = new List<List<CIcon>>();
+			trees = new List<List<CIcon>>();
 
 			foreach (List<int> match in matches) {
 				var tree = new List<CIcon>();
@@ -42,7 +44,7 @@ namespace Match {
 				trees.Add(tree);
 			}
 
-			return trees;
+			return this;
 		}
 
 		protected bool IsHorizontalMatch (int index) {
@@ -57,12 +59,16 @@ namespace Match {
 			if (IsOutOfVeticalRange(index)) {
 				return false;
 			} else {
-				return IsMatch(index, index + GetWidth()*1, index + GetWidth()*2);
+				return IsMatch(index, index + field.width*1, index + field.width*2);
 			}
 		}
 
 		public bool MatchesExists () {
-			return FindMatchesIndexes().Count > 0;
+			return GetMatches().Count > 0;
+		}
+
+		public List<List<CIcon>> GetMatches() {
+			return trees;
 		}
 
 	}

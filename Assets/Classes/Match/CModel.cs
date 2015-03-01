@@ -10,55 +10,59 @@ namespace Match {
 		CField field;
 
 		public CModel (CField field) {
+			CGame.Model.ActivateFirst();
+
 			this.field = field;
 
 			var actionEvents = field.actions.events;
 
 			actionEvents.OnFinish(OnActionsFinished);
-			actionEvents.OnEnd  ((int) EEvents.RefreshPosition, OnRefreshEnd     );
-			actionEvents.OnEnd  ((int) EEvents.Match          , OnMatchEnd       );
-			actionEvents.OnBegin((int) EEvents.Swipe          , OnSwipeBegin     );
-			actionEvents.OnBegin((int) EEvents.SwipeBack      , OnSwipeBackBegin );
+			actionEvents.OnBreak((int) EEvents.FreeFall  , OnFreeFallBreak  );
+			actionEvents.OnEnd  ((int) EEvents.FreeFall  , OnFreeFallEnd    );
+			actionEvents.OnEnd  ((int) EEvents.Match     , OnMatchEnd       );
+			actionEvents.OnBegin((int) EEvents.Swipe     , OnSwipeBegin     );
+			actionEvents.OnBegin((int) EEvents.SwipeBack , OnSwipeBackBegin );
 		}
 
-		public void OnRefreshEnd (IAction action) {
-			var autoMatch = new CAutoMatch(field.FindMatches());
-			field.actions.AddAction(autoMatch);
+		public void OnFreeFallBreak (IAction action) {
+			CheckActive();
+			AiTurn();
 		}
 
-		public void OnMatchEnd (IAction action) {
-			AddScore((action as Actions.CMatch).GetCountMatchIcon());
-		}
+		public void OnFreeFallEnd(IAction action) {
+			var matcher = new CMatcher(field).FindMatches();
 
-		public void OnSwipeBegin (IAction action) {
-			Game.Instance.mModel.GetActivePlayer().matches--;
-		}
-
-		public void OnSwipeBackBegin (IAction action) {
-			Game.Instance.mModel.GetActivePlayer().matches++;
+			field.actions.Add(new CAutoMatch(matcher.GetMatches()));
 		}
 
 		public void OnActionsFinished () {
-			CRefreshPosition refresh = new CRefreshPosition(field);
-			field.actions.AddAction(refresh);
+			field.actions.Add(new CFreeFall(field));
+		}
 
-			if (!field.actions.HasActions()) {
-				CheckActive();
-				AiTurn();
-			}
+		public void OnMatchEnd (IAction action) {
+			var count = (action as Actions.CMatch).GetCountMatchIcon();
+
+			CGame.Model.GetActivePlayer().AddScore(CalculateScore(count));
+		}
+
+		public void OnSwipeBegin (IAction action) {
+			CGame.Model.GetActivePlayer().matches--;
+		}
+
+		public void OnSwipeBackBegin (IAction action) {
+			CGame.Model.GetActivePlayer().matches++;
 		}
 
 		protected void CheckActive () {
-			if (Game.Instance.mModel.GetActivePlayer().IsStepFinished()) {
-				Game.Instance.mModel.SwitchPlayer();
+			if (CGame.Model.GetActivePlayer().IsStepFinished()) {
+				CGame.Model.SwitchPlayer();
 			}
 		}
 
 		protected void AiTurn () {
-			if (!Game.Instance.mModel.opponent.isActive) return;
+			if (!CGame.Model.opponent.isActive) return;
 
-			var searcher = new CSearcher(field);
-			searcher.FindMoves();
+			var searcher = new CSearcher(field).FindMoves();
 
 			if (!searcher.MovesExists()) {
 				Debug.Log("No moves");
@@ -67,16 +71,7 @@ namespace Match {
 
 			var move = searcher.GetMoves()[0];
 
-			field.actions.AddAction(new Actions.CSwipe(field, move.from, move.to));
-		}
-
-		public void AddScore (int count) {
-			Text textNode = Game.Instance.mModel.player.isActive
-				? field.playerText
-				: field.opponentText;
-
-			Game.Instance.mModel.GetActivePlayer().AddScore(CalculateScore(count));
-			textNode.text = "" + Game.Instance.mModel.GetActivePlayer().score;
+			field.actions.Add(new Actions.CSwipe(field, move.from, move.to));
 		}
 
 		private int CalculateScore (int count) {

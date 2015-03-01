@@ -12,40 +12,21 @@ namespace Match {
 
 		public Libraries.ActionSystem.CManager actions;
 
-		public Text playerText;
-		public Text opponentText;
-
-		private CMatcher matcher;
-		private CInput input;
-		private CModel model;
-
 		public void Start() {
-			Game.Instance.mModel.ActivateFirst();
-
 			actions = new Libraries.ActionSystem.CManager();
-			input = new CInput(this);
-			model = new CModel(this);
-			matcher = new CMatcher(this);
+
+			new CInput(this);
+			new CModel(this);
 
 			CreateIcons();
 		}
 
-		public void Update () {
-			if (input != null) {
-				input.Update();
-			}
-		}
-
-		protected Config.Match.CField config {
-			get { return Game.Config.match.field; }
-		}
-
 		public int height {
-			get { return config.rows; }
+			get { return CGame.Config.match.field.rows; }
 		}
 
 		public int width {
-			get { return config.columns; }
+			get { return CGame.Config.match.field.columns; }
 		}
 
 		public CIcon [,] icons;
@@ -53,9 +34,9 @@ namespace Match {
 		protected void CreateIcons () {
 			icons = new CIcon[height, width];
 
-			for (int r = 0; r < height; r++) {
-				for (int c = 0; c < width; c++) {
-					RegisterIcon(new CCell(r, c));
+			for (int row = 0; row < height; row++) {
+				for (int col = 0; col < width; col++) {
+					RegisterIcon(new CCell(row, col));
 				}
 			}
 		}
@@ -70,6 +51,8 @@ namespace Match {
 		}
 
 		public Vector3 GetIconCenterByCell(CCell cell) {
+			var config = CGame.Config.match.field;
+
 			return new Vector3(
 				config.from.x + cell.col * config.offset.x,
 				config.from.y + cell.row * config.offset.y,
@@ -87,12 +70,8 @@ namespace Match {
 			return null;
 		}
 
-		public List<List<CIcon>> FindMatches () {
-			return matcher.FindMatches();
-		}
-
 		private CIcon RegisterIcon(CCell position) {
-			GameObject gameObject = Instantiate(Game.Config.match.gems.prefab) as GameObject;
+			GameObject gameObject = Instantiate(CGame.Config.match.gems.prefab) as GameObject;
 			gameObject.transform.SetParent(this.transform);
 			gameObject.transform.localScale = Vector3.one;
 			gameObject.transform.position = GetIconCenterByCell(position);

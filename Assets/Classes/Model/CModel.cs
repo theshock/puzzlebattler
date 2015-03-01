@@ -1,10 +1,10 @@
 namespace Model {
-	public class CGame {
+	public class CModel {
 
 		public CPlayer player;
 		public CPlayer opponent;
 
-		public CGame () {
+		public CModel() {
 			player   = new CPlayer();
 			opponent = new CPlayer();
 		}
@@ -22,7 +22,7 @@ namespace Model {
 		}
 
 		public void ActivateFirst () {
-			if (Game.Config.match.isPlayerFirst) {
+			if (CGame.Config.match.isPlayerFirst) {
 				ActivatePlayer(player);
 			} else  {
 				ActivatePlayer(opponent);
@@ -32,11 +32,11 @@ namespace Model {
 		public void ActivatePlayer(CPlayer active) {
 			if (active == player) {
 				player.isActive = true;
-				player.matches = Game.Config.match.player.matchesPerTurn;
+				player.matches = CGame.Config.match.player.matchesPerTurn;
 				opponent.isActive = false;
 			} else {
 				opponent.isActive = true;
-				opponent.matches = Game.Config.match.opponent.matchesPerTurn;
+				opponent.matches = CGame.Config.match.opponent.matchesPerTurn;
 				player.isActive = false;
 			}
 		}
