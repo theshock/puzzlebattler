@@ -5,5 +5,7 @@ namespace Config {
 
 		public Match.CMatch match;
 
+		public float turnTime = 60f;
+
 	}
 }

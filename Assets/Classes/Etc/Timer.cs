@@ -10,10 +10,11 @@ namespace Etc {
 
 		public event OnEnd onEnd;
 
-		public float turnTime = 60f;
+		private float turnTime = 60f;
 		private float value = 0f;
 
-		public void Awake () {
+		public void SetTurnTime (float time) {
+			turnTime = time;
 			Reset();
 		}
 

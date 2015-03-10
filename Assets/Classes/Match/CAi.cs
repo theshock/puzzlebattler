@@ -15,7 +15,7 @@ namespace Match {
 		}
 
 		protected float GetDelay() {
-			return Random.Range(1f, 2.5f);
+			return Random.Range(2f, 2.5f);
 		}
 
 		protected IEnumerator DelayedTurn () {

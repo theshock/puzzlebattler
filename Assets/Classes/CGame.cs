@@ -1,4 +1,5 @@
 ﻿using Config;
+using Etc;
 using Libraries;
 using Model;
 using System.Collections;
@@ -11,13 +12,16 @@ public class CGame : MonoBehaviour {
 	public Model.CModel model;
 	public Match.CField match;
 	public CInput input;
+	public Etc.Timer timer;
 
 	public CProgressBar playerProgress;
 	public CProgressBar opponentProgress;
-	public Etc.Timer timer;
 
 	public Text playerText;
 	public Text opponentText;
+
+	public SwipesCounter playerSwipesCounter;
+	public SwipesCounter opponentSwipesCounter;
 
 	public static CConfig Config {
 		get { return Instance.config; }
@@ -38,6 +42,10 @@ public class CGame : MonoBehaviour {
 		model = new Model.CModel(this);
 		input = new Libraries.CInput();
 
+		  playerSwipesCounter.Watch(model.player);
+		opponentSwipesCounter.Watch(model.opponent);
+
+		timer.SetTurnTime(Config.turnTime);
 		timer.onEnd += OnTimerEnd;
 	}
 

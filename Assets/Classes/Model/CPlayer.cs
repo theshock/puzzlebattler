@@ -5,8 +5,10 @@ namespace Model {
 		public int score   = 0;
 
 		public delegate void OnScoreChange(CPlayer player, int scoreChange);
+		public delegate void OnMatchesChange(CPlayer player);
 
 		public event OnScoreChange onScoreChange;
+		public event OnMatchesChange onMatchesChange;
 
 		private CGame game;
 
@@ -18,8 +20,13 @@ namespace Model {
 			return matches;
 		}
 
+		public int GetRealtimeMatches () {
+			return CanSwipe() ? matches : 0;
+		}
+
 		public void SetMatches (int value) {
 			matches = value;
+			onMatchesChange(this);
 		}
 
 		public void UseMatch () {
