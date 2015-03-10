@@ -11,9 +11,12 @@ namespace Match {
 	public class CField : MonoBehaviour {
 
 		public Libraries.ActionSystem.CManager actions;
+		public CAi ai;
 
 		public void Start() {
 			actions = new Libraries.ActionSystem.CManager();
+
+			ai = new CAi(this);
 
 			new CInput(this);
 			new CModel(this);

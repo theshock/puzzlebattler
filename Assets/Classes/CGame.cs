@@ -14,6 +14,7 @@ public class CGame : MonoBehaviour {
 
 	public CProgressBar playerProgress;
 	public CProgressBar opponentProgress;
+	public Etc.Timer timer;
 
 	public Text playerText;
 	public Text opponentText;
@@ -34,8 +35,10 @@ public class CGame : MonoBehaviour {
 
 	public void Awake() {
 		Instance = this;
-		model = new Model.CModel();
+		model = new Model.CModel(this);
 		input = new Libraries.CInput();
+
+		timer.onEnd += OnTimerEnd;
 	}
 
 	public void Start() {
@@ -47,6 +50,13 @@ public class CGame : MonoBehaviour {
 
 	public void OnScoreChange(CPlayer player, int scoreChange) {
 		Recount();
+	}
+
+	public void OnTimerEnd () {
+		if (!match.actions.HasActions()) {
+			Model.SwitchPlayer();
+			match.ai.Play();
+		}
 	}
 
 	public void Recount() {

@@ -1,6 +1,7 @@
 using Libraries.ActionSystem;
 using Match.Actions;
 using Model;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,7 +27,7 @@ namespace Match {
 
 		public void OnFreeFallBreak (IAction action) {
 			CheckActive();
-			AiTurn();
+			field.ai.Play();
 		}
 
 		public void OnFreeFallEnd(IAction action) {
@@ -46,32 +47,17 @@ namespace Match {
 		}
 
 		public void OnSwipeBegin (IAction action) {
-			CGame.Model.GetActivePlayer().matches--;
+			CGame.Model.GetActivePlayer().UseMatch();
 		}
 
 		public void OnSwipeBackBegin (IAction action) {
-			CGame.Model.GetActivePlayer().matches++;
+			CGame.Model.GetActivePlayer().RestoreMatch();
 		}
 
 		protected void CheckActive () {
 			if (CGame.Model.GetActivePlayer().IsStepFinished()) {
 				CGame.Model.SwitchPlayer();
 			}
-		}
-
-		protected void AiTurn () {
-			if (!CGame.Model.opponent.isActive) return;
-
-			var searcher = new CSearcher(field).FindMoves();
-
-			if (!searcher.MovesExists()) {
-				Debug.Log("No moves");
-				return;
-			}
-
-			var move = searcher.GetMoves()[0];
-
-			field.actions.Add(new Actions.CSwipe(field, move.from, move.to));
 		}
 
 		private int CalculateScore (int count) {
