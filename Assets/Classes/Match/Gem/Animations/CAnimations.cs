@@ -33,6 +33,7 @@ namespace Match.Gem.Animations {
 			MonoBehaviour.Destroy(animation.gameObject);
 		}
 
+		// todo: use objects pool, not recreate
 		public CAnimation Require (EAnimations type, Vector3 position) {
 			var anim = Create(type, position);
 			anim.SetListener(null);
