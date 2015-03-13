@@ -1,34 +1,59 @@
+using Match.Gem.Animations;
 using System.Collections;
 using UnityEngine;
 
 namespace Match.Gem {
-	public class CDie : Object {
+	public class CDie : Animations.IListener {
 
-		protected CIcon mIcon;
-		protected IDieObserver mObserver;
+		protected CIcon icon;
+		protected IDieObserver observer;
 
 		public CDie (CIcon icon, IDieObserver observer) {
-			mIcon = icon;
-			mObserver = observer;
-			LaunchParticles();
-			icon.StartCoroutine(DieEnd());
+			this.icon = icon;
+			this.observer = observer;
+
+			CAnimations
+				.Highlight( icon.transform )
+				.SetColor( icon.color )
+				.SetListener( this );
 		}
 
-		protected IEnumerator DieEnd () {
-			yield return new WaitForSeconds(0.1f);
+		protected void StartDying () {
+			CAnimations
+				.Spark( icon.transform )
+				.SetColor( icon.color )
+				.SetListener( this );
 
-			mIcon.SetState(EState.Death);
-			mObserver.OnDieEnd();
+			CAnimations
+				.Transform( icon.transform )
+				.SetColor( icon.color )
+				.SetListener( this );
+
+			icon.SetState(EState.Hidden);
 		}
 
-		protected void LaunchParticles () {
-			var transform = mIcon.transform;
-			var prefab = CGame.Config.match.die.GetPrefab(mIcon.color);
-			GameObject anim = Instantiate(prefab, transform.position, transform.rotation) as GameObject;
+		public void OnTransformBoltStart(CAnimation animation) {
+			CAnimations
+				.Contour( icon.transform )
+				.SetColor( icon.color )
+				.SetListener( this );
+		}
 
-			anim.transform.SetParent(transform.parent);
+		public void OnTransformExplosionStart(CAnimation animation) {
+			CAnimations
+				.Explosion( icon.transform )
+				.SetColor( icon.color );
+		}
 
-			Destroy(anim, 2);
+		public void OnAnimationFinish(CAnimation animation) {
+			if (animation.GetType() == EAnimations.Highlight) {
+				StartDying();
+			}
+		}
+
+		public void OnIconDied (CAnimation animation) {
+			icon.SetState(EState.Death);
+			observer.OnDieEnd();
 		}
 
 

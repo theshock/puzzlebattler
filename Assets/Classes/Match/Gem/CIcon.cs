@@ -23,7 +23,14 @@ namespace Match.Gem {
 
 		public void SetState (EState state) {
 			this.state = state;
+
+			gameObject.SetActive(IsVisibleState());
+
 			UpdateName();
+		}
+
+		protected bool IsVisibleState () {
+			return state == EState.Idle || state == EState.Movement;
 		}
 
 		protected void UpdateName () {

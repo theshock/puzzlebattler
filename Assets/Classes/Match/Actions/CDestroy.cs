@@ -1,22 +1,29 @@
 using Libraries;
+using Libraries.ActionSystem;
+using Match.Gem;
 using System.Collections;
 using UnityEngine;
-using Libraries.ActionSystem;
 
 namespace Match.Actions {
 	public class CDestroy : CBase, Gem.IDieObserver {
-		private Gem.CIcon mIconTarget = null;
+		private Gem.CIcon target;
+		private IDieObserver observer;
 
-		public CDestroy (Gem.CIcon target) {
-			mIconTarget = target;
+		public CDestroy (Gem.CIcon target, IDieObserver observer) {
+			this.target  = target;
+			this.observer = observer;
 		}
 
 		public override bool Validation() {
-			return mIconTarget && mIconTarget.IsIdle();
+			return target && target.IsIdle();
 		}
 
 		public override void StartAction() {
-			new Gem.CDie(mIconTarget, this);
+			new Gem.CDie(target, this);
+		}
+
+		public void OnDieBolt () {
+			//this.observer.OnDieBolt();
 		}
 
 		public void OnDieEnd () {

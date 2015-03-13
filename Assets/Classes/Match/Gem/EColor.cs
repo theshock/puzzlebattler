@@ -1,9 +1,9 @@
 namespace Match.Gem {
 	public enum EColor {
-		Red,
-		Green,
 		Blue,
+		Green,
 		Purple,
+		Red,
 		Yellow
 	};
 }

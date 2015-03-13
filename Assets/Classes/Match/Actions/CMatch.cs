@@ -6,22 +6,22 @@ using Libraries.ActionSystem;
 
 namespace Match.Actions {
 	public class CMatch : CCreating {
-		private List<CIcon> mMatchIcons;
+		private List<CIcon> icons;
 
-		public CMatch (List<CIcon> aMatchIcons) {
-			mMatchIcons = aMatchIcons;
+		public CMatch (List<CIcon> icons) {
+			this.icons = icons;
 		}
 
 		public EColor GetMatchIconType() {
-			return mMatchIcons[0].color;
+			return icons[0].color;
 		}
 
 		public override bool Validation() {
-			if (mMatchIcons == null) {
+			if (icons == null) {
 				return false;
 			}
 
-			foreach (CIcon icon in mMatchIcons) {
+			foreach (CIcon icon in icons) {
 				if (icon == null || !icon.IsIdle()) {
 					return false;
 				}
@@ -31,12 +31,13 @@ namespace Match.Actions {
 		}
 
 		public int GetCountMatchIcon() {
-			return mMatchIcons.Count;
+			return icons.Count;
 		}
 
 		public override void StartAction() {
-			foreach (CIcon icon in mMatchIcons) {
-				Wait(new CDestroy(icon));
+			foreach (CIcon icon in icons) {
+				// todo: fix null
+				Wait(new CDestroy(icon, null));
 			}
 			CheckCompleteness();
 		}

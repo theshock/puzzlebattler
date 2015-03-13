@@ -8,17 +8,17 @@ namespace Config.Match {
 
 		public GameObject prefab;
 
-		public int chanceRed;
 		public int chanceBlue;
 		public int chanceGreen;
 		public int chancePurple;
+		public int chanceRed;
 		public int chanceYellow;
 
-		public Sprite imageRed;
 		public Sprite imageBlue;
-		public Sprite imageYellow;
 		public Sprite imageGreen;
 		public Sprite imagePurple;
+		public Sprite imageRed;
+		public Sprite imageYellow;
 
 		public float GetChance (EColor type) {
 			return (float) GetChanceValue(type) / (float) GetChanceSum();
@@ -26,10 +26,10 @@ namespace Config.Match {
 
 		private int GetChanceValue (EColor type) {
 			switch (type) {
-				case EColor.Red   : return chanceRed;
 				case EColor.Blue  : return chanceBlue;
 				case EColor.Green : return chanceGreen;
 				case EColor.Purple: return chancePurple;
+				case EColor.Red   : return chanceRed;
 				case EColor.Yellow: return chanceYellow;
 			}
 
@@ -37,15 +37,15 @@ namespace Config.Match {
 		}
 
 		private int GetChanceSum () {
-			return chanceRed + chanceBlue + chanceGreen + chancePurple + chanceYellow;
+			return chanceBlue + chanceGreen + chancePurple + chanceRed + chanceYellow;
 		}
 
 		public Sprite GetCorrectSprite (EColor type) {
 			switch (type) {
-				case EColor.Red   : return imageRed;
 				case EColor.Blue  : return imageBlue;
 				case EColor.Green : return imageGreen;
 				case EColor.Purple: return imagePurple;
+				case EColor.Red   : return imageRed;
 				case EColor.Yellow: return imageYellow;
 			}
 

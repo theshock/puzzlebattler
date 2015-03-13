@@ -51,7 +51,7 @@ TextureImporter:
     - name: Red
       rect:
         serializedVersion: 2
-        x: 0
+        x: 480
         y: 0
         width: 160
         height: 160
@@ -71,7 +71,7 @@ TextureImporter:
     - name: Blue
       rect:
         serializedVersion: 2
-        x: 320
+        x: 0
         y: 0
         width: 160
         height: 160
@@ -81,7 +81,7 @@ TextureImporter:
     - name: Purple
       rect:
         serializedVersion: 2
-        x: 480
+        x: 320
         y: 0
         width: 160
         height: 160
