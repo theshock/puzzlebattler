@@ -3,40 +3,53 @@ using UnityEngine;
 namespace Match.Gem.Animations {
 	public class CAnimations : Object {
 
-		public static CBolt      Bolt     (Transform transform) { return (CBolt)      Req( EAnimations.Bolt     , transform ); }
-		public static CContour   Contour  (Transform transform) { return (CContour)   Req( EAnimations.Contour  , transform ); }
-		public static CExplosion Explosion(Transform transform) { return (CExplosion) Req( EAnimations.Explosion, transform ); }
-		public static CHighlight Highlight(Transform transform) { return (CHighlight) Req( EAnimations.Highlight, transform ); }
-		public static CSpark     Spark    (Transform transform) { return (CSpark)     Req( EAnimations.Spark    , transform ); }
-		public static CTransform Transform(Transform transform) { return (CTransform) Req( EAnimations.Transform, transform ); }
+		public static void SetParent (Transform parent) { Instance.SetDefaultParent(parent); }
 
-		protected static CAnimations instance;
+		public static CBolt      Bolt     (Vector3 position) { return (CBolt)      Req( EAnimations.Bolt     , position ); }
+		public static CContour   Contour  (Vector3 position) { return (CContour)   Req( EAnimations.Contour  , position ); }
+		public static CExplosion Explosion(Vector3 position) { return (CExplosion) Req( EAnimations.Explosion, position ); }
+		public static CHighlight Highlight(Vector3 position) { return (CHighlight) Req( EAnimations.Highlight, position ); }
+		public static CSpark     Spark    (Vector3 position) { return (CSpark)     Req( EAnimations.Spark    , position ); }
+		public static CTransform Transform(Vector3 position) { return (CTransform) Req( EAnimations.Transform, position ); }
 
-		protected static CAnimation Req (EAnimations type, Transform transform) {
-			if (instance == null) {
-				instance = new CAnimations();
-			}
+		static readonly CAnimations instance = new CAnimations();
 
-			return instance.Require(type, transform);
+		// Explicit static constructor to tell C# compiler
+		// not to mark type as beforefieldinit
+		static CAnimations() {}
+		private CAnimations() { }
+
+		public static CAnimations Instance{
+			get { return instance; }
+		}
+
+		protected Transform transformParent;
+
+		protected static CAnimation Req (EAnimations type, Vector3 position) {
+			return Instance.Require(type, position);
 		}
 
 		public void OnAnimationFinish (CAnimation animation) {
 			MonoBehaviour.Destroy(animation.gameObject);
 		}
 
-		public CAnimation Require (EAnimations type, Transform transform) {
-			var anim = Create(type, transform);
+		public CAnimation Require (EAnimations type, Vector3 position) {
+			var anim = Create(type, position);
 			anim.SetListener(null);
 			return anim;
 		}
 
-		public CAnimation Create (EAnimations type, Transform transform) {
+		public void SetDefaultParent (Transform parent) {
+			this.transformParent = parent;
+		}
+
+		public CAnimation Create (EAnimations type, Vector3 position) {
 			var prefab = CGame.Config.match.die.GetPrefab(type);
 
 			GameObject gameObject = Instantiate(prefab) as GameObject;
-			gameObject.transform.SetParent(transform.parent);
+			gameObject.transform.SetParent(this.transformParent);
 			gameObject.transform.localScale = new Vector3(100, 100, 1);
-			gameObject.transform.position = transform.position;
+			gameObject.transform.position = position;
 
 			var anim = gameObject.GetComponent<CAnimation>();
 			anim.SetAnimations(this);

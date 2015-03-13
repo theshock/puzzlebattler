@@ -64,7 +64,7 @@ namespace Match {
 			if (count < 4) {
 				return 3;
 			} else {
-				return ((count - 1) * count) / 2 - (count - 3);
+				return 3 + (count - 3) * count / 2;
 			}
 		}
 	}

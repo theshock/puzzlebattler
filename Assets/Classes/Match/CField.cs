@@ -1,5 +1,6 @@
 ﻿using Libraries;
 using Match.Gem;
+using Match.Gem.Animations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,6 +21,8 @@ namespace Match {
 
 			new CInput(this);
 			new CModel(this);
+
+			Gem.Animations.CAnimations.SetParent(this.transform);
 
 			CreateIcons();
 		}

@@ -1,8 +1,8 @@
+using Libraries.ActionSystem;
 using Match.Gem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Libraries.ActionSystem;
 
 namespace Match.Actions {
 	public class CMatch : CCreating {
@@ -34,10 +34,41 @@ namespace Match.Actions {
 			return icons.Count;
 		}
 
+		protected CBoltLauncher GetBoltLauncher() {
+			List<CBoltLauncher.Connection> connections = new List<CBoltLauncher.Connection>();
+
+			foreach (CIcon from in icons) {
+				bool ignore = true;
+
+				foreach (CIcon to in icons) {
+					if (!ignore && to.IsNeighbour(from)) {
+						connections.Add(
+							new CBoltLauncher.Connection(){
+								from = from,
+								to   = to
+							}
+						);
+					}
+
+					if (from == to) {
+						ignore = false;
+					}
+				}
+			}
+
+			return connections.Count > 0 ? new CBoltLauncher(connections) : null;
+		}
+
 		public override void StartAction() {
+			bool isFirst = true;
+
 			foreach (CIcon icon in icons) {
-				// todo: fix null
-				Wait(new CDestroy(icon, null));
+				if (isFirst) {
+					Wait(new CDestroy(icon, GetBoltLauncher()));
+					isFirst = false;
+				} else {
+					Wait(new CDestroy(icon, null));
+				}
 			}
 			CheckCompleteness();
 		}

@@ -13,19 +13,19 @@ namespace Match.Gem {
 			this.observer = observer;
 
 			CAnimations
-				.Highlight( icon.transform )
+				.Highlight( icon.transform.position )
 				.SetColor( icon.color )
 				.SetListener( this );
 		}
 
 		protected void StartDying () {
 			CAnimations
-				.Spark( icon.transform )
+				.Spark( icon.transform.position )
 				.SetColor( icon.color )
 				.SetListener( this );
 
 			CAnimations
-				.Transform( icon.transform )
+				.Transform( icon.transform.position )
 				.SetColor( icon.color )
 				.SetListener( this );
 
@@ -34,14 +34,15 @@ namespace Match.Gem {
 
 		public void OnTransformBoltStart(CAnimation animation) {
 			CAnimations
-				.Contour( icon.transform )
+				.Contour( icon.transform.position )
 				.SetColor( icon.color )
 				.SetListener( this );
+			observer.OnDieBolt();
 		}
 
 		public void OnTransformExplosionStart(CAnimation animation) {
 			CAnimations
-				.Explosion( icon.transform )
+				.Explosion( icon.transform.position )
 				.SetColor( icon.color );
 		}
 

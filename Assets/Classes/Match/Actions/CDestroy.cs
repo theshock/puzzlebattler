@@ -23,7 +23,9 @@ namespace Match.Actions {
 		}
 
 		public void OnDieBolt () {
-			//this.observer.OnDieBolt();
+			if (this.observer != null) {
+				this.observer.OnDieBolt();
+			}
 		}
 
 		public void OnDieEnd () {
