@@ -1,3 +1,4 @@
+using Match.Gem;
 using UnityEngine;
 
 namespace Config {
@@ -5,7 +6,11 @@ namespace Config {
 
 		public Match.CMatch match;
 
+		public CSkill heal;
+		public CSkill fireball;
+
 		public float turnTime = 60f;
+
 
 	}
 }
