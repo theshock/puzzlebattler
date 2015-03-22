@@ -15,6 +15,8 @@ namespace Match {
 		public CAi ai;
 
 		public void Start() {
+			CGame.Instance.field = this;
+
 			actions = new Libraries.ActionSystem.CManager();
 
 			ai = new CAi(this);

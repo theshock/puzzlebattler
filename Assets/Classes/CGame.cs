@@ -1,6 +1,7 @@
 ﻿using Config;
 using Etc;
 using Libraries;
+using Match.Gem;
 using Model;
 using System.Collections;
 using UnityEngine;
@@ -19,6 +20,9 @@ public class CGame : MonoBehaviour {
 
 	public Text playerText;
 	public Text opponentText;
+
+	public Etc.CSkill[] skills;
+	public Match.CField field;
 
 	public SwipesCounter playerSwipesCounter;
 	public SwipesCounter opponentSwipesCounter;
@@ -81,5 +85,20 @@ public class CGame : MonoBehaviour {
 
 	protected void Count(CPlayer player, int maxHealth, CProgressBar progress) {
 		progress.SetValue((maxHealth - player.score) / (float) maxHealth);
+	}
+
+	public void OnMatchEnd (EColor color) {
+		if (Model.opponent.isActive) return;
+
+		foreach (var skill in skills) {
+			skill.OnMatch(color);
+		}
+	}
+
+	public void CheckActive () {
+		if (CGame.Model.GetActivePlayer().IsStepFinished()) {
+			CGame.Model.SwitchPlayer();
+		}
+		field.ai.Play();
 	}
 }

@@ -25,7 +25,7 @@ namespace Match {
 		}
 
 		public void OnInputMove (Vector2 position) {
-			if (!CGame.Instance.model.player.CanSwipe()) return;
+			if (!CGame.Instance.model.player.CanAction()) return;
 			if (!IsActiveIcon(selectedIcon)) return;
 
 			CIcon targetIcon = field.GetIconByPoint(position);

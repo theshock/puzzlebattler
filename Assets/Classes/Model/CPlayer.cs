@@ -21,7 +21,7 @@ namespace Model {
 		}
 
 		public int GetRealtimeMatches () {
-			return CanSwipe() ? matches : 0;
+			return CanAction() ? matches : 0;
 		}
 
 		public void SetMatches (int value) {
@@ -29,16 +29,18 @@ namespace Model {
 			onMatchesChange(this);
 		}
 
-		public void UseMatch () {
+		public void UseAction() {
 			SetMatches(matches-1);
 		}
 
-		public void RestoreMatch () {
+		public void RestoreAction() {
 			SetMatches(matches+1);
 		}
 
 		public void AddScore (int scoreChange) {
 			score += scoreChange;
+
+			if (score < 0) score = 0;
 
 			if (onScoreChange != null) {
 				onScoreChange.Invoke(this, scoreChange);
@@ -49,7 +51,7 @@ namespace Model {
 			return isActive && (matches == 0 || game.timer.IsEnded());
 		}
 
-		public bool CanSwipe () {
+		public bool CanAction() {
 			return isActive && matches > 0 && !game.timer.IsEnded();
 		}
 	}

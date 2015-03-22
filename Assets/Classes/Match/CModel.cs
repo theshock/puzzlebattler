@@ -26,8 +26,7 @@ namespace Match {
 		}
 
 		public void OnFreeFallBreak (IAction action) {
-			CheckActive();
-			field.ai.Play();
+			CGame.Instance.CheckActive();
 		}
 
 		public void OnFreeFallEnd(IAction action) {
@@ -41,23 +40,19 @@ namespace Match {
 		}
 
 		public void OnMatchEnd (IAction action) {
-			var count = (action as Actions.CMatch).GetCountMatchIcon();
+			var match = action as Actions.CMatch;
+			var count = match.GetCountMatchIcon();
 
+			CGame.Instance.OnMatchEnd(match.GetMatchIconType());
 			CGame.Model.GetActivePlayer().AddScore(CalculateScore(count));
 		}
 
 		public void OnSwipeBegin (IAction action) {
-			CGame.Model.GetActivePlayer().UseMatch();
+			CGame.Model.GetActivePlayer().UseAction();
 		}
 
 		public void OnSwipeBackBegin (IAction action) {
-			CGame.Model.GetActivePlayer().RestoreMatch();
-		}
-
-		protected void CheckActive () {
-			if (CGame.Model.GetActivePlayer().IsStepFinished()) {
-				CGame.Model.SwitchPlayer();
-			}
+			CGame.Model.GetActivePlayer().RestoreAction();
 		}
 
 		private int CalculateScore (int count) {
