@@ -9,6 +9,8 @@ namespace Config {
 		public CSkill heal;
 		public CSkill fireball;
 
+		public int attackStrongScore = 10;
+
 		public float turnTime = 60f;
 
 

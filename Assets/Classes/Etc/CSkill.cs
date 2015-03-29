@@ -87,15 +87,18 @@ namespace Etc {
 			}
 		}
 
+		public void OffAll () {
+			foreach (CRequest req in requests) {
+				req.Off();
+			}
+			CheckAvailable();
+		}
+
 		private void Activate () {
 			if (!CGame.Model.player.CanAction()) return;
 			if (!IsComplete()) return;
 
-			foreach (CRequest req in requests) {
-				req.Off();
-			}
-
-			CheckAvailable();
+			OffAll();
 			Cast();
 		}
 
@@ -110,12 +113,14 @@ namespace Etc {
 		}
 
 		private void CastDamage() {
-			CGame.Model.player.AddScore(config.value);
+			CGame.Instance.PlayerWaitHit(config.value);
+			CGame.Instance.playerCharacter.SetState( Character.States.CastDamage );
 			CGame.Instance.CheckActive();
 		}
 
 		private void CastHeal() {
-			CGame.Model.opponent.AddScore(-config.value);
+			CGame.Instance.PlayerWaitHit(-config.value);
+			CGame.Instance.playerCharacter.SetState( Character.States.CastHeal );
 			CGame.Instance.CheckActive();
 		}
 

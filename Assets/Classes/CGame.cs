@@ -15,6 +15,8 @@ public class CGame : MonoBehaviour {
 	public CInput input;
 	public Etc.Timer timer;
 
+	public Character playerCharacter;
+
 	public CProgressBar playerProgress;
 	public CProgressBar opponentProgress;
 
@@ -22,7 +24,6 @@ public class CGame : MonoBehaviour {
 	public Text opponentText;
 
 	public Etc.CSkill[] skills;
-	public Match.CField field;
 
 	public SwipesCounter playerSwipesCounter;
 	public SwipesCounter opponentSwipesCounter;
@@ -54,8 +55,14 @@ public class CGame : MonoBehaviour {
 	}
 
 	public void Start() {
-		model.player  .onScoreChange += OnScoreChange;
-		model.opponent.onScoreChange += OnScoreChange;
+		model.player  .onDamageChange += OnScoreChange;
+		model.opponent.onDamageChange += OnScoreChange;
+
+		model.player  .SetMaxDamage(Config.match.player  .health);
+		model.opponent.SetMaxDamage(Config.match.opponent.health);
+
+		playerCharacter.onIdle += OnCharacterIdle;
+		playerCharacter.onTrigger += OnCharacterTrigger;
 
 		Recount();
 	}
@@ -71,20 +78,79 @@ public class CGame : MonoBehaviour {
 		}
 	}
 
-	public void Recount() {
-		Count(model.player, Config.match.opponent.health, opponentProgress);
-		Count(model.opponent, Config.match.player.health, playerProgress);
+	private bool finished = false;
 
-		  playerText.text = "" + CGame.Instance.model.player.score;
-		opponentText.text = "" + CGame.Instance.model.opponent.score;
+	public void OnCharacterIdle () {
+		if (finished) {
+			StartCoroutine(DelayedReset());
+		} else if (model.player.GetLives() <= 0) {
+			Defeat();
+		} else if (model.opponent.GetLives() <= 0) {
+			Victory();
+		} else if (!match.actions.HasActions()) {
+			match.ai.Play();
+		}
+	}
+
+	private int lastHitDamage = 0;
+
+	public void PlayerWaitHit(int damage) {
+		lastHitDamage = damage;
+	}
+
+	public void OnCharacterTrigger () {
+		if (lastHitDamage < 0) {
+			Model.player.AddDamage(lastHitDamage);
+		} else {
+			Model.opponent.AddDamage(lastHitDamage);
+		}
+		lastHitDamage = 0;
+	}
+
+	private void Victory () {
+		playerCharacter.SetState( Character.States.Victory );
+		finished = true;
+	}
+
+	private void Defeat () {
+		playerCharacter.SetState( Character.States.Death );
+		finished = true;
+	}
+
+	protected IEnumerator DelayedReset () {
+		yield return new WaitForSeconds(2f);
+
+		finished = false;
+		model.player  .damage = 0;
+		model.opponent.damage = 0;
+		model.ActivateFirst();
+		timer.Reset();
+
+		foreach (Etc.CSkill skill in skills) {
+			skill.OffAll();
+		}
+
+		Recount();
+		match.ai.Play();
+	}
+
+	public void CheckActive () {
+		if (CGame.Model.GetActivePlayer().IsStepFinished()) {
+			CGame.Model.SwitchPlayer();
+		}
+		match.ai.Play();
+	}
+
+	public void Recount() {
+		opponentProgress.SetValue( model.opponent.GetLives() );
+		  playerProgress.SetValue( model.  player.GetLives() );
+
+		  playerText.text = "" + CGame.Instance.model.player.damage;
+		opponentText.text = "" + CGame.Instance.model.opponent.damage;
 	}
 
 	public void Update () {
 		input.Check();
-	}
-
-	protected void Count(CPlayer player, int maxHealth, CProgressBar progress) {
-		progress.SetValue((maxHealth - player.score) / (float) maxHealth);
 	}
 
 	public void OnMatchEnd (EColor color) {
@@ -93,12 +159,5 @@ public class CGame : MonoBehaviour {
 		foreach (var skill in skills) {
 			skill.OnMatch(color);
 		}
-	}
-
-	public void CheckActive () {
-		if (CGame.Model.GetActivePlayer().IsStepFinished()) {
-			CGame.Model.SwitchPlayer();
-		}
-		field.ai.Play();
 	}
 }

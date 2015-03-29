@@ -5,12 +5,16 @@ namespace Match {
 	public class CAi {
 
 		private CField field;
+		private bool turning = false;
 
 		public CAi (CField field) {
 			this.field = field;
 		}
 
 		public void Play() {
+			if (turning) return;
+
+			turning = true;
 			field.StartCoroutine(DelayedTurn());
 		}
 
@@ -20,17 +24,18 @@ namespace Match {
 
 		protected IEnumerator DelayedTurn () {
 			yield return new WaitForSeconds(GetDelay());
+			turning = false;
 
-			if (CGame.Model.opponent.isActive) {
-				var searcher = new CSearcher(field).FindMoves();
+			if (!CGame.Model.opponent.CanAction()) yield break;
 
-				if (searcher.MovesExists()) {
-					var move = searcher.GetMoves()[0];
+			var searcher = new CSearcher(field).FindMoves();
 
-					field.actions.Add(new Actions.CSwipe(field, move.from, move.to));
-				} else {
-					Debug.Log("No moves for AI");
-				}
+			if (searcher.MovesExists()) {
+				var move = searcher.GetMoves()[0];
+
+				field.actions.Add(new Actions.CSwipe(field, move.from, move.to));
+			} else {
+				Debug.Log("No moves for AI");
 			}
 		}
 

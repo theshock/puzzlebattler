@@ -15,6 +15,10 @@ namespace Model {
 			return player.isActive ? player : opponent;
 		}
 
+		public CPlayer GetNonActivePlayer () {
+			return player.isActive ? opponent : player;
+		}
+
 		public void SwitchPlayer () {
 			game.timer.Reset();
 

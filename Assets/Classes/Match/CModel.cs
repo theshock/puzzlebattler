@@ -1,3 +1,4 @@
+using Etc;
 using Libraries.ActionSystem;
 using Match.Actions;
 using Model;
@@ -9,6 +10,8 @@ namespace Match {
 	public class CModel {
 
 		CField field;
+
+		private int score = 0;
 
 		public CModel (CField field) {
 			CGame.Model.ActivateFirst();
@@ -26,6 +29,17 @@ namespace Match {
 		}
 
 		public void OnFreeFallBreak (IAction action) {
+			if (IsOpponent()) {
+				CGame.Model.player.AddDamage(score);
+				CGame.Instance.playerCharacter.SetState( Character.States.Damaged );
+			} else if (score >= CGame.Config.attackStrongScore) {
+				CGame.Instance.PlayerWaitHit(score);
+				CGame.Instance.playerCharacter.SetState( Character.States.AttackStrong );
+			} else {
+				CGame.Instance.PlayerWaitHit(score);
+				CGame.Instance.playerCharacter.SetState( Character.States.AttackWeak );
+			}
+
 			CGame.Instance.CheckActive();
 		}
 
@@ -42,17 +56,28 @@ namespace Match {
 		public void OnMatchEnd (IAction action) {
 			var match = action as Actions.CMatch;
 			var count = match.GetCountMatchIcon();
+			score += CalculateScore(count);
 
 			CGame.Instance.OnMatchEnd(match.GetMatchIconType());
-			CGame.Model.GetActivePlayer().AddScore(CalculateScore(count));
 		}
 
 		public void OnSwipeBegin (IAction action) {
+			score = 0;
+			if (!IsOpponent()) {
+				CGame.Instance.playerCharacter.SetState( Character.States.AttackIdle );
+			}
 			CGame.Model.GetActivePlayer().UseAction();
 		}
 
 		public void OnSwipeBackBegin (IAction action) {
+			if (!IsOpponent()) {
+				CGame.Instance.playerCharacter.Idle();
+			}
 			CGame.Model.GetActivePlayer().RestoreAction();
+		}
+
+		public bool IsOpponent() {
+			return CGame.Model.GetActivePlayer() == CGame.Model.opponent;
 		}
 
 		private int CalculateScore (int count) {

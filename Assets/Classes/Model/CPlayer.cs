@@ -2,12 +2,13 @@ namespace Model {
 	public class CPlayer {
 		public bool isActive = false;
 		private int matches = 0;
-		public int score   = 0;
+		public int damage = 0;
+		public int max = 0;
 
 		public delegate void OnScoreChange(CPlayer player, int scoreChange);
 		public delegate void OnMatchesChange(CPlayer player);
 
-		public event OnScoreChange onScoreChange;
+		public event OnScoreChange onDamageChange;
 		public event OnMatchesChange onMatchesChange;
 
 		private CGame game;
@@ -16,12 +17,20 @@ namespace Model {
 			this.game = game;
 		}
 
+		public void SetMaxDamage(int value) {
+			max = value;
+		}
+
+		public float GetLives() {
+			return (max - damage) / (float) max;
+		}
+
 		public int GetMatches () {
 			return matches;
 		}
 
 		public int GetRealtimeMatches () {
-			return CanAction() ? matches : 0;
+			return isActive ? matches : 0;
 		}
 
 		public void SetMatches (int value) {
@@ -37,13 +46,13 @@ namespace Model {
 			SetMatches(matches+1);
 		}
 
-		public void AddScore (int scoreChange) {
-			score += scoreChange;
+		public void AddDamage(int change) {
+			damage += change;
 
-			if (score < 0) score = 0;
+			if (damage < 0) damage = 0;
 
-			if (onScoreChange != null) {
-				onScoreChange.Invoke(this, scoreChange);
+			if (onDamageChange != null) {
+				onDamageChange.Invoke(this, change);
 			}
 		}
 
@@ -52,7 +61,12 @@ namespace Model {
 		}
 
 		public bool CanAction() {
-			return isActive && matches > 0 && !game.timer.IsEnded();
+			return isActive
+				&& matches > 0
+				&& !game.timer.IsEnded()
+				&& game.playerCharacter.IsIdle()
+				&& game.match.actions.HasActions() == false
+				&& GetLives() > 0;
 		}
 	}
 }
