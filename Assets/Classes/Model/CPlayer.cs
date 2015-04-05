@@ -65,6 +65,7 @@ namespace Model {
 				&& matches > 0
 				&& !game.timer.IsEnded()
 				&& game.playerCharacter.IsIdle()
+				&& game.opponentCharacter.IsIdle()
 				&& game.match.actions.HasActions() == false
 				&& GetLives() > 0;
 		}

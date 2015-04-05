@@ -19,6 +19,7 @@ public class CGame : MonoBehaviour {
 	public Audio.AudioSystem sounds;
 
 	public Character playerCharacter;
+	public Character opponentCharacter;
 
 	public CProgressBar playerProgress;
 	public CProgressBar opponentProgress;
@@ -69,7 +70,6 @@ public class CGame : MonoBehaviour {
 		model.opponent.SetMaxDamage(Config.match.opponent.health);
 
 		playerCharacter.onIdle += OnCharacterIdle;
-		playerCharacter.onTrigger += OnCharacterTrigger;
 
 		Recount();
 	}
@@ -99,28 +99,23 @@ public class CGame : MonoBehaviour {
 		}
 	}
 
-	private int lastHitDamage = 0;
-
-	public void PlayerWaitHit(int damage) {
-		lastHitDamage = damage;
-	}
-
-	public void OnCharacterTrigger () {
-		if (lastHitDamage < 0) {
-			Model.player.AddDamage(lastHitDamage);
-		} else {
-			Model.opponent.AddDamage(lastHitDamage);
-		}
-		lastHitDamage = 0;
-	}
+	//public void OnCharacterTrigger () {
+	//	if (lastHitDamage < 0) {
+	//		Model.player.AddDamage(lastHitDamage);
+	//	} else {
+	//		Model.opponent.AddDamage(lastHitDamage);
+	//	}
+	//}
 
 	private void Victory () {
 		playerCharacter.SetState( Character.States.Victory );
+		opponentCharacter.SetState( Character.States.Death );
 		finished = true;
 	}
 
 	private void Defeat () {
 		playerCharacter.SetState( Character.States.Death );
+		opponentCharacter.SetState( Character.States.Victory );
 		finished = true;
 	}
 

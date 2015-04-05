@@ -29,17 +29,29 @@ namespace Match {
 		}
 
 		public void OnFreeFallBreak (IAction action) {
-			if (IsOpponent()) {
-				CGame.Model.player.AddDamage(score);
-				CGame.Instance.playerCharacter.SetState( Character.States.Damaged );
-				CGame.Sounds.ouch.Play();
-			} else if (score >= CGame.Config.attackStrongScore) {
-				CGame.Instance.PlayerWaitHit(score);
-				CGame.Instance.playerCharacter.SetState( Character.States.AttackStrong );
-			} else {
-				CGame.Instance.PlayerWaitHit(score);
-				CGame.Instance.playerCharacter.SetState( Character.States.AttackWeak );
-			}
+			Character source = IsOpponent()
+				? CGame.Instance.opponentCharacter
+				: CGame.Instance.playerCharacter;
+
+			Character target = !IsOpponent()
+				? CGame.Instance.opponentCharacter
+				: CGame.Instance.playerCharacter;
+
+			Model.CPlayer targetModel = !IsOpponent()
+				? CGame.Model.opponent
+				: CGame.Model.player;
+
+			source.SetState(
+				score >= CGame.Config.attackStrongScore
+					? Character.States.AttackStrong
+					: Character.States.AttackWeak,
+
+				() => {
+					CGame.Sounds.ouch.Play();
+					target.SetState( Character.States.Damaged );
+					targetModel.AddDamage(score);
+				}
+			);
 
 			CGame.Instance.CheckActive();
 		}
@@ -64,14 +76,18 @@ namespace Match {
 
 		public void OnSwipeBegin (IAction action) {
 			score = 0;
-			if (!IsOpponent()) {
+			if (IsOpponent()) {
+				CGame.Instance.opponentCharacter.SetState( Character.States.AttackIdle );
+			} else {
 				CGame.Instance.playerCharacter.SetState( Character.States.AttackIdle );
 			}
 			CGame.Model.GetActivePlayer().UseAction();
 		}
 
 		public void OnSwipeBackBegin (IAction action) {
-			if (!IsOpponent()) {
+			if (IsOpponent()) {
+				CGame.Instance.opponentCharacter.Idle();
+			} else {
 				CGame.Instance.playerCharacter.Idle();
 			}
 			CGame.Model.GetActivePlayer().RestoreAction();

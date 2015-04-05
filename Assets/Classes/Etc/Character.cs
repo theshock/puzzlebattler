@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Etc {
@@ -19,6 +20,7 @@ namespace Etc {
 		public delegate void OnFrame();
 		public event OnFrame onIdle;
 		public event OnFrame onTrigger;
+		public event OnFrame onTriggerSingle;
 
 		protected const string KEY = "State";
 		protected Animator animator;
@@ -41,6 +43,11 @@ namespace Etc {
 			}
 		}
 
+		public void SetState (States state, OnFrame onTrigger) {
+			onTriggerSingle += onTrigger;
+			SetState(state);
+		}
+
 		public void Idle () {
 			SetState( States.Idle );
 		}
@@ -50,6 +57,13 @@ namespace Etc {
 		}
 
 		public void OnAnimationTrigger () {
+			if (onTriggerSingle != null) {
+				onTriggerSingle.Invoke();
+
+				foreach(Delegate d in onTriggerSingle.GetInvocationList()) {
+					onTriggerSingle -= (OnFrame) d;
+				}
+			}
 			if (onTrigger != null) {
 				onTrigger.Invoke();
 			}

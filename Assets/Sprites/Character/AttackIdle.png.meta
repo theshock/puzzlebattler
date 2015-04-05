@@ -6,6 +6,9 @@ TextureImporter:
     21300002: AttackIdle_1
     21300004: AttackIdle_2
     21300006: AttackIdle_3
+    21300008: AttackIdle_4
+    21300010: AttackIdle_5
+    21300012: AttackIdle_6
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -26,7 +29,7 @@ TextureImporter:
   generateCubemap: 0
   seamlessCubemap: 0
   textureFormat: -1
-  maxTextureSize: 2048
+  maxTextureSize: 4096
   textureSettings:
     filterMode: -1
     aniso: 1
@@ -52,38 +55,68 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1024
-        height: 768
+        width: 512
+        height: 384
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: AttackIdle_1
       rect:
         serializedVersion: 2
-        x: 1024
+        x: 512
         y: 0
-        width: 1024
-        height: 768
+        width: 512
+        height: 384
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: AttackIdle_2
       rect:
         serializedVersion: 2
-        x: 2048
+        x: 1024
         y: 0
-        width: 1024
-        height: 768
+        width: 512
+        height: 384
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: AttackIdle_3
       rect:
         serializedVersion: 2
+        x: 1536
+        y: 0
+        width: 512
+        height: 384
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: AttackIdle_4
+      rect:
+        serializedVersion: 2
+        x: 2048
+        y: 0
+        width: 512
+        height: 384
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: AttackIdle_5
+      rect:
+        serializedVersion: 2
+        x: 2560
+        y: 0
+        width: 512
+        height: 384
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: AttackIdle_6
+      rect:
+        serializedVersion: 2
         x: 3072
         y: 0
-        width: 1024
-        height: 768
+        width: 512
+        height: 384
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

@@ -113,15 +113,25 @@ namespace Etc {
 		}
 
 		private void CastDamage() {
-			CGame.Instance.PlayerWaitHit(config.value);
-			CGame.Instance.playerCharacter.SetState( Character.States.CastDamage );
+			CGame.Instance.playerCharacter.SetState(
+				Character.States.CastDamage,
+				() => {
+					CGame.Sounds.ouch.Play();
+					CGame.Model.opponent.AddDamage(config.value);
+					CGame.Instance.opponentCharacter.SetState( Character.States.Damaged );
+				}
+			);
 			CGame.Instance.CheckActive();
 			CGame.Sounds.fireball.Play();
 		}
 
 		private void CastHeal() {
-			CGame.Instance.PlayerWaitHit(-config.value);
-			CGame.Instance.playerCharacter.SetState( Character.States.CastHeal );
+			CGame.Instance.playerCharacter.SetState(
+				Character.States.CastHeal,
+				() => {
+					CGame.Model.player.AddDamage(-config.value);
+				}
+			);
 			CGame.Instance.CheckActive();
 			CGame.Sounds.heal.Play();
 		}
