@@ -66,6 +66,8 @@ namespace Match.Actions {
 		public override void StartAction() {
 			move = new CMove();
 
+			CGame.Sounds.fall.Play();
+
 			for ( int col = 0; col < field.width; col++ ) {
 				ColumnFreeFall(col);
 			}

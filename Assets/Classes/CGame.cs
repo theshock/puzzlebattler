@@ -1,4 +1,5 @@
-﻿using Config;
+﻿using Audio;
+using Config;
 using Etc;
 using Libraries;
 using Match.Gem;
@@ -14,6 +15,8 @@ public class CGame : MonoBehaviour {
 	public Match.CField match;
 	public CInput input;
 	public Etc.Timer timer;
+
+	public Audio.AudioSystem sounds;
 
 	public Character playerCharacter;
 
@@ -38,6 +41,10 @@ public class CGame : MonoBehaviour {
 
 	public static CInput Input {
 		get { return Instance.input; }
+	}
+
+	public static Audio.AudioSystem Sounds {
+		get { return Instance.sounds; }
 	}
 
 	public static CGame Instance { get; private set; }

@@ -1,5 +1,6 @@
 using Libraries.ActionSystem;
 using Match.Gem;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -62,6 +63,7 @@ namespace Match.Actions {
 		public override void StartAction() {
 			bool isFirst = true;
 
+			CGame.Sounds.energy.Play();
 			foreach (CIcon icon in icons) {
 				if (isFirst) {
 					Wait(new CDestroy(icon, GetBoltLauncher()));

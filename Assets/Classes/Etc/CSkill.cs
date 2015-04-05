@@ -116,12 +116,14 @@ namespace Etc {
 			CGame.Instance.PlayerWaitHit(config.value);
 			CGame.Instance.playerCharacter.SetState( Character.States.CastDamage );
 			CGame.Instance.CheckActive();
+			CGame.Sounds.fireball.Play();
 		}
 
 		private void CastHeal() {
 			CGame.Instance.PlayerWaitHit(-config.value);
 			CGame.Instance.playerCharacter.SetState( Character.States.CastHeal );
 			CGame.Instance.CheckActive();
+			CGame.Sounds.heal.Play();
 		}
 
 		public void OnMouseDown () {

@@ -32,6 +32,7 @@ namespace Match {
 			if (IsOpponent()) {
 				CGame.Model.player.AddDamage(score);
 				CGame.Instance.playerCharacter.SetState( Character.States.Damaged );
+				CGame.Sounds.ouch.Play();
 			} else if (score >= CGame.Config.attackStrongScore) {
 				CGame.Instance.PlayerWaitHit(score);
 				CGame.Instance.playerCharacter.SetState( Character.States.AttackStrong );

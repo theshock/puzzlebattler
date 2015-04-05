@@ -41,6 +41,8 @@ namespace Match.Gem {
 		}
 
 		public void OnTransformExplosionStart(CAnimation animation) {
+			CGame.Sounds.explosion.Play();
+
 			CAnimations
 				.Explosion( icon.transform.position )
 				.SetColor( icon.color );
