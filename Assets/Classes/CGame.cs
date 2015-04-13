@@ -28,6 +28,7 @@ public class CGame : MonoBehaviour {
 	public Text opponentText;
 
 	public Etc.CSkill[] skills;
+	public EndPopup endPopup;
 
 	public SwipesCounter playerSwipesCounter;
 	public SwipesCounter opponentSwipesCounter;
@@ -88,9 +89,7 @@ public class CGame : MonoBehaviour {
 	private bool finished = false;
 
 	public void OnCharacterIdle () {
-		if (finished) {
-			StartCoroutine(DelayedReset());
-		} else if (model.player.GetLives() <= 0) {
+		if (model.player.GetLives() <= 0) {
 			Defeat();
 		} else if (model.opponent.GetLives() <= 0) {
 			Victory();
@@ -108,20 +107,26 @@ public class CGame : MonoBehaviour {
 	//}
 
 	private void Victory () {
-		playerCharacter.SetState( Character.States.Victory );
-		opponentCharacter.SetState( Character.States.Death );
-		finished = true;
+		if (finished) {
+			endPopup.ShowVictory(Reset);
+		} else {
+			playerCharacter.SetState(Character.States.Victory);
+			opponentCharacter.SetState(Character.States.Death);
+			finished = true;
+		}
 	}
 
 	private void Defeat () {
-		playerCharacter.SetState( Character.States.Death );
-		opponentCharacter.SetState( Character.States.Victory );
-		finished = true;
+		if (finished) {
+			endPopup.ShowDefeat(Reset);
+		} else {
+			playerCharacter.SetState(Character.States.Death);
+			opponentCharacter.SetState(Character.States.Victory);
+			finished = true;
+		}
 	}
 
-	protected IEnumerator DelayedReset () {
-		yield return new WaitForSeconds(2f);
-
+	protected void Reset () {
 		finished = false;
 		model.player  .damage = 0;
 		model.opponent.damage = 0;
