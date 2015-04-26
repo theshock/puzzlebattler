@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using UnityEngine;
 
@@ -43,6 +44,15 @@ namespace Etc {
 			}
 		}
 
+		private Tweener FadeTo (float value, float time) {
+			return DOTween.ToAlpha(
+				() => this.renderer.material.color,
+				x => this.renderer.material.color = x,
+				value,
+				time
+			);
+		}
+
 		public void SetState (States state, OnFrame onTrigger) {
 			onTriggerSingle += onTrigger;
 			SetState(state);
@@ -53,7 +63,14 @@ namespace Etc {
 		}
 
 		public void OnAnimationComplete () {
-			Idle();
+			if (state == States.Death) {
+				FadeTo(0.0f, CGame.Config.fadeOutTime).OnComplete(() => {
+					Idle();
+					FadeTo(1.0f, CGame.Config.fadeInTime);
+				});
+			} else {
+				Idle();
+			}
 		}
 
 		public void OnAnimationTrigger () {

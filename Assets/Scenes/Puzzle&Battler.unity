@@ -1093,7 +1093,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc5cb41204a1211419d52f0fb914af28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 40
+  health: 100
   matchesPerTurn: 3
   redPower: 1
   bluePower: 1
@@ -1207,7 +1207,10 @@ MonoBehaviour:
   fireball: {fileID: 1972538076}
   sound: 1
   attackStrongScore: 10
-  turnTime: 30
+  turnTime: 10
+  opponentsCount: 3
+  fadeOutTime: 2
+  fadeInTime: 1
 --- !u!1 &840055164
 GameObject:
   m_ObjectHideFlags: 0
@@ -1857,6 +1860,7 @@ Transform:
   - {fileID: 1721946830}
   - {fileID: 845283397}
   - {fileID: 1706841438}
+  - {fileID: 1412024266}
   m_Father: {fileID: 1417612942}
   m_RootOrder: 1
 --- !u!1 &935338990
@@ -2019,6 +2023,84 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 953300734}
+--- !u!1 &958419979
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 958419980}
+  - 222: {fileID: 958419983}
+  - 114: {fileID: 958419982}
+  - 114: {fileID: 958419981}
+  m_Layer: 0
+  m_Name: Opponents
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &958419980
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 958419979}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: -.0099997716, y: .0099997716, z: .0099997716}
+  m_Children: []
+  m_Father: {fileID: 1412024266}
+  m_RootOrder: 0
+  m_AnchorMin: {x: .5, y: .5}
+  m_AnchorMax: {x: .5, y: .5}
+  m_AnchoredPosition: {x: 1, y: .270000011}
+  m_SizeDelta: {x: 150, y: 150}
+  m_Pivot: {x: .5, y: .5}
+--- !u!114 &958419981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 958419979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f97f0c3af27f1041a7d1ba8e9a9084a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &958419982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 958419979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: .831896544, b: .327586234, a: 1}
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 2b945224570f3a444a2f6ff84df04751, type: 3}
+    m_FontSize: 96
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_RichText: 1
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
+    m_LineSpacing: 1
+  m_Text: 3
+--- !u!222 &958419983
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 958419979}
 --- !u!1 &982302512
 GameObject:
   m_ObjectHideFlags: 0
@@ -3079,13 +3161,64 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc5cb41204a1211419d52f0fb914af28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 40
+  health: 70
   matchesPerTurn: 3
   redPower: 1
   bluePower: 1
   greenPower: 1
   purplePower: 1
   yellowPower: 1
+--- !u!1 &1412024265
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1412024266}
+  - 212: {fileID: 1412024267}
+  m_Layer: 0
+  m_Name: Skills
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1412024266
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1412024265}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -507, y: 955, z: -250}
+  m_LocalScale: {x: -100, y: 100, z: 100}
+  m_Children:
+  - {fileID: 958419980}
+  m_Father: {fileID: 928828760}
+  m_RootOrder: 7
+--- !u!212 &1412024267
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1412024265}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000e000000000000000, type: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 1
+  m_Sprite: {fileID: 21300000, guid: e6fd4bcfe5ff5604886c8a7a54943523, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1412813719
 GameObject:
   m_ObjectHideFlags: 0
@@ -3209,8 +3342,10 @@ MonoBehaviour:
   - {fileID: 1324954447}
   - {fileID: 462560031}
   endPopup: {fileID: 1621651223}
+  opponentsCount: {fileID: 958419982}
   playerSwipesCounter: {fileID: 1841847305}
   opponentSwipesCounter: {fileID: 410086560}
+  opponents: 3
 --- !u!1 &1490506145
 GameObject:
   m_ObjectHideFlags: 0

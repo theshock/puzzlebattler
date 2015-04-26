@@ -30,8 +30,12 @@ public class CGame : MonoBehaviour {
 	public Etc.CSkill[] skills;
 	public EndPopup endPopup;
 
+	public Text opponentsCount;
+
 	public SwipesCounter playerSwipesCounter;
 	public SwipesCounter opponentSwipesCounter;
+
+	public int opponents = 3;
 
 	public static CConfig Config {
 		get { return Instance.config; }
@@ -73,6 +77,8 @@ public class CGame : MonoBehaviour {
 		playerCharacter.onIdle += OnCharacterIdle;
 		opponentCharacter.onIdle += OnCharacterIdle;
 
+		opponents = Config.opponentsCount;
+
 		Recount();
 	}
 
@@ -112,12 +118,14 @@ public class CGame : MonoBehaviour {
 	//}
 
 	private void Victory () {
-		if (finished) {
-			endPopup.ShowVictory(Reset);
-		} else {
+		if (!finished) {
 			playerCharacter.SetState(Character.States.Victory);
 			opponentCharacter.SetState(Character.States.Death);
 			finished = true;
+		} else if (--opponents > 0) {
+			RoundReset();
+		} else {
+			endPopup.ShowVictory(Reset);
 		}
 	}
 
@@ -132,11 +140,19 @@ public class CGame : MonoBehaviour {
 	}
 
 	protected void Reset () {
+		model.player.damage = 0;
+		RoundReset();
+	}
+
+	protected void RoundReset () {
 		finished = false;
-		model.player  .damage = 0;
 		model.opponent.damage = 0;
 		model.ActivateFirst();
 		timer.Reset();
+
+		if (opponents == 0) {
+			opponents = Config.opponentsCount;
+		}
 
 		foreach (Etc.CSkill skill in skills) {
 			skill.OffAll();
@@ -154,6 +170,8 @@ public class CGame : MonoBehaviour {
 	}
 
 	public void Recount() {
+		opponentsCount.text = "" + opponents;
+
 		opponentProgress.SetValue( model.opponent.GetLives() );
 		  playerProgress.SetValue( model.  player.GetLives() );
 
