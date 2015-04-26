@@ -71,6 +71,7 @@ public class CGame : MonoBehaviour {
 		model.opponent.SetMaxDamage(Config.match.opponent.health);
 
 		playerCharacter.onIdle += OnCharacterIdle;
+		opponentCharacter.onIdle += OnCharacterIdle;
 
 		Recount();
 	}
@@ -89,6 +90,10 @@ public class CGame : MonoBehaviour {
 	private bool finished = false;
 
 	public void OnCharacterIdle () {
+		if (playerCharacter.IsIdle() == false || opponentCharacter.IsIdle() == false) {
+			return;
+		}
+
 		if (model.player.GetLives() <= 0) {
 			Defeat();
 		} else if (model.opponent.GetLives() <= 0) {

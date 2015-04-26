@@ -41,17 +41,19 @@ namespace Match {
 				? CGame.Model.opponent
 				: CGame.Model.player;
 
-			source.SetState(
-				score >= CGame.Config.attackStrongScore
-					? Character.States.AttackStrong
-					: Character.States.AttackWeak,
+			if (score > 0) {
+				source.SetState(
+					score >= CGame.Config.attackStrongScore
+						? Character.States.AttackStrong
+						: Character.States.AttackWeak,
 
-				() => {
-					CGame.Sounds.ouch.Play();
-					target.SetState( Character.States.Damaged );
-					targetModel.AddDamage(score);
-				}
-			);
+					() => {
+						CGame.Sounds.ouch.Play();
+						target.SetState( Character.States.Damaged );
+						targetModel.AddDamage(score);
+					}
+				);
+			}
 
 			CGame.Instance.CheckActive();
 		}

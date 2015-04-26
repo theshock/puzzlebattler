@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Model {
 	public class CPlayer {
 		public bool isActive = false;
