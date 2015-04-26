@@ -1207,7 +1207,7 @@ MonoBehaviour:
   fireball: {fileID: 1972538076}
   sound: 1
   attackStrongScore: 10
-  turnTime: 10
+  turnTime: 50
   opponentsCount: 3
   fadeOutTime: 2
   fadeInTime: 1
