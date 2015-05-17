@@ -6,6 +6,7 @@ namespace Config {
 
 		public Match.CMatch match;
 
+		public CGoals goals;
 		public CSkill heal;
 		public CSkill fireball;
 

@@ -28,6 +28,7 @@ public class CGame : MonoBehaviour {
 	public Text opponentText;
 
 	public Etc.CSkill[] skills;
+	public Etc.CGoals goals;
 	public EndPopup endPopup;
 
 	public Text opponentsCount;
@@ -124,8 +125,10 @@ public class CGame : MonoBehaviour {
 			finished = true;
 		} else if (--opponents > 0) {
 			RoundReset();
-		} else {
+		} else if (goals.IsComplete()) {
 			endPopup.ShowVictory(Reset);
+		} else {
+			endPopup.ShowDefeat(Reset);
 		}
 	}
 
@@ -141,6 +144,7 @@ public class CGame : MonoBehaviour {
 
 	protected void Reset () {
 		model.player.damage = 0;
+		goals.Reset();
 		RoundReset();
 	}
 
@@ -185,6 +189,8 @@ public class CGame : MonoBehaviour {
 
 	public void OnMatchEnd (EColor color) {
 		if (Model.opponent.isActive) return;
+
+		goals.OnMatch(color);
 
 		foreach (var skill in skills) {
 			skill.OnMatch(color);
